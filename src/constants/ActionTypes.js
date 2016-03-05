@@ -1,0 +1,1 @@
+export const ACTION_FETCH = 'ACTION_FETCH'
