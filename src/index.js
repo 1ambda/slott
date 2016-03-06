@@ -4,12 +4,15 @@ import { Provider, } from 'react-redux'
 import { Router, Route, browserHistory, } from 'react-router'
 import { syncHistoryWithStore, routerReducer, } from 'react-router-redux'
 
+/** initialize */
+import 'isomorphic-fetch'
+import injectTapEventPlugin from 'react-tap-event-plugin'
+injectTapEventPlugin()
+
 import routes from './routes'
 import configureStore from './store/configureStore'
 
 import './styles/styles.scss'
-
-import 'isomorphic-fetch'
 
 const store = configureStore()
 const history = syncHistoryWithStore(browserHistory, store)

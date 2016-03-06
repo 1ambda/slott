@@ -1,18 +1,21 @@
 import React, { PropTypes, } from 'react'
-import { Link, IndexLink, } from 'react-router'
 
-const App = (props) => {
-  return (
-    <div>
-      <IndexLink to="/">Home</IndexLink> | <Link to="/About">About</Link>
-      <br/>
-      {props.children}
-    </div>
-  )
-}
+import NavBar from './NavBar'
 
-App.propTypes = {
-  children: PropTypes.element,
+class App extends React.Component {
+  static propTypes = {
+    children: PropTypes.element,
+  }
+
+  render() {
+    return (
+      <div>
+        <NavBar />
+        <br/>
+        {this.props.children}
+      </div>
+    )
+  }
 }
 
 export default App
