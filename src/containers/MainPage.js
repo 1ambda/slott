@@ -1,6 +1,7 @@
 import React, { Component, PropTypes, } from 'react'
 import { connect, } from 'react-redux'
 import { bindActionCreators, } from 'redux'
+
 import * as actions from '../actions/actions'
 
 class MainPage extends Component {
@@ -18,7 +19,7 @@ class MainPage extends Component {
 
 function mapStateToProps(state) {
   return {
-    appState: state.jobState,
+    appState: state.job,
   }
 }
 

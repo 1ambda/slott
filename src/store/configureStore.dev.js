@@ -1,12 +1,32 @@
-import { createStore, } from 'redux'
-import rootReducer from '../reducers'
+import { createStore, applyMiddleware, compose, combineReducers, } from 'redux'
+import { routerReducer, } from 'react-router-redux'
+
+import * as reducers from '../reducers'
+
+const middlewares = []
 
 export default function configureStore(initialState) {
   let store
   if (window.devToolsExtension) {
-    store = window.devToolsExtension()(createStore)(rootReducer, initialState)
+    store = createStore(
+      combineReducers({
+        ...reducers,
+        routing: routerReducer,
+      }),
+      initialState,
+      compose(
+        applyMiddleware(...middlewares),
+        window.devToolsExtension ? window.devToolsExtension() : f => f
+      ))
   } else {
-    store = createStore(rootReducer, initialState)
+    store = createStore(
+      combineReducers({
+        ...reducers,
+        routing: routerReducer,
+      }),
+      initialState,
+      applyMiddleware(...middlewares)
+    )
   }
 
   if (module.hot) {
