@@ -37,9 +37,7 @@ export default class NavBar extends React.Component {
         <ToolbarGroup float="right">
           <IconMenu
             style={style.iconMenu}
-            iconButtonElement={<IconButton iconStyle={style.icon} ><MoreVertIcon /></IconButton>}
-            targetOrigin={{horizontal: 'right', vertical: 'top'}}
-            anchorOrigin={{horizontal: 'right', vertical: 'top'}} >
+            iconButtonElement={<IconButton iconStyle={style.icon} ><MoreVertIcon /></IconButton>} >
             <MenuItem style={style.iconMenuItem} primaryText="Settings" />
             <MenuItem style={style.iconMenuItem} primaryText="Sign out" />
           </IconMenu>

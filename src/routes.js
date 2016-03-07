@@ -3,9 +3,9 @@ import { Route, IndexRoute, } from 'react-router'
 
 import App from './components/App'
 import MainPage from './containers/MainPage'
-import JobPage from './components/JobPage.js'
-import HistoryPage from './components/HistoryPage.js'
-import NotFoundPage from './components/NotFoundPage.js'
+import JobPage from './containers/JobPage'
+import HistoryPage from './components/HistoryPage'
+import NotFoundPage from './components/NotFoundPage'
 
 export default (
   <Route path="/" component={App}>

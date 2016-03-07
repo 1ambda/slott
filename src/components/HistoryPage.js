@@ -8,9 +8,7 @@ export default class HistoryPage extends React.Component {
 
   render() {
     return (
-      <div>
-        <h2>History</h2>
-      </div>
+      <div>History</div>
     )
   }
 }

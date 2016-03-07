@@ -2,7 +2,7 @@ import React, { PropTypes, } from 'react'
 import { connect, } from 'react-redux'
 import { bindActionCreators, } from 'redux'
 
-import * as actions from '../actions/actions'
+import * as actions from '../actions'
 
 class MainPage extends React.Component {
   static propTypes = {
@@ -19,7 +19,7 @@ class MainPage extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    appState: state.job,
+    appState: state.jobs,
   }
 }
 

@@ -1,5 +1,5 @@
 import JobReducer from './JobReducer'
 
-export const job = JobReducer
+export const jobs = JobReducer
 
 
