@@ -7,16 +7,10 @@ import JobList from '../components/JobList'
 
 import * as actions from '../actions'
 
-const jobs = [
-  {name: 'tmap-tsg', config: {}, running: true, disabled: false, },
-  {name: '11st-ch-encrypted', config: {}, running: false, disabled: false, },
-  {name: 'rake-metric', config: {}, running: false, disabled: true, },
-]
-
 class JobPage extends React.Component {
   static propTypes = {
     actions: PropTypes.object.isRequired,
-    jobs: PropTypes.object.isRequired,
+    jobs: PropTypes.array.isRequired,
   }
 
   static createItem() {
@@ -32,8 +26,10 @@ class JobPage extends React.Component {
   }
 
   render() {
+    const { jobs, actions, } = this.props
+
     return (
-      <JobList jobs={jobs} />
+      <JobList jobs={jobs} actions={actions} />
     )
   }
 }
@@ -46,7 +42,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(actions, dispatch),
+    actions: bindActionCreators(actions.job, dispatch),
   }
 }
 

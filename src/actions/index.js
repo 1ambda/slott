@@ -1,5 +1,4 @@
-import * as ActionTypes from '../constants/ActionTypes'
+import * as JobActions from './JobActions'
 
-export function fetch() {
-	return { type: ActionTypes.ACTION_FETCH, }
-}
+export const job = JobActions
+

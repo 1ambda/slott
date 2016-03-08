@@ -6,4 +6,5 @@ export const NavBarColors = {
 
 export const JobItemColors = {
   spin: '#00bcd4',
+  activeRemoveIcon: '#ffe57f',
 }

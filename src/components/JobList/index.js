@@ -8,29 +8,32 @@ import JobItem from '../JobItem'
 
 export default class JobList extends React.Component {
   static propTypes = {
+    actions: PropTypes.object.isRequired,
     jobs: PropTypes.array.isRequired,
   }
 
-  static createJobItem(job, index) {
-    const { name, config, running, disabled, } = job
+  static createJobItem(job, index, actions) {
+    const { name, config, running, disabled, inTransition, } = job
     return (<JobItem name={name}
                      config={config}
                      running={running}
-                     key={index}
                      disabled={disabled}
-                     index={index} />)
+                     inTransition={inTransition}
+                     index={index}
+                     key={index}
+                     actions={actions} />)
   }
 
 
   render() {
 
-    const { jobs, } = this.props
+    const { jobs, actions, } = this.props
 
     const jobItems = jobs
       .map((job, index) => { return { job, index, } })
       .reduce((acc, jobWithIndex) => {
         const { job, index, } = jobWithIndex
-        acc.push(JobList.createJobItem(job, index))
+        acc.push(JobList.createJobItem(job, index, actions))
         return acc
       }, [])
 

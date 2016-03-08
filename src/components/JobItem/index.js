@@ -13,26 +13,57 @@ export default class JobItem extends React.Component {
   static propTypes = {
     index: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-    config: PropTypes.string.isRequired,
+    config: PropTypes.object.isRequired,
     running: PropTypes.bool.isRequired,
     disabled: PropTypes.bool.isRequired,
+    inTransition: PropTypes.bool.isRequired,
+    actions: PropTypes.object.isRequired,
+  }
+
+  handleDisableToggleChange(event, toggled) {
+    const { name, actions, } = this.props
+
+    if (toggled) actions.disableJob(name)
+    else actions.enableJob(name)
+  }
+
+  handleRunningToggleChange(event, toggled) {
+    const { name, actions, } = this.props
+
+    if (toggled) actions.startJob(name)
+    else actions.stopJob(name)
   }
 
   render() {
 
-    const { name, config, running, disabled, index, } = this.props
+    const { name, config, running, disabled, inTransition, index, } = this.props
+
+    const isRemoveIconInactive =  inTransition || disabled || running
+    const isDisableToggleInactive = inTransition || running
+    const isRunningToggleInactive = inTransition || disabled
+
+    const removeIconColor = JobItemColors.activeRemoveIcon
+
+    const removeIcon = (<FontIcon style={{color: removeIconColor}}
+                                  className="material-icons">delete</FontIcon>)
+    const disableToggle = (<Toggle onToggle={this.handleDisableToggleChange.bind(this)}
+                                   disabled={isDisableToggleInactive}
+                                   defaultToggled={!running && disabled} />)
+    const runningToggle = (<Toggle onToggle={this.handleRunningToggleChange.bind(this)}
+                                   disabled={isRunningToggleInactive}
+                                   defaultToggled={!disabled && running} />)
 
     const nestedItems = [
       (<ListItem key={0}
-                 disabled={disabled}
+                 disabled={isRemoveIconInactive}
                  primaryText="Remove"
-                 rightIcon={<FontIcon className="material-icons">delete</FontIcon>} />),
+                 rightIcon={removeIcon} />),
       (<ListItem key={1}
                  primaryText="Disabled"
-                 rightToggle={<Toggle defaultToggled={disabled} />} />),
+                 rightToggle={disableToggle} />),
       (<ListItem key={2}
                  primaryText="Running"
-                 rightToggle={<Toggle disabled={disabled} defaultToggled={!disabled && running} />} />),
+                 rightToggle={runningToggle} />),
     ]
 
     const spinIcon = (!disabled && running) ?
