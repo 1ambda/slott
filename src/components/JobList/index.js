@@ -19,7 +19,6 @@ export default class JobList extends React.Component {
                      running={running}
                      disabled={disabled}
                      inTransition={inTransition}
-                     index={index}
                      key={index}
                      actions={actions} />)
   }

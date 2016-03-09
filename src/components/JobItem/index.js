@@ -11,13 +11,80 @@ import * as style from './style'
 
 export default class JobItem extends React.Component {
   static propTypes = {
-    index: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     config: PropTypes.object.isRequired,
     running: PropTypes.bool.isRequired,
     disabled: PropTypes.bool.isRequired,
     inTransition: PropTypes.bool.isRequired,
     actions: PropTypes.object.isRequired,
+  }
+
+  static getJobCommandColor(inactive) {
+    return (inactive) ?
+      JobItemColors.inactiveJobCommandColor : JobItemColors.activeJobCommandColor
+  }
+
+  static createRemoveButton(index, running, disabled, inTransition) {
+    const isRemoveIconInactive =  inTransition || disabled || running
+
+    /**
+     * since updating inline-style does't update DOM element,
+     * we have to create <FontIcon /> every time to update remove icon color
+     */
+
+    const inactive = (inTransition || (disabled || running))
+
+    const removeIcon = (inactive) ?
+      (<FontIcon style={{color: JobItemColors.inactiveRemoveIcon, }}
+                 className="material-icons">delete</FontIcon>) :
+      (<FontIcon style={{color: JobItemColors.activeRemoveIcon, }}
+                 className="material-icons">delete</FontIcon>)
+
+    const commandColor = JobItem.getJobCommandColor(inactive)
+
+    return (
+      <ListItem key={index}
+                style={{color: commandColor,}}
+                disabled={isRemoveIconInactive}
+                primaryText="Remove"
+                rightIcon={removeIcon} />
+    )
+  }
+
+  static createDisableToggle(index, running, disabled, inTransition, handler) {
+
+    const inactive = inTransition || running
+    const disableToggle = (<Toggle onToggle={handler}
+                                   disabled={inactive}
+                                   defaultToggled={!running && disabled} />)
+
+
+    const commandColor = JobItem.getJobCommandColor(inactive)
+
+    return (
+      <ListItem key={index}
+                style={{color: commandColor,}}
+                primaryText="Disabled"
+                rightToggle={disableToggle} />
+    )
+  }
+
+  static createRunningToggle(index, running, disabled, inTransition, handler) {
+
+    const inactive = inTransition || disabled
+
+    const runningToggle = (<Toggle onToggle={handler}
+                                   disabled={inactive}
+                                   defaultToggled={!disabled && running} />)
+
+    const commandColor = JobItem.getJobCommandColor(inactive)
+
+    return (
+      <ListItem key={index}
+                style={{color: commandColor,}}
+                primaryText="Running"
+                rightToggle={runningToggle} />
+    )
   }
 
   handleDisableToggleChange(event, toggled) {
@@ -36,34 +103,12 @@ export default class JobItem extends React.Component {
 
   render() {
 
-    const { name, config, running, disabled, inTransition, index, } = this.props
-
-    const isRemoveIconInactive =  inTransition || disabled || running
-    const isDisableToggleInactive = inTransition || running
-    const isRunningToggleInactive = inTransition || disabled
-
-    const removeIconColor = JobItemColors.activeRemoveIcon
-
-    const removeIcon = (<FontIcon style={{color: removeIconColor}}
-                                  className="material-icons">delete</FontIcon>)
-    const disableToggle = (<Toggle onToggle={this.handleDisableToggleChange.bind(this)}
-                                   disabled={isDisableToggleInactive}
-                                   defaultToggled={!running && disabled} />)
-    const runningToggle = (<Toggle onToggle={this.handleRunningToggleChange.bind(this)}
-                                   disabled={isRunningToggleInactive}
-                                   defaultToggled={!disabled && running} />)
+    const { name, config, running, disabled, inTransition, } = this.props
 
     const nestedItems = [
-      (<ListItem key={0}
-                 disabled={isRemoveIconInactive}
-                 primaryText="Remove"
-                 rightIcon={removeIcon} />),
-      (<ListItem key={1}
-                 primaryText="Disabled"
-                 rightToggle={disableToggle} />),
-      (<ListItem key={2}
-                 primaryText="Running"
-                 rightToggle={runningToggle} />),
+      JobItem.createRemoveButton(0, running, disabled, inTransition),
+      JobItem.createDisableToggle(1, running, disabled, inTransition, this.handleDisableToggleChange.bind(this)),
+      JobItem.createRunningToggle(2, running, disabled, inTransition, this.handleRunningToggleChange.bind(this)),
     ]
 
     const spinIcon = (!disabled && running) ?
@@ -71,8 +116,7 @@ export default class JobItem extends React.Component {
       (<FontIcon className="fa fa-circle-o-notch" />)
 
     return (
-      <ListItem key={index}
-                primaryText={name}
+      <ListItem primaryText={name}
                 leftIcon={spinIcon}
                 nestedItems={nestedItems} />
     )

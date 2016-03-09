@@ -8,12 +8,7 @@ const JOB_TRANSITION_DELAY = 1000
 const always = true
 
 export function delay(millis) {
-  return new Promise(resolve =>
-    setTimeout(() => {
-      console.log(1)
-      resolve()
-    }, millis)
-  )
+  return new Promise(resolve => setTimeout(() => { resolve() }, millis))
 }
 
 function* startJob(action) {
