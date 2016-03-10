@@ -1,0 +1,8 @@
+export const START = 'START'
+export const STOP  = 'STOP'
+export const DISABLE = 'DISABLE'
+export const ENABLE  = 'ENABLE'
+export const ENTER_TRANSITION = 'ENTER_TRANSITION'
+export const EXIT_TRANSITION  = 'EXIT_TRANSITION'
+export const REMOVE = 'REMOVE'
+export const CHANGE_PAGE_OFFSET = 'CHANGE_PAGE_OFFSET'

@@ -2,7 +2,7 @@ import { createStore, applyMiddleware, compose, combineReducers, } from 'redux'
 import { routerReducer, } from 'react-router-redux'
 import createSagaMiddleware from 'redux-saga'
 
-import * as reducers from '../reducers'
+import RootReducer from '../reducers'
 import sagas from '../sagas'
 const sagaMiddleware = createSagaMiddleware(sagas)
 
@@ -12,10 +12,7 @@ export default function configureStore(initialState) {
   let store
   if (window.devToolsExtension) {
     store = createStore(
-      combineReducers({
-        ...reducers,
-        routing: routerReducer,
-      }),
+      RootReducer,
       initialState,
       compose(
         applyMiddleware(...middlewares),
@@ -23,10 +20,7 @@ export default function configureStore(initialState) {
       ))
   } else {
     store = createStore(
-      combineReducers({
-        ...reducers,
-        routing: routerReducer,
-      }),
+      RootReducer,
       initialState,
       applyMiddleware(...middlewares)
     )

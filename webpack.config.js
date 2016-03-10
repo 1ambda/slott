@@ -44,7 +44,11 @@ const getEntry = function (env) {
 }
 
 const getLoaders = function (env) {
-  const loaders = [{ test: /\.js$/, include: path.join(__dirname, 'src'), loaders: ['babel', 'eslint',] },]
+  const loaders = [{
+    test: /\.js$/,
+    include: path.join(__dirname, 'src'),
+    loaders: ['babel', 'eslint',],
+  },]
 
   if (env === productionEnvironment ) {
     loaders.push({test: /(\.css|\.scss)$/, loader: ExtractTextPlugin.extract('css?sourceMap!sass?sourceMap'),})

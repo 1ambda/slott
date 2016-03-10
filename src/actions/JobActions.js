@@ -1,27 +1,31 @@
-import * as ActionTypes from '../constants/ActionTypes'
+import * as JobActionTypes from '../constants/JobActionTypes'
 
-export function disableJob(name) {
-  return { type: ActionTypes.JOB_DISABLE, payload: { name, }, }
+export function disableJob(payload) {
+  return { type: JobActionTypes.DISABLE, payload, }
 }
 
-export function enableJob(name) {
-  return { type: ActionTypes.JOB_ENABLE, payload: { name, }, }
+export function enableJob(payload) {
+  return { type: JobActionTypes.ENABLE, payload, }
 }
 
-export function startJob(name) {
-  return { type: ActionTypes.JOB_START, payload: { name, }, }
+export function startJob(payload) {
+  return { type: JobActionTypes.START, payload, }
 }
 
-export function stopJob(name) {
-  return { type: ActionTypes.JOB_STOP, payload: { name, }, }
+export function stopJob(payload) {
+  return { type: JobActionTypes.STOP, payload, }
 }
 
-export function enterTransition(name) {
-  return { type: ActionTypes.JOB_ENTER_TRANSITION, payload: { name, }, }
+export function enterTransition(payload) {
+  return { type: JobActionTypes.ENTER_TRANSITION, payload, }
 }
 
-export function exitTransition(name) {
-  return { type: ActionTypes.JOB_EXIT_TRANSITION, payload: { name, }, }
+export function exitTransition(payload) {
+  return { type: JobActionTypes.EXIT_TRANSITION, payload, }
+}
+
+export function changePageOffset(payload) {
+  return { type: JobActionTypes.CHANGE_PAGE_OFFSET, payload, }
 }
 
 

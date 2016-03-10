@@ -4,25 +4,14 @@ import { connect, } from 'react-redux'
 import { bindActionCreators, } from 'redux'
 
 import JobList from '../components/JobList'
+import Paginator from '../components/Paginator'
 
-import * as actions from '../actions'
+import * as JobActions from '../actions/JobActions'
 
 class JobPage extends React.Component {
   static propTypes = {
     actions: PropTypes.object.isRequired,
     jobs: PropTypes.array.isRequired,
-  }
-
-  static createItem() {
-
-  }
-
-  static createList() {
-
-  }
-
-  static createPaginator() {
-
   }
 
   render() {
@@ -36,13 +25,14 @@ class JobPage extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    jobs: state.jobs,
+    jobs: state.job.items,
+    paginator: state.job.paginator,
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(actions.job, dispatch),
+    actions: bindActionCreators(JobActions, dispatch),
   }
 }
 

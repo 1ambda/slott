@@ -33,6 +33,7 @@ export default class JobList extends React.Component {
       .reduce((acc, jobWithIndex) => {
         const { job, index, } = jobWithIndex
         acc.push(JobList.createJobItem(job, index, actions))
+        acc.push(<Divider key={`divider-${index}`} />)
         return acc
       }, [])
 
@@ -43,7 +44,6 @@ export default class JobList extends React.Component {
           <Divider />
           {jobItems}
         </List>
-        <Divider />
       </div>
     )
   }

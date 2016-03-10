@@ -58,6 +58,7 @@
     "mocha": "2.3.4",
     "node-sass": "3.4.2",
     "parallelshell": "2.0.0",
+    "react-paginate": "0.5.4",
     "react-transform-catch-errors": "1.0.1",
     "react-transform-hmr": "1.0.1",
     "redbox-react": "1.2.0",

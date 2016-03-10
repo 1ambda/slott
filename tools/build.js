@@ -1,7 +1,7 @@
 import webpack from 'webpack'
 import webpackConfigBuilder from '../webpack.config'
 import colors from 'colors'
-import { argv as args } from 'yargs'
+import { argv as args, } from 'yargs'
 
 process.env.NODE_ENV = 'production'
 
