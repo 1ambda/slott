@@ -1,4 +1,4 @@
-import * as Theme from '../../constants/theme'
+import * as Theme from '../../../constants/theme'
 
 export const navbar = {
   backgroundColor: Theme.NavBarColors.backgroundColor,

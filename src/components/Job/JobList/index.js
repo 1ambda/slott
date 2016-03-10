@@ -13,19 +13,12 @@ export default class JobList extends React.Component {
   }
 
   static createJobItem(job, index, actions) {
-    const { name, config, running, disabled, inTransition, } = job
-    return (<JobItem name={name}
-                     config={config}
-                     running={running}
-                     disabled={disabled}
-                     inTransition={inTransition}
+    return (<JobItem {...job}
                      key={index}
                      actions={actions} />)
   }
 
-
   render() {
-
     const { jobs, actions, } = this.props
 
     const jobItems = jobs

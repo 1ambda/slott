@@ -5,12 +5,14 @@ import Divider from 'material-ui/lib/divider'
 import Checkbox from 'material-ui/lib/checkbox'
 import Toggle from 'material-ui/lib/toggle'
 import FontIcon from 'material-ui/lib/font-icon'
+import Badge from 'material-ui/lib/badge'
 
-import { JobItemColors, } from '../../constants/theme'
+import { JobItemColors, } from '../../../constants/theme'
 import * as style from './style'
 
 export default class JobItem extends React.Component {
   static propTypes = {
+    tags: PropTypes.array,
     name: PropTypes.string.isRequired,
     config: PropTypes.object.isRequired,
     running: PropTypes.bool.isRequired,
@@ -87,27 +89,27 @@ export default class JobItem extends React.Component {
     )
   }
 
-  handleDisableToggleChange(event, toggled) {
-    const { name, actions, } = this.props
+  handleDisableToggleChange() {
+    const { name, actions, disabled, } = this.props
 
     const payload  = { name, }
 
-    if (toggled) actions.disableJob(payload)
-    else actions.enableJob(payload)
+    if (disabled) actions.enableJob(payload)
+    else actions.disableJob(payload)
   }
 
-  handleRunningToggleChange(event, toggled) {
-    const { name, actions, } = this.props
+  handleRunningToggleChange() {
+    const { name, actions, running, } = this.props
 
     const payload  = { name, }
 
-    if (toggled) actions.startJob(payload)
-    else actions.stopJob(payload)
+    if (running) actions.stopJob(payload)
+    else actions.startJob(payload)
   }
 
   render() {
 
-    const { name, config, running, disabled, inTransition, } = this.props
+    const { name, tags, config, running, disabled, inTransition, } = this.props
 
     const nestedItems = [
       JobItem.createRemoveButton(0, running, disabled, inTransition),
@@ -119,8 +121,11 @@ export default class JobItem extends React.Component {
       (<FontIcon style={{color: JobItemColors.spin,}} className="fa fa-circle-o-notch fa-spin" />) :
       (<FontIcon className="fa fa-circle-o-notch" />)
 
+    const tagText = tags.join(', ')
+
     return (
       <ListItem primaryText={name}
+                secondaryText={tagText}
                 leftIcon={spinIcon}
                 nestedItems={nestedItems} />
     )
