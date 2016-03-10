@@ -39,8 +39,7 @@ export default class JobList extends React.Component {
 
     return (
       <div>
-        <List subheader="Jobs">
-          <br/>
+        <List>
           <Divider />
           {jobItems}
         </List>

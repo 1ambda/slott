@@ -31,7 +31,6 @@ function* stopJob() {
   }
 }
 
-
 export default function* () {
   yield fork(startJob)
   yield fork(stopJob)

@@ -27,6 +27,3 @@ export function exitTransition(payload) {
 export function changePageOffset(payload) {
   return { type: JobActionTypes.CHANGE_PAGE_OFFSET, payload, }
 }
-
-
-// TODO remove, fetch

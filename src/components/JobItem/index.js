@@ -90,15 +90,19 @@ export default class JobItem extends React.Component {
   handleDisableToggleChange(event, toggled) {
     const { name, actions, } = this.props
 
-    if (toggled) actions.disableJob(name)
-    else actions.enableJob(name)
+    const payload  = { name, }
+
+    if (toggled) actions.disableJob(payload)
+    else actions.enableJob(payload)
   }
 
   handleRunningToggleChange(event, toggled) {
     const { name, actions, } = this.props
 
-    if (toggled) actions.startJob(name)
-    else actions.stopJob(name)
+    const payload  = { name, }
+
+    if (toggled) actions.startJob(payload)
+    else actions.stopJob(payload)
   }
 
   render() {

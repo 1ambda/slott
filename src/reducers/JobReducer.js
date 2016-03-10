@@ -2,7 +2,7 @@ import { combineReducers, } from 'redux'
 
 import * as JobActionTypes from '../constants/JobActionTypes'
 
-const INITIAL_JOBS = [
+const INITIAL_JOB_ITEMS = [
   {name: 'akka-cluster-00', config: {}, running: true, disabled: false, inTransition: false, },
   {name: 'akka-cluster-01', config: {}, running: false, disabled: false, inTransition: false, },
   {name: 'akka-cluster-02', config: {}, running: true, disabled: true, inTransition: false, },
@@ -17,46 +17,55 @@ const INITIAL_JOBS = [
   {name: 'daily-batch-2', config: {}, running: false, disabled: false, inTransition: false, },
 ]
 
+const INITIAL_PAGINATOR_STATE = {
+  currentPageOffset: 0,
+  currentItemOffset: 0,
+  itemCountPerPage: 8,
+}
+
 function editJob(state, prop, value, name) {
   return state.map(job => {
     return (job.name === name) ? Object.assign({}, job, {[prop]: value,}) : job
   })
 }
 
-function removeJob(state, name) {
-  return state.filter(job => job.name !== name)
-}
-
-export function handleJobItems(state = INITIAL_JOBS, action = null) {
+export function handleJobItems(state = INITIAL_JOB_ITEMS, action = null) {
   if (null == action) return state
 
   const { type, payload, } = action
 
-  if (!type.startsWith('EFFECT') && !type.startsWith('@@')) {
-    console.log(type)
-    console.log(payload)
-  }
-
   switch(type) {
     case JobActionTypes.ENTER_TRANSITION:
-      return editJob(state, 'inTransition', true, payload)
+      return editJob(state, 'inTransition', true, payload.name)
     case JobActionTypes.EXIT_TRANSITION:
-      return editJob(state, 'inTransition', false, payload)
+      return editJob(state, 'inTransition', false, payload.name)
     case JobActionTypes.DISABLE:
-      return editJob(state, 'disabled', true, payload)
+      return editJob(state, 'disabled', true, payload.name)
     case JobActionTypes.ENABLE:
-      return editJob(state, 'disabled', false, payload)
+      return editJob(state, 'disabled', false, payload.name)
     case JobActionTypes.STOP:
-      return editJob(state, 'running', false, payload)
+      return editJob(state, 'running', false, payload.name)
     case JobActionTypes.START:
-      return editJob(state, 'running', true, payload)
+      return editJob(state, 'running', true, payload.name)
       // TODO remove, update
   }
 
   return state
 }
 
-export function handleJobPaginator(state = {}, action = null) {
+export function handleJobPaginator(state = INITIAL_PAGINATOR_STATE, action = null) {
+
+  const { type, payload, } = action
+
+  switch(type) {
+    case JobActionTypes.CHANGE_PAGE_OFFSET: {
+      const { newPageOffset, } = payload
+      const currentItemOffset = newPageOffset * state.itemCountPerPage
+      const currentPageOffset = newPageOffset
+      return Object.assign({}, state, { currentPageOffset, currentItemOffset, })
+    }
+  }
+
   return state
 }
 

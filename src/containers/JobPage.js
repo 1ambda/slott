@@ -11,14 +11,34 @@ import * as JobActions from '../actions/JobActions'
 class JobPage extends React.Component {
   static propTypes = {
     actions: PropTypes.object.isRequired,
+    paginator: PropTypes.object.isRequired,
     jobs: PropTypes.array.isRequired,
   }
 
+  handlePageOffsetChange(newPageOffset) {
+    const { actions, } = this.props
+    actions.changePageOffset({ newPageOffset, })
+  }
+
   render() {
-    const { jobs, actions, } = this.props
+    const { jobs, actions, paginator, } = this.props
+    const { itemCountPerPage, currentPageOffset, currentItemOffset, } = paginator
+
+    const sliced = jobs.slice(currentItemOffset, currentItemOffset + itemCountPerPage)
 
     return (
-      <JobList jobs={jobs} actions={actions} />
+      <div>
+        <div>
+          <JobList jobs={sliced} actions={actions} />
+        </div>
+        <div className="center">
+          <Paginator itemCountPerPage={itemCountPerPage}
+                     currentPageOffset={currentPageOffset}
+                     currentItemOffset={currentItemOffset}
+                     totalItemCount={jobs.length}
+                     handler={this.handlePageOffsetChange.bind(this)} />
+        </div>
+      </div>
     )
   }
 }
