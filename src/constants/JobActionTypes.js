@@ -8,3 +8,10 @@ export const REMOVE = 'JOB_REMOVE'
 export const SORT = 'JOB_SORT'
 export const FILTER = 'JOB_FILTER'
 export const CHANGE_PAGE_OFFSET = 'JOB_CHANGE_PAGE_OFFSET'
+
+export const FETCH = {
+  REQUEST: 'JOB_FETCH_REQUEST',
+  SUCCESS: 'JOB_FETCH_SUCCESS',
+  FAILURE: 'JOB_FETCH_FAILURE',
+}
+

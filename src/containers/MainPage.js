@@ -7,7 +7,6 @@ import * as actions from '../actions'
 class MainPage extends React.Component {
   static propTypes = {
     actions: PropTypes.object.isRequired,
-    appState: PropTypes.object.isRequired,
   }
 
   render() {
@@ -19,7 +18,7 @@ class MainPage extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    appState: state.jobs,
+    appState: {}, /** TODO */
   }
 }
 

@@ -1,0 +1,55 @@
+[
+  { "name": "akka-cluster-00", "tags": ["cluster"],
+    "config": {},
+    "running": true, "disabled": false, "inTransition": false
+  },
+  { "name": "akka-cluster-01", "tags": ["cluster"],
+    "config": {},
+    "running": false, "disabled": false, "inTransition": false
+  },
+  { "name": "akka-remote-01", "tags": ["remote"],
+    "config": {},
+    "running": true, "disabled": false, "inTransition": false
+  },
+  { "name": "hourly-batch-1", "tags": ["batch", "hourly"],
+    "config": {},
+    "running": false, "disabled": false, "inTransition": false
+  },
+  { "name": "storm-job-1", "tags": ["streaming"],
+    "config": {},
+    "running": true, "disabled": false, "inTransition": false
+  },
+  { "name": "storm-job-2", "tags": ["streaming"],
+    "config": {},
+    "running": false, "disabled": true, "inTransition": false
+  },
+  { "name": "daily-batch-0", "tags": ["batch", "daily"],
+    "config": {},
+    "running": false, "disabled": false, "inTransition": false
+  },
+  { "name": "spark-job-0", "tags": ["micro batch"],
+    "config": {},
+    "running": true, "disabled": false, "inTransition": false
+  },
+  { "name": "spark-streaming-0", "tags": ["streaming"],
+    "config": {},
+    "running": false, "disabled": true, "inTransition": false
+  },
+  { "name": "spark-streaming-5", "tags": ["streaming"],
+    "config": {},
+    "running": true, "disabled": false, "inTransition": false
+  },
+  { "name": "storm-trident-3", "tags": ["trident", "streaming" ],
+    "config": {},
+    "running": false, "disabled": true, "inTransition": false
+  },
+  { "name": "daily-batch-1", "tags": ["batch", "daily"],
+    "config": {},
+    "running": false, "disabled": true, "inTransition": false
+  },
+  { "name": "hourly-batch-0", "tags": ["batch", "hourly"],
+    "config": {},
+    "running": false, "disabled": false, "inTransition": false
+  }
+]
+

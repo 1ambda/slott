@@ -11,7 +11,7 @@ const bundler = webpack(webpackConfig)
 
 browserSync({
   server: {
-    baseDir: 'src',
+    baseDir: ['src', 'resource',],
 
     middleware: [
       webpackDevMiddleware(bundler, {
@@ -28,5 +28,6 @@ browserSync({
 
   files: [
     'src/*.html',
+    'resource/**/*.*',
   ],
 })

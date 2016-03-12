@@ -7,11 +7,12 @@ browserSync({
     port: 3001,
   },
   server: {
-    baseDir: 'dist',
+    baseDir: ['dist', 'resource',],
   },
 
   files: [
     'src/*.html',
+    'resource/**/*.*',
   ],
 
   middleware: [historyApiFallback(),],

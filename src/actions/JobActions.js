@@ -39,3 +39,16 @@ export function sortJob(payload) {
 export function filterJob(payload) {
   return { type: JobActionTypes.FILTER, payload, }
 }
+
+export function fetchJobs() {
+  return { type: JobActionTypes.FETCH.REQUEST, }
+}
+
+export function fetchJobsSuccess(payload) {
+  return { type: JobActionTypes.FETCH.SUCCESS, payload, }
+}
+
+export function fetchJobsFailure(payload) {
+  return { type: JobActionTypes.FETCH.FAILURE, payload, }
+}
+

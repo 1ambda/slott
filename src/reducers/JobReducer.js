@@ -3,51 +3,6 @@ import { combineReducers, } from 'redux'
 import * as JobActionTypes from '../constants/JobActionTypes'
 import * as JobSortStrategies from '../constants/JobSortStrategies'
 
-
-const INITIAL_SORT_STRATEGY = JobSortStrategies.RUNNING
-
-const JOB_ITEMS = [
-  { name: 'akka-cluster-00',
-    tags: ['cluster',], config: {},
-    running: true, disabled: false, inTransition: false, },
-  { name: 'akka-cluster-01',
-    tags: ['cluster',], config: {},
-    running: false, disabled: false, inTransition: false, },
-  { name: 'akka-remote-01',
-    tags: ['remote',], config: {},
-    running: true, disabled: false, inTransition: false, },
-  { name: 'hourly-batch-1',
-    tags: ['batch', 'hourly',], config: {},
-    running: false, disabled: false, inTransition: false, },
-  { name: 'storm-job-1',
-    tags: ['streaming',], config: {},
-    running: true, disabled: false, inTransition: false, },
-  { name: 'storm-job-2',
-    tags: ['streaming',], config: {},
-    running: false, disabled: true, inTransition: false, },
-  { name: 'daily-batch-0',
-    tags: ['batch', 'daily',], config: {},
-    running: false, disabled: false, inTransition: false, },
-  { name: 'spark-job-0',
-    tags: ['micro batch',], config: {},
-    running: true, disabled: false, inTransition: false, },
-  { name: 'spark-streaming-0',
-    tags: ['streaming',], config: {},
-    running: false, disabled: true, inTransition: false, },
-  { name: 'spark-streaming-5',
-    tags: ['streaming',], config: {},
-    running: true, disabled: false, inTransition: false, },
-  { name: 'storm-trident-3',
-    tags: ['trident', 'streaming', ], config: {},
-    running: false, disabled: true, inTransition: false, },
-  { name: 'daily-batch-1',
-    tags: ['batch', 'daily',], config: {},
-    running: false, disabled: true, inTransition: false, },
-  { name: 'hourly-batch-0',
-    tags: ['batch', 'hourly',], config: {},
-    running: false, disabled: false, inTransition: false, },
-]
-
 const INITIAL_PAGINATOR_STATE = {
   currentPageOffset: 0,
   currentItemOffset: 0,
@@ -105,14 +60,14 @@ export function sortJob(state, strategy) {
   return state
 }
 
-const INITIAL_JOB_ITEMS = sortJob(JOB_ITEMS, INITIAL_SORT_STRATEGY)
-
-export function handleJobItems(state = INITIAL_JOB_ITEMS, action = null) {
+export function handleJobItems(state = [], action = null) {
   if (null == action) return state
 
   const { type, payload, } = action
 
   switch(type) {
+    case JobActionTypes.FETCH.SUCCESS:
+      return payload.jobs /** return fetched new jobs */
     case JobActionTypes.ENTER_TRANSITION:
       return editJob(state, 'inTransition', true, payload.name)
     case JobActionTypes.EXIT_TRANSITION:
@@ -167,7 +122,7 @@ export function handleJobFilter(state = '', action = null) {
   return state
 }
 
-export function handleJobSorter(state = INITIAL_SORT_STRATEGY, action = null) {
+export function handleJobSorter(state = JobSortStrategies.INITIAL, action = null) {
   const { type, payload, } = action
 
   switch(type) {

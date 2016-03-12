@@ -22,8 +22,6 @@ export default class JobList extends React.Component {
   render() {
     const { jobs, filterKeyword, actions, } = this.props
 
-    console.log(filterKeyword)
-
     const jobItems = jobs
       .reduce((acc, job) => {
         acc.push(JobList.createJobItem(job, actions))
