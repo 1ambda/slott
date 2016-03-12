@@ -13,9 +13,9 @@ export default class JobList extends React.Component {
     jobs: PropTypes.array.isRequired,
   }
 
-  static createJobItem(job, index, actions) {
+  static createJobItem(job, actions) {
     return (<JobItem {...job}
-                     key={index}
+                     key={job.name}
                      actions={actions} />)
   }
 
@@ -25,11 +25,9 @@ export default class JobList extends React.Component {
     console.log(filterKeyword)
 
     const jobItems = jobs
-      .map((job, index) => { return { job, index, } })
-      .reduce((acc, jobWithIndex) => {
-        const { job, index, } = jobWithIndex
-        acc.push(JobList.createJobItem(job, index, actions))
-        acc.push(<Divider key={`divider-${index}`} />)
+      .reduce((acc, job) => {
+        acc.push(JobList.createJobItem(job, actions))
+        acc.push(<Divider key={`divider-${job.name}`} />)
         return acc
       }, [])
 

@@ -28,11 +28,13 @@ class JobPage extends React.Component {
     const { actions, paginator, filterKeyword, sortingStrategy, jobs, } = this.props
     const { itemCountPerPage, currentPageOffset, currentItemOffset, } = paginator
 
+    /** 1. filter jobs */
     const filtered = jobs.filter(job => {
       const searchArea = `${job.name} ${job.tags.join(' ')}`
       return (searchArea.includes(filterKeyword))
     })
 
+    /** 2. select jobs to be curated */
     const sliced = filtered.slice(currentItemOffset, currentItemOffset + itemCountPerPage)
 
     return (

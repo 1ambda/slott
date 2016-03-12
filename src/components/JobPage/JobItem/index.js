@@ -116,8 +116,9 @@ export default class JobItem extends React.Component {
       JobItem.createRunningToggle(2, running, disabled, inTransition, this.handleRunningToggleChange.bind(this)),
     ]
 
-    const spinIcon = (!disabled && running) ?
-      (<FontIcon style={{color: JobItemColors.spin,}} className="fa fa-circle-o-notch fa-spin" />) :
+    const spinIcon =
+      (!disabled && running) ? (<FontIcon style={{color: JobItemColors.runningSpin,}} className="fa fa-circle-o-notch fa-spin" />) :
+        (!running && !disabled)  ? (<FontIcon style={{color: JobItemColors.waitingSpin,}} className="fa fa-circle-o-notch" />) :
       (<FontIcon className="fa fa-circle-o-notch" />)
 
     const tagText = tags.join(', ')

@@ -5,7 +5,8 @@ export const NavBarColors = {
 }
 
 export const JobItemColors = {
-  spin: '#00bcd4',
+  runningSpin: '#00bcd4',
+  waitingSpin: '#4db6ac',
   activeRemoveIcon: '#ffe57f',
   inactiveRemoveIcon: '#bdbdbd',
   activeJobCommandColor: 'rgba(0, 0, 0, 0.87)',
