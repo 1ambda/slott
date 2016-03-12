@@ -1,8 +1,12 @@
 import { combineReducers, } from 'redux'
 
 import * as JobActionTypes from '../constants/JobActionTypes'
+import * as JobSortStrategies from '../constants/JobSortStrategies'
 
-const INITIAL_JOB_ITEMS = [
+
+const INITIAL_SORT_STRATEGY = JobSortStrategies.RUNNING
+
+const JOB_ITEMS = [
   { name: 'akka-cluster-00',
     tags: ['cluster',], config: {},
     running: true, disabled: false, inTransition: false, },
@@ -11,7 +15,7 @@ const INITIAL_JOB_ITEMS = [
     running: false, disabled: false, inTransition: false, },
   { name: 'akka-remote-01',
     tags: ['remote',], config: {},
-    running: true, disabled: true, inTransition: false, },
+    running: true, disabled: false, inTransition: false, },
   { name: 'hourly-batch-1',
     tags: ['batch', 'hourly',], config: {},
     running: false, disabled: false, inTransition: false, },
@@ -50,11 +54,58 @@ const INITIAL_PAGINATOR_STATE = {
   itemCountPerPage: 8,
 }
 
-function editJob(state, prop, value, name) {
+export function editJob(state, prop, value, name) {
   return state.map(job => {
     return (job.name === name) ? Object.assign({}, job, {[prop]: value,}) : job
   })
 }
+
+export function sortByRunning(job1, job2) {
+  if (job1.running && !job2.running) return -1
+  else if (!job1.running && job2.running) return 1
+
+  /** if both jobs are not running, enabled first  */
+  if (!job1.disabled && job2.disabled) return -1
+  else if (job1.disabled && !job2.disabled) return 1
+  else return 0
+}
+
+export function sortByWaiting(job1, job2) {
+  if (!job1.running && job2.running) return -1
+  else if (job1.running && !job2.running) return 1
+
+  /** if both jobs are not running, enabled first  */
+  if (!job1.disabled && job2.disabled) return -1
+  else if (job1.disabled && !job2.disabled) return 1
+  else return 0
+}
+
+export function sortByDisabled(job1, job2) {
+  if (job1.running && !job2.running) return 1
+  else if (!job1.running && job2.running) return -1
+
+  /** if both jobs are not running */
+  if (job1.disabled && !job2.disabled) return -1
+  else if (!job1.disabled && job2.disabled) return 1
+  else return 0
+}
+
+export function sortJob(state, strategy) {
+  const jobs = state.slice() /** copy origin state */
+
+  switch(strategy) {
+    case JobSortStrategies.RUNNING:
+      return jobs.sort(sortByRunning)
+    case JobSortStrategies.WAITING:
+      return jobs.sort(sortByWaiting)
+    case JobSortStrategies.DISABLED:
+      return jobs.sort(sortByDisabled)
+  }
+
+  return state
+}
+
+const INITIAL_JOB_ITEMS = sortJob(JOB_ITEMS, INITIAL_SORT_STRATEGY)
 
 export function handleJobItems(state = INITIAL_JOB_ITEMS, action = null) {
   if (null == action) return state
@@ -74,7 +125,11 @@ export function handleJobItems(state = INITIAL_JOB_ITEMS, action = null) {
       return editJob(state, 'running', false, payload.name)
     case JobActionTypes.START:
       return editJob(state, 'running', true, payload.name)
-      // TODO remove, update
+    case JobActionTypes.REMOVE:
+      console.log(`TODO: ${JobActionTypes.REMOVE}`)
+      return state
+    case JobActionTypes.SORT:
+      return sortJob(state, payload.strategy)
   }
 
   return state
@@ -96,7 +151,31 @@ export function handleJobPaginator(state = INITIAL_PAGINATOR_STATE, action = nul
   return state
 }
 
+export function handleJobFilter(state = '', action = null) {
+  const { type, payload, } = action
+
+  switch(type) {
+    case JobActionTypes.FILTER:
+      return payload.filterKeyword /** string is immutable */
+  }
+
+  return state
+}
+
+export function handleJobSorter(state = INITIAL_SORT_STRATEGY, action = null) {
+  const { type, payload, } = action
+
+  switch(type) {
+    case JobActionTypes.SORT:
+      return payload.strategy /** string is immutable */
+  }
+
+  return state
+}
+
 export default combineReducers({
   items: handleJobItems,
   paginator: handleJobPaginator,
+  filterKeyword: handleJobFilter,
+  sortingStrategy: handleJobSorter,
 })

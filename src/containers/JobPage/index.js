@@ -14,6 +14,8 @@ class JobPage extends React.Component {
   static propTypes = {
     actions: PropTypes.object.isRequired,
     paginator: PropTypes.object.isRequired,
+    filterKeyword: PropTypes.string.isRequired,
+    sortingStrategy: PropTypes.string.isRequired,
     jobs: PropTypes.array.isRequired,
   }
 
@@ -23,22 +25,17 @@ class JobPage extends React.Component {
   }
 
   render() {
-    const { jobs, actions, paginator, } = this.props
+    const { actions, paginator, filterKeyword, sortingStrategy, jobs, } = this.props
     const { itemCountPerPage, currentPageOffset, currentItemOffset, } = paginator
 
+    // TODO filter
     const sliced = jobs.slice(currentItemOffset, currentItemOffset + itemCountPerPage)
 
     return (
       <div>
-        <div>
-          <JobHeader jobs={jobs} actions={actions} />
-        </div>
-        <div>
-          <JobList jobs={sliced} actions={actions} />
-        </div>
-        <div>
-          <JobFooter jobs={jobs} actions={actions} />
-        </div>
+        <JobHeader sortingStrategy={sortingStrategy} jobs={jobs} actions={actions} />
+        <JobList filterKeyword={filterKeyword} jobs={sliced} actions={actions} />
+        <JobFooter jobs={jobs} actions={actions} />
         <div className="center" style={style.paginator}>
           <Paginator itemCountPerPage={itemCountPerPage}
                      currentPageOffset={currentPageOffset}
@@ -55,6 +52,8 @@ function mapStateToProps(state) {
   return {
     jobs: state.job.items,
     paginator: state.job.paginator,
+    filterKeyword: state.job.filterKeyword,
+    sortingStrategy: state.job.sortingStrategy,
   }
 }
 

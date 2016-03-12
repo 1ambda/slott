@@ -1,47 +1,65 @@
 import React, { PropTypes, } from 'react'
-import SelectField from 'material-ui/lib/select-field'
-import DropDownMenu from 'material-ui/lib/DropDownMenu'
-import TextField from 'material-ui/lib/text-field'
-import MenuItem from 'material-ui/lib/menus/menu-item'
 
-
+import Filter from '../../Common/Filter'
+import Sorter from '../../Common/Sorter'
 import * as style from './style'
+
+import JobSortingStrategies from '../../../constants/JobSortStrategies'
 
 /** TODO filter, */
 export default class JobHeader extends React.Component {
   static propTypes = {
+    sortingStrategy: PropTypes.string.isRequired,
     jobs: PropTypes.array.isRequired,
     actions: PropTypes.object.isRequired,
   }
 
-  render() {
-    const { jobs, actions, } = this.props
+  handleFilterChange(filterKeyword) {
+    const payload = { filterKeyword, }
+    const { actions, } = this.props
 
+    actions.filterJob(payload)
+  }
+
+  handleSorterChange(strategy) {
+    const payload = { strategy, }
+    const { actions, } = this.props
+
+    actions.sortJob(payload)
+  }
+
+  createSummary(jobs) {
     const totalJobCount = jobs.length
     const runningJobCount = jobs.filter(j => j.running).length
+
+    return (
+      <div style={style.summary}>
+        Running <span style={style.summaryRunningJob}>{runningJobCount}</span> of {totalJobCount} Jobs
+      </div>
+    )
+  }
+
+  render() {
+    const { sortingStrategy, jobs, actions, } = this.props
 
     return (
       <div>
         <div style={style.title}>
           Job
         </div>
-        <div style={style.summary}>
-          Running {runningJobCount} of {totalJobCount} Jobs
-        </div>
         <div>
-
-          <TextField
-            hintText="Hint Text"
-            floatingLabelText="Floating Label Text"
-            />
-          <SelectField value={1} className="right">
-            <MenuItem value={1} primaryText="Never"/>
-            <MenuItem value={2} primaryText="Every Night"/>
-            <MenuItem value={3} primaryText="Weeknights"/>
-            <MenuItem value={4} primaryText="Weekends"/>
-            <MenuItem value={5} primaryText="Weekly"/>
-          </SelectField>
+          <Filter handler={this.handleFilterChange.bind(this)}
+                  floatingLabel="Insert Filter"
+                  style={style.filterInput} />
+          <Sorter handler={this.handleSorterChange.bind(this)}
+                  style={style.sorter}
+                  labelStyle={style.sorterLabel}
+                  floatingLabel="Sort by"
+                  floatingLabelStyle={style.sorterFloatingLabel}
+                  strategies={JobSortingStrategies}
+                  currentStrategy={sortingStrategy} />
         </div>
+        {this.createSummary(jobs)}
       </div>
     )
   }

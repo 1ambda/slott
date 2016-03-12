@@ -27,3 +27,15 @@ export function exitTransition(payload) {
 export function changePageOffset(payload) {
   return { type: JobActionTypes.CHANGE_PAGE_OFFSET, payload, }
 }
+
+export function removeJob(payload) {
+  return { type: JobActionTypes.REMOVE, payload, }
+}
+
+export function sortJob(payload) {
+  return { type: JobActionTypes.SORT, payload, }
+}
+
+export function filterJob(payload) {
+  return { type: JobActionTypes.FILTER, payload, }
+}

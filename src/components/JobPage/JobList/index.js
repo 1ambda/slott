@@ -8,6 +8,7 @@ import JobItem from '../JobItem'
 
 export default class JobList extends React.Component {
   static propTypes = {
+    filterKeyword: PropTypes.string.isRequired,
     actions: PropTypes.object.isRequired,
     jobs: PropTypes.array.isRequired,
   }
@@ -19,7 +20,9 @@ export default class JobList extends React.Component {
   }
 
   render() {
-    const { jobs, actions, } = this.props
+    const { jobs, filterKeyword, actions, } = this.props
+
+    console.log(filterKeyword)
 
     const jobItems = jobs
       .map((job, index) => { return { job, index, } })
@@ -38,3 +41,4 @@ export default class JobList extends React.Component {
     )
   }
 }
+
