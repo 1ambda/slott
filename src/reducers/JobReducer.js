@@ -146,6 +146,11 @@ export function handleJobPaginator(state = INITIAL_PAGINATOR_STATE, action = nul
       const currentPageOffset = newPageOffset
       return Object.assign({}, state, { currentPageOffset, currentItemOffset, })
     }
+
+    /** reset paginator if filter or sorter action is occurred */
+    case JobActionTypes.SORT:
+    case JobActionTypes.FILTER:
+      return INITIAL_PAGINATOR_STATE
   }
 
   return state
