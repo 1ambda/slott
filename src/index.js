@@ -13,7 +13,8 @@ import { syncHistoryWithStore, routerReducer, } from 'react-router-redux'
 import routes from './routes'
 import configureStore from './store/configureStore'
 
-import './styles/styles.scss'
+/** import global css (element only, not class) */
+import './styles/styles.css'
 
 const store = configureStore()
 const history = syncHistoryWithStore(browserHistory, store)

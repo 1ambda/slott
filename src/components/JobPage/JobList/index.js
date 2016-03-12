@@ -31,12 +31,10 @@ export default class JobList extends React.Component {
       }, [])
 
     return (
-      <div>
-        <List>
-          <Divider />
-          {jobItems}
-        </List>
-      </div>
+      <List style={style.list}>
+        <Divider />
+        {jobItems}
+      </List>
     )
   }
 }

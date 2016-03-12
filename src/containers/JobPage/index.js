@@ -3,8 +3,10 @@ import { Link, } from 'react-router'
 import { connect, } from 'react-redux'
 import { bindActionCreators, } from 'redux'
 
-import JobList from '../../components/Job/JobList'
 import Paginator from '../../components/Common/Paginator'
+import JobList from '../../components/JobPage/JobList'
+import JobHeader from '../../components/JobPage/JobHeader'
+import JobFooter from '../../components/JobPage/JobFooter'
 import * as JobActions from '../../actions/JobActions'
 import * as style from './style'
 
@@ -29,7 +31,13 @@ class JobPage extends React.Component {
     return (
       <div>
         <div>
+          <JobHeader jobs={jobs} actions={actions} />
+        </div>
+        <div>
           <JobList jobs={sliced} actions={actions} />
+        </div>
+        <div>
+          <JobFooter jobs={jobs} actions={actions} />
         </div>
         <div className="center" style={style.paginator}>
           <Paginator itemCountPerPage={itemCountPerPage}

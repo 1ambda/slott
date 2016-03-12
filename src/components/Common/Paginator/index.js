@@ -2,7 +2,7 @@ import React from 'react'
 import ReactPaginate from 'react-paginate'
 
 /** since react-paginate support css style only, we need a stylesheet */
-import './style.scss'
+import * as paginatorStyle from './style.css'
 
 const styles = {
   container: {
@@ -38,7 +38,8 @@ export default class Paginator extends React.Component {
                      clickCallback={this.handlePageChange.bind(this)}
                      containerClassName={"pagination"}
                      subContainerClassName={"pages pagination"}
-                     activeClassName="paginator-active-label" />
+                     activeClassName={paginatorStyle.activeLabel} />
+
     )
   }
 }

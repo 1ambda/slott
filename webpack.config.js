@@ -43,17 +43,53 @@ const getEntry = function (env) {
   return entry
 }
 
+const getPostcssPlugins = function (env) {
+
+  let browsers = ['last 10 version', '> 5%', 'ie >= 8']
+
+  let plugins = [
+    require('postcss-url')({
+      copy: 'rebase',
+    }),
+    require('postcss-cssnext')({
+      browsers: browsers,
+    }),
+    require('postcss-reporter')({
+      clearMessages: true,
+    }),
+    require('autoprefixer')({
+      browsers: browsers,
+    }),
+    require('postcss-import')(),
+  ]
+
+  return plugins;
+}
+
+
 const getLoaders = function (env) {
-  const loaders = [{
-    test: /\.js$/,
-    include: path.join(__dirname, 'src'),
-    loaders: ['babel', 'eslint',],
-  },]
+  const loaders = [
+    {
+      test: /\.js$/,
+      include: path.join(__dirname, 'src'),
+      loaders: ['babel', 'eslint',],
+    },
+  ]
 
   if (env === productionEnvironment ) {
-    loaders.push({test: /(\.css|\.scss)$/, loader: ExtractTextPlugin.extract('css?sourceMap!sass?sourceMap'),})
+    loaders.push({
+        test: /(\.css)$/,
+        include: path.join(__dirname, 'src'),
+        loader: ExtractTextPlugin.extract(['style', 'css?sourceMap&module&importLoaders=1', 'postcss']),
+      }
+    )
   } else {
-    loaders.push({test: /(\.css|\.scss)$/, loaders: ['style', 'css?sourceMap', 'sass?sourceMap',],})
+    loaders.push({
+        test: /(\.css)$/,
+        include: path.join(__dirname, 'src'),
+        loaders: ['style', 'css?sourceMap&module&importLoaders=1', 'postcss']
+      }
+    )
   }
 
   return loaders
@@ -72,9 +108,8 @@ function getConfig(env) {
       filename: 'bundle.js',
     },
     plugins: getPlugins(env),
-    module: {
-      loaders: getLoaders(env),
-    },
+    module: { loaders: getLoaders(env), },
+    postcss: getPostcssPlugins(),
   }
 }
 

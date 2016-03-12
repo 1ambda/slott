@@ -5,7 +5,6 @@ import Divider from 'material-ui/lib/divider'
 import Checkbox from 'material-ui/lib/checkbox'
 import Toggle from 'material-ui/lib/toggle'
 import FontIcon from 'material-ui/lib/font-icon'
-import Badge from 'material-ui/lib/badge'
 
 import { JobItemColors, } from '../../../constants/theme'
 import * as style from './style'
@@ -46,7 +45,7 @@ export default class JobItem extends React.Component {
 
     return (
       <ListItem key={index}
-                style={{color: commandColor,}}
+                style={{color: commandColor, fontWeight: style.fontWeight,}}
                 disabled={isRemoveIconInactive}
                 primaryText="Remove"
                 rightIcon={removeIcon} />
@@ -65,7 +64,7 @@ export default class JobItem extends React.Component {
 
     return (
       <ListItem key={index}
-                style={{color: commandColor,}}
+                style={{color: commandColor, fontWeight: style.fontWeight,}}
                 primaryText="Disabled"
                 rightToggle={disableToggle} />
     )
@@ -83,7 +82,7 @@ export default class JobItem extends React.Component {
 
     return (
       <ListItem key={index}
-                style={{color: commandColor,}}
+                style={{color: commandColor, fontWeight: style.fontWeight,}}
                 primaryText="Running"
                 rightToggle={runningToggle} />
     )
