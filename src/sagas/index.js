@@ -10,9 +10,9 @@ import * as api from './api'
 const JOB_TRANSITION_DELAY = 1000
 const always = true
 
-export function delay(millis) {
-  return new Promise(resolve => setTimeout(() => { resolve() }, millis))
-}
+// TODO: global error page
+// TODO: remove, start/stop, enable/disable api
+// TODO config, json editor
 
 /** fetch initial jobs */
 function* initialize() {
@@ -30,17 +30,17 @@ function* watchStartJob() {
     const { payload, } = yield take(JobActionTypes.START)
     yield put(JobActions.enterTransition(payload))
     yield put(JobActions.startJob(payload))
-    yield call(delay, JOB_TRANSITION_DELAY)
+    yield call(api.delay, JOB_TRANSITION_DELAY)
     yield put(JobActions.exitTransition(payload))
   }
 }
 
-function* watchStartJob() {
+function* watchStop() {
   while(always) {
     const { payload, } = yield take(JobActionTypes.STOP)
     yield put(JobActions.enterTransition(payload))
     yield put(JobActions.stopJob(payload))
-    yield call(delay, JOB_TRANSITION_DELAY)
+    yield call(api.delay, JOB_TRANSITION_DELAY)
     yield put(JobActions.exitTransition(payload))
   }
 }
@@ -48,5 +48,5 @@ function* watchStartJob() {
 export default function* () {
   yield fork(initialize)
   yield fork(watchStartJob)
-  yield fork(watchStartJob)
+  yield fork(watchStop)
 }

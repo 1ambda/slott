@@ -21,3 +21,8 @@ function fetchJSON(url) {
 export function* fetchJobs() {
   return fetchJSON('/api/jobs.json')
 }
+
+export function delay(millis) {
+  return new Promise(resolve => setTimeout(() => { resolve() }, millis))
+}
+

@@ -74,6 +74,30 @@ const getLoaders = function (env) {
       include: path.join(__dirname, 'src'),
       loaders: ['babel', 'eslint',],
     },
+    { /** globally used css */
+      test: /(\.css)$/,
+      include: [ path.join(__dirname, 'node_modules') ],
+      loaders: ['style', 'css?sourceMap&importLoaders=1', 'postcss']
+    },
+    {
+      test: /\.woff(\?\S*)?$/,
+      loader: 'url-loader?limit=10000&minetype=application/font-woff'
+    },
+    {
+      test: /\.woff2(\?\S*)?$/,
+      loader: 'url-loader?limit=10000&minetype=application/font-woff'
+    },
+    {
+      test: /\.eot(\?\S*)?$/,
+      loader: 'url-loader'
+    }, {
+      test: /\.ttf(\?\S*)?$/,
+      loader: 'url-loader'
+    },
+    {
+      test: /\.svg(\?\S*)?$/,
+      loader: 'url-loader'
+    },
   ]
 
   if (env === productionEnvironment ) {
@@ -107,6 +131,9 @@ function getConfig(env) {
       publicPath: '',
       filename: 'bundle.js',
     },
+    //externals: {
+    //  jsoneditor: 'JSONEditor',
+    //},
     plugins: getPlugins(env),
     module: { loaders: getLoaders(env), },
     postcss: getPostcssPlugins(),
