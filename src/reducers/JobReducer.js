@@ -3,12 +3,6 @@ import { combineReducers, } from 'redux'
 import * as JobActionTypes from '../constants/JobActionTypes'
 import * as JobSortStrategies from '../constants/JobSortStrategies'
 
-const INITIAL_PAGINATOR_STATE = {
-  currentPageOffset: 0,
-  currentItemOffset: 0,
-  itemCountPerPage: 8,
-}
-
 export function editJob(state, prop, value, name) {
   return state.map(job => {
     return (job.name === name) ? Object.assign({}, job, {[prop]: value,}) : job
@@ -90,6 +84,12 @@ export function handleJobItems(state = [], action = null) {
   return state
 }
 
+const INITIAL_PAGINATOR_STATE = {
+  currentPageOffset: 0,
+  currentItemOffset: 0,
+  itemCountPerPage: 8,
+}
+
 export function handleJobPaginator(state = INITIAL_PAGINATOR_STATE, action = null) {
 
   const { type, payload, } = action
@@ -133,9 +133,35 @@ export function handleJobSorter(state = JobSortStrategies.INITIAL, action = null
   return state
 }
 
+const INITIAL_CONFIG_DIALOG_STATE = {
+  title: '',
+  opened: false,
+  readonly: true,
+  config: {},
+}
+
+export function handleConfigDialog(state = INITIAL_CONFIG_DIALOG_STATE, action = null) {
+  const { type, payload, } = action
+
+  switch(type) {
+    case JobActionTypes.OPEN_CONFIG_DIALOG:
+      return Object.assign({}, state, {
+        title: payload.name, opened: true, readonly: payload.readonly, config: payload.config,
+      })
+
+    case JobActionTypes.CLOSE_CONFIG_DIALOG:
+      return Object.assign({}, state, {
+        opened: false,
+      })
+  }
+
+  return state
+}
+
 export default combineReducers({
   items: handleJobItems,
   paginator: handleJobPaginator,
   filterKeyword: handleJobFilter,
   sortingStrategy: handleJobSorter,
+  configDialog: handleConfigDialog,
 })

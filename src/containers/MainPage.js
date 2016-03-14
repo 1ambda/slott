@@ -4,8 +4,6 @@ import { bindActionCreators, } from 'redux'
 
 import * as actions from '../actions'
 
-import ConfigDialog from '../components/JobPage/ConfigDialog'
-
 
 class MainPage extends React.Component {
   static propTypes = {
@@ -13,10 +11,8 @@ class MainPage extends React.Component {
   }
 
   render() {
-
     return (
-      <ConfigDialog />
-
+      <div>Main Page</div>
     )
   }
 }

@@ -1,11 +1,19 @@
 import * as JobActionTypes from '../constants/JobActionTypes'
 
-export function disableJob(payload) {
-  return { type: JobActionTypes.DISABLE, payload, }
+export function openConfigDialog(payload) {
+  return { type: JobActionTypes.OPEN_CONFIG_DIALOG, payload, }
+}
+
+export function closeConfigDialog() {
+  return { type: JobActionTypes.CLOSE_CONFIG_DIALOG, }
 }
 
 export function enableJob(payload) {
   return { type: JobActionTypes.ENABLE, payload, }
+}
+
+export function disableJob(payload) {
+  return { type: JobActionTypes.DISABLE, payload, }
 }
 
 export function startJob(payload) {

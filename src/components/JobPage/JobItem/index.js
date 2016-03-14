@@ -6,8 +6,8 @@ import Checkbox from 'material-ui/lib/checkbox'
 import Toggle from 'material-ui/lib/toggle'
 import FontIcon from 'material-ui/lib/font-icon'
 
-import { JobItemColors, } from '../../../constants/theme'
 import * as style from './style'
+import { JobItemColors, } from '../../../constants/theme'
 
 export default class JobItem extends React.Component {
   static propTypes = {
@@ -106,6 +106,27 @@ export default class JobItem extends React.Component {
     else actions.startJob(payload)
   }
 
+  handleClick(event) {
+    const { actions, name, tags, config, running, disabled, inTransition, } = this.props
+
+    const readonly = (inTransition || (disabled || running))
+    const payload = { name, config, readonly, }
+
+    /**
+     * preventDefault hack
+     *
+     * since we can't controll nestedListToggle event in current material-ui version (0.14.4)
+     * we have to avoid opening dialog when nestedListToggle is clicked
+     */
+
+    if (event.dispatchMarker.includes('Text'))
+      actions.openConfigDialog(payload)
+  }
+
+  handleNestedListToggle(a, b) {
+    //console.log(a)
+  }
+
   render() {
 
     const { name, tags, config, running, disabled, inTransition, } = this.props
@@ -124,7 +145,9 @@ export default class JobItem extends React.Component {
     const tagText = tags.join(', ')
 
     return (
-      <ListItem primaryText={name}
+      <ListItem onClick={this.handleClick.bind(this)}
+                primaryText={name}
+                onNestedListToggle={this.handleNestedListToggle.bind(this)}
                 secondaryText={tagText}
                 leftIcon={spinIcon}
                 nestedItems={nestedItems} />

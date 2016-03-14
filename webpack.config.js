@@ -63,7 +63,7 @@ const getPostcssPlugins = function (env) {
     require('postcss-import')(),
   ]
 
-  return plugins;
+  return plugins
 }
 
 
@@ -76,7 +76,7 @@ const getLoaders = function (env) {
     },
     { /** globally used css */
       test: /(\.css)$/,
-      include: [ path.join(__dirname, 'node_modules') ],
+      include: [ path.join(__dirname, 'node_modules'), ],
       loaders: ['style', 'css?sourceMap&importLoaders=1', 'postcss']
     },
     {
@@ -131,9 +131,9 @@ function getConfig(env) {
       publicPath: '',
       filename: 'bundle.js',
     },
-    //externals: {
-    //  jsoneditor: 'JSONEditor',
-    //},
+    externals: {
+      //required: 'var name',
+    },
     plugins: getPlugins(env),
     module: { loaders: getLoaders(env), },
     postcss: getPostcssPlugins(),

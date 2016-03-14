@@ -3,20 +3,23 @@ import { Link, } from 'react-router'
 import { connect, } from 'react-redux'
 import { bindActionCreators, } from 'redux'
 
-import Paginator from '../../components/Common/Paginator'
 import JobList from '../../components/JobPage/JobList'
 import JobHeader from '../../components/JobPage/JobHeader'
 import JobFooter from '../../components/JobPage/JobFooter'
+import Paginator from '../../components/Common/Paginator'
+import ConfigDialog from '../../components/Common/ConfigDialog'
+
 import * as JobActions from '../../actions/JobActions'
 import * as style from './style'
 
 class JobPage extends React.Component {
   static propTypes = {
     actions: PropTypes.object.isRequired,
+    jobs: PropTypes.array.isRequired,
     paginator: PropTypes.object.isRequired,
     filterKeyword: PropTypes.string.isRequired,
     sortingStrategy: PropTypes.string.isRequired,
-    jobs: PropTypes.array.isRequired,
+    configDialog: PropTypes.object.isRequired,
   }
 
   handlePageOffsetChange(newPageOffset) {
@@ -24,8 +27,17 @@ class JobPage extends React.Component {
     actions.changePageOffset({ newPageOffset, })
   }
 
+  handleConfigDialogClose() {
+    const { actions, } = this.props
+    actions.closeConfigDialog()
+  }
+
+  handleConfigDialogUpdate(config) {
+    console.log(config)
+  }
+
   render() {
-    const { actions, paginator, filterKeyword, sortingStrategy, jobs, } = this.props
+    const { actions, jobs, paginator, filterKeyword, sortingStrategy, configDialog, } = this.props
     const { itemCountPerPage, currentPageOffset, currentItemOffset, } = paginator
 
     /** 1. filter jobs */
@@ -36,6 +48,13 @@ class JobPage extends React.Component {
 
     /** 2. select jobs to be curated */
     const sliced = filtered.slice(currentItemOffset, currentItemOffset + itemCountPerPage)
+
+    /** 3. draw ConfigDialog */
+    const configDialogDOM =  (configDialog.opened) ?
+      (<ConfigDialog actions={actions}
+                      updateHandler={this.handleConfigDialogUpdate.bind(this)}
+                      closeHandler={this.handleConfigDialogClose.bind(this)}
+          {...Object.assign({}, configDialog, {opened: undefined, })} />) : null
 
     return (
       <div>
@@ -49,6 +68,7 @@ class JobPage extends React.Component {
                      totalItemCount={jobs.length}
                      handler={this.handlePageOffsetChange.bind(this)} />
         </div>
+        {configDialogDOM}
       </div>
     )
   }
@@ -60,6 +80,7 @@ function mapStateToProps(state) {
     paginator: state.job.paginator,
     filterKeyword: state.job.filterKeyword,
     sortingStrategy: state.job.sortingStrategy,
+    configDialog: state.job.configDialog,
   }
 }
 
