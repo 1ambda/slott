@@ -12,3 +12,7 @@ export const JobItemColors = {
   activeJobCommandColor: 'rgba(0, 0, 0, 0.87)',
   inactiveJobCommandColor: '#cfd8dc',
 }
+
+export const JobPageColors = {
+  popoverBackground: '#78909c',
+}

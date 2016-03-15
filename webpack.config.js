@@ -45,7 +45,7 @@ const getEntry = function (env) {
 
 const getPostcssPlugins = function (env) {
 
-  let browsers = ['last 10 version', '> 5%', 'ie >= 8']
+  let browsers = ['last 10 version', '> 5%', 'ie >= 8',]
 
   let plugins = [
     require('postcss-url')({
@@ -77,26 +77,26 @@ const getLoaders = function (env) {
     { /** globally used css */
       test: /(\.css)$/,
       include: [ path.join(__dirname, 'node_modules'), ],
-      loaders: ['style', 'css?sourceMap&importLoaders=1', 'postcss']
+      loaders: ['style', 'css?sourceMap&importLoaders=1', 'postcss',],
     },
     {
       test: /\.woff(\?\S*)?$/,
-      loader: 'url-loader?limit=10000&minetype=application/font-woff'
+      loader: 'url-loader?limit=10000&minetype=application/font-woff',
     },
     {
       test: /\.woff2(\?\S*)?$/,
-      loader: 'url-loader?limit=10000&minetype=application/font-woff'
+      loader: 'url-loader?limit=10000&minetype=application/font-woff',
     },
     {
       test: /\.eot(\?\S*)?$/,
-      loader: 'url-loader'
+      loader: 'url-loader',
     }, {
       test: /\.ttf(\?\S*)?$/,
-      loader: 'url-loader'
+      loader: 'url-loader',
     },
     {
       test: /\.svg(\?\S*)?$/,
-      loader: 'url-loader'
+      loader: 'url-loader',
     },
   ]
 
@@ -104,14 +104,14 @@ const getLoaders = function (env) {
     loaders.push({
         test: /(\.css)$/,
         include: path.join(__dirname, 'src'),
-        loader: ExtractTextPlugin.extract(['style', 'css?sourceMap&module&importLoaders=1', 'postcss']),
+        loader: ExtractTextPlugin.extract(['style', 'css?sourceMap&module&importLoaders=1', 'postcss',]),
       }
     )
   } else {
     loaders.push({
         test: /(\.css)$/,
         include: path.join(__dirname, 'src'),
-        loaders: ['style', 'css?sourceMap&module&importLoaders=1', 'postcss']
+        loaders: ['style', 'css?sourceMap&module&importLoaders=1', 'postcss',],
       }
     )
   }

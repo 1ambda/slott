@@ -3,11 +3,35 @@ import { combineReducers, } from 'redux'
 import * as JobActionTypes from '../constants/JobActionTypes'
 import * as JobSortStrategies from '../constants/JobSortStrategies'
 
-export function editJob(state, prop, value, name) {
-  return state.map(job => {
-    return (job.name === name) ? Object.assign({}, job, {[prop]: value,}) : job
-  })
+const JOB_PROPERTY = {
+  running: 'running',
+  disabled: 'disabled',
+  inTransition: 'inTransition',
 }
+
+export const editJob = (job, prop, value) =>
+  Object.assign({}, job, {[prop]: value,})
+
+export const editJobByName = (state, name, prop, value) =>
+  state.map(job => {
+    return (job.name === name) ? editJob(job, prop, value) : job
+  })
+
+
+export const stopJob = (state, name) => editJobByName(state, name, JOB_PROPERTY.running, false)
+export const startJob = (state, name) => editJobByName(state, name, JOB_PROPERTY.running, true)
+export const disableJob = (state, name) => editJobByName(state, name, JOB_PROPERTY.disabled, true)
+export const enableJob = (state, name) => editJobByName(state, name, JOB_PROPERTY.disabled, false)
+export const enterJobTransition = (state, name) => editJobByName(state, name, JOB_PROPERTY.inTransition, true)
+export const exitJobTransition = (state, name) => editJobByName(state, name, JOB_PROPERTY.inTransition, false)
+export const stopAllJobs = (state) => /** iff job is running */
+  state.map(job => (job[JOB_PROPERTY.running]) ?
+      editJob(job, JOB_PROPERTY.running, false) : job
+  )
+export const startAllJobs = (state) => /** iff not running and not disabled */
+  state.map(job => (!job[JOB_PROPERTY.running] && !job[JOB_PROPERTY.disabled]) ?
+      editJob(job, JOB_PROPERTY.running, true) : job
+  )
 
 export function sortByRunning(job1, job2) {
   if (job1.running && !job2.running) return -1
@@ -63,22 +87,26 @@ export function handleJobItems(state = [], action = null) {
     case JobActionTypes.FETCH.SUCCESS:
       return payload.jobs /** return fetched new jobs */
     case JobActionTypes.ENTER_TRANSITION:
-      return editJob(state, 'inTransition', true, payload.name)
+      return enterJobTransition(state, payload.name)
     case JobActionTypes.EXIT_TRANSITION:
-      return editJob(state, 'inTransition', false, payload.name)
+      return exitJobTransition(state, payload.name)
     case JobActionTypes.DISABLE:
-      return editJob(state, 'disabled', true, payload.name)
+      return disableJob(state, payload.name)
     case JobActionTypes.ENABLE:
-      return editJob(state, 'disabled', false, payload.name)
+      return enableJob(state, payload.name)
     case JobActionTypes.STOP:
-      return editJob(state, 'running', false, payload.name)
+      return stopJob(state, payload.name)
     case JobActionTypes.START:
-      return editJob(state, 'running', true, payload.name)
+      return startJob(state, payload.name)
     case JobActionTypes.REMOVE:
       console.log(`TODO: ${JobActionTypes.REMOVE}`)
       return state
     case JobActionTypes.SORT:
       return sortJob(state, payload.strategy)
+    case JobActionTypes.STOP_ALL:
+      return stopAllJobs(state)
+    case JobActionTypes.START_ALL:
+      return startAllJobs(state)
   }
 
   return state

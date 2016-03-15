@@ -1,62 +1,27 @@
 import * as JobActionTypes from '../constants/JobActionTypes'
 
-export function openConfigDialog(payload) {
-  return { type: JobActionTypes.OPEN_CONFIG_DIALOG, payload, }
-}
+/** for job item */
+export const enableJob = (payload) => { return { type: JobActionTypes.ENABLE, payload, } }
+export const disableJob = (payload) => { return { type: JobActionTypes.DISABLE, payload, } }
+export const startJob = (payload) => { return { type: JobActionTypes.START, payload, } }
+export const stopJob = (payload) => { return { type: JobActionTypes.STOP, payload, } }
+export const enterTransition = (payload) => { return { type: JobActionTypes.ENTER_TRANSITION, payload, } }
+export const exitTransition = (payload) => { return { type: JobActionTypes.EXIT_TRANSITION, payload, } }
+export const removeJob = (payload) => { return { type: JobActionTypes.REMOVE, payload, } }
+export const stopAllJobs = () => { return { type: JobActionTypes.STOP_ALL, } }
+export const startAllJobs = () => { return { type: JobActionTypes.START_ALL, } }
 
-export function closeConfigDialog() {
-  return { type: JobActionTypes.CLOSE_CONFIG_DIALOG, }
-}
+/** sorter, filter, paginator */
+export const sortJob = (payload) => { return { type: JobActionTypes.SORT, payload, } }
+export const filterJob = (payload) => { return { type: JobActionTypes.FILTER, payload, } }
+export const changePageOffset = (payload) => { return { type: JobActionTypes.CHANGE_PAGE_OFFSET, payload, } }
 
-export function enableJob(payload) {
-  return { type: JobActionTypes.ENABLE, payload, }
-}
+/** for config dialog */
+export const openConfigDialog = (payload) => { return { type: JobActionTypes.OPEN_CONFIG_DIALOG, payload, } }
+export const closeConfigDialog = () => { return { type: JobActionTypes.CLOSE_CONFIG_DIALOG, } }
 
-export function disableJob(payload) {
-  return { type: JobActionTypes.DISABLE, payload, }
-}
-
-export function startJob(payload) {
-  return { type: JobActionTypes.START, payload, }
-}
-
-export function stopJob(payload) {
-  return { type: JobActionTypes.STOP, payload, }
-}
-
-export function enterTransition(payload) {
-  return { type: JobActionTypes.ENTER_TRANSITION, payload, }
-}
-
-export function exitTransition(payload) {
-  return { type: JobActionTypes.EXIT_TRANSITION, payload, }
-}
-
-export function changePageOffset(payload) {
-  return { type: JobActionTypes.CHANGE_PAGE_OFFSET, payload, }
-}
-
-export function removeJob(payload) {
-  return { type: JobActionTypes.REMOVE, payload, }
-}
-
-export function sortJob(payload) {
-  return { type: JobActionTypes.SORT, payload, }
-}
-
-export function filterJob(payload) {
-  return { type: JobActionTypes.FILTER, payload, }
-}
-
-export function fetchJobs() {
-  return { type: JobActionTypes.FETCH.REQUEST, }
-}
-
-export function fetchJobsSuccess(payload) {
-  return { type: JobActionTypes.FETCH.SUCCESS, payload, }
-}
-
-export function fetchJobsFailure(payload) {
-  return { type: JobActionTypes.FETCH.FAILURE, payload, }
-}
+/** api calls for job item */
+export const fetchJobs = () => { return { type: JobActionTypes.FETCH.REQUEST, } }
+export const fetchJobsSuccess = (payload) => { return { type: JobActionTypes.FETCH.SUCCESS, payload, } }
+export const fetchJobsFailure = (payload) => { return { type: JobActionTypes.FETCH.FAILURE, payload, } }
 

@@ -1,7 +1,8 @@
 # TODO
 
-- main page (summary)
+- stop all api
 - footer bottom show all
+- main page (summary)
 - 400
 - 500
 - update, remove api
