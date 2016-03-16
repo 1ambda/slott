@@ -6,7 +6,7 @@
         "consumer-group": "cluster-comsumer-1"
       }
     },
-    "running": true, "disabled": false, "inTransition": false
+    "state": "RUNNING", "switching": false
   },
   { "name": "akka-cluster-01", "tags": ["cluster"],
     "config": {
@@ -15,7 +15,7 @@
         "consumer-group": "cluster-comsumer-1"
       }
     },
-    "running": false, "disabled": false, "inTransition": false
+    "state": "WAITING", "switching": false
   },
   { "name": "akka-remote-01", "tags": ["remote"],
     "config": {
@@ -24,7 +24,7 @@
         "consumer-group": "cluster-comsumer-1"
       }
     },
-    "running": true, "disabled": false, "inTransition": false
+    "state": "RUNNING", "switching": false
   },
   { "name": "hourly-batch-1", "tags": ["batch", "hourly"],
     "config": {
@@ -33,7 +33,7 @@
         "consumer-group": "cluster-comsumer-1"
       }
     },
-    "running": false, "disabled": false, "inTransition": false
+    "state": "RUNNING", "switching": false
   },
   { "name": "storm-job-1", "tags": ["streaming"],
     "config": {
@@ -42,7 +42,7 @@
         "consumer-group": "cluster-comsumer-1"
       }
     },
-    "running": true, "disabled": false, "inTransition": false
+    "state": "RUNNING", "switching": false
   },
   { "name": "storm-job-2", "tags": ["streaming"],
     "config": {
@@ -51,7 +51,7 @@
         "consumer-group": "cluster-comsumer-1"
       }
     },
-    "running": false, "disabled": true, "inTransition": false
+    "state": "STOPPED", "switching": false
   },
   { "name": "daily-batch-0", "tags": ["batch", "daily"],
     "config": {
@@ -60,7 +60,7 @@
         "consumer-group": "cluster-comsumer-1"
       }
     },
-    "running": false, "disabled": false, "inTransition": false
+    "state": "WAITING", "switching": false
   },
   { "name": "spark-job-0", "tags": ["micro batch"],
     "config": {
@@ -69,7 +69,7 @@
         "consumer-group": "cluster-comsumer-1"
       }
     },
-    "running": true, "disabled": false, "inTransition": false
+    "state": "RUNNING", "switching": false
   },
   { "name": "spark-streaming-0", "tags": ["streaming"],
     "config": {
@@ -78,7 +78,7 @@
         "consumer-group": "cluster-comsumer-1"
       }
     },
-    "running": false, "disabled": true, "inTransition": false
+    "state": "STOPPED", "switching": false
   },
   { "name": "spark-streaming-5", "tags": ["streaming"],
     "config": {
@@ -87,7 +87,7 @@
         "consumer-group": "cluster-comsumer-1"
       }
     },
-    "running": true, "disabled": false, "inTransition": false
+    "state": "RUNNING", "switching": false
   },
   { "name": "storm-trident-3", "tags": ["trident", "streaming" ],
     "config": {
@@ -96,7 +96,7 @@
         "consumer-group": "cluster-comsumer-1"
       }
     },
-    "running": false, "disabled": true, "inTransition": false
+    "state": "STOPPED", "switching": false
   },
   { "name": "daily-batch-1", "tags": ["batch", "daily"],
     "config": {
@@ -105,7 +105,7 @@
         "consumer-group": "cluster-comsumer-1"
       }
     },
-    "running": false, "disabled": true, "inTransition": false
+    "state": "STOPPED", "switching": false
   },
   { "name": "hourly-batch-0", "tags": ["batch", "hourly"],
     "config": {
@@ -114,7 +114,7 @@
         "consumer-group": "cluster-comsumer-1"
       }
     },
-    "running": false, "disabled": false, "inTransition": false
+    "state": "WAITING", "switching": false
   }
 ]
 

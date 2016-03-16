@@ -9,36 +9,31 @@ import FontIcon from 'material-ui/lib/font-icon'
 import * as style from './style'
 import { JobItemColors, } from '../../../constants/theme'
 
+import { JOB_PROPERTY, isRunning, isStopped, isWaiting, isSwitching, } from '../../../reducers/JobReducer/job'
 
 /** extract getInactiveState functions for testability */
-export function isReadonly({ inTransition, disabled, running, }) {
-  return inTransition || disabled || running
+export function isReadonly(job) {
+  return isSwitching(job) || isStopped(job) || isRunning(job)
 }
 
-export function isDisableToggleInactive ({ inTransition, running, }) {
-  return  inTransition || running
+export function isReadonlyToggleDisabled(job) {
+  return isSwitching(job) || isRunning(job)
 }
-export function isDisableToggleDefaultToggled({ disabled, running, }) {
-  return !running && disabled
+export function isReadonlyToggleDefaultToggled(job) {
+  return isStopped(job)
 }
 
-export function isRunningToggleInactive ({ inTransition, disabled, }) {
-  return inTransition || disabled
-
+export function isRunningToggleDisabled(job) {
+  return isSwitching(job) || isStopped(job)
 }
-export function isRunningToggleDefaultToggled({ disabled, running, }) {
-  return !disabled && running
+export function isRunningToggleDefaultToggled(job) {
+  return isRunning(job)
 }
 
 
 export default class JobItem extends React.Component {
   static propTypes = {
-    tags: PropTypes.array,
-    name: PropTypes.string.isRequired,
-    config: PropTypes.object.isRequired,
-    running: PropTypes.bool.isRequired,
-    disabled: PropTypes.bool.isRequired,
-    inTransition: PropTypes.bool.isRequired,
+    job: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
   }
 
@@ -47,33 +42,33 @@ export default class JobItem extends React.Component {
       JobItemColors.inactiveJobCommandColor : JobItemColors.activeJobCommandColor
   }
 
-  static createRemoveButton(index, inactive, handler) {
+  static createRemoveButton(index, readonly, handler) {
 
     /**
      * since updating inline-style does't update DOM element,
      * we have to create <FontIcon /> every time to update remove icon color
      */
-    const removeIcon = (inactive) ?
+    const removeIcon = (readonly) ?
       (<FontIcon style={{color: JobItemColors.inactiveRemoveIcon, }}
                  className="material-icons">delete</FontIcon>) :
       (<FontIcon style={{color: JobItemColors.activeRemoveIcon, }}
                  className="material-icons">delete</FontIcon>)
 
-    const commandColor = JobItem.getJobCommandColor(inactive)
+    const commandColor = JobItem.getJobCommandColor(readonly)
 
     return (
       <ListItem key={index}
                 style={{color: commandColor, fontWeight: style.fontWeight,}}
-                disabled={inactive}
+                disabled={readonly}
                 primaryText="Remove"
                 rightIcon={removeIcon}
                 onClick={handler} />
     )
   }
 
-  static createDisableToggle(index, inactive, toggled, handler) {
+  static createReadonlyToggle(index, inactive, toggled, handler) {
 
-    const disableToggle = (<Toggle onToggle={handler}
+    const readonlyToggle = (<Toggle onToggle={handler}
                                    disabled={inactive}
                                    defaultToggled={toggled} />)
 
@@ -84,7 +79,7 @@ export default class JobItem extends React.Component {
       <ListItem key={index}
                 style={{color: commandColor, fontWeight: style.fontWeight,}}
                 primaryText="Readonly"
-                rightToggle={disableToggle} />
+                rightToggle={readonlyToggle} />
     )
   }
 
@@ -104,44 +99,58 @@ export default class JobItem extends React.Component {
     )
   }
 
-  static createSpinIcon({ running, disabled, }) {
-    return (!disabled && running) ? (<FontIcon style={{color: JobItemColors.runningSpin,}} className="fa fa-circle-o-notch fa-spin" />) :
-      (!running && !disabled)  ? (<FontIcon style={{color: JobItemColors.waitingSpin,}} className="fa fa-circle-o-notch" />) :
+  static createSpinIcon(job) {
+
+
+    return (isRunning(job)) ? (<FontIcon style={{color: JobItemColors.runningSpin,}} className="fa fa-circle-o-notch fa-spin" />) :
+      (isWaiting(job))  ? (<FontIcon style={{color: JobItemColors.waitingSpin,}} className="fa fa-circle-o-notch" />) :
         (<FontIcon className="fa fa-circle-o-notch" />)
   }
 
-  handleDisableToggleChange() {
-    const { name, actions, disabled, } = this.props
+  handleReadonlyToggleChange() {
+    const { job, actions, } = this.props
+    const payload  = { name: job[JOB_PROPERTY.name], }
 
-    const payload  = { name, }
-
-    if (disabled) actions.enableJob(payload)
-    else actions.disableJob(payload)
+    /**
+     * since material-ui toggle doesn't property work, (0.14.4)
+     * we rely on the redux state instead of passed params of this callback
+     * to send actions
+     */
+    if (isReadonly(job)) actions.unsetReadonly(payload)
+    else actions.setReadonly(payload)
   }
 
   handleRunningToggleChange() {
-    const { name, actions, running, } = this.props
+    const { job, actions, } = this.props
+    const payload  = { name: job[JOB_PROPERTY.name], }
 
-    const payload  = { name, }
-
-    if (running) actions.stopJob(payload)
+    /**
+     * since material-ui toggle doesn't property work, (0.14.4)
+     * we rely on the redux state instead of passed params of this callback
+     * to send actions
+     */
+    if (isRunning(job)) actions.stopJob(job)
     else actions.startJob(payload)
   }
 
   handleRemoveButtonClick(event) {
-    const { name, actions, } = this.props
+    const { job, actions, } = this.props
+    const payload  = { name: job[JOB_PROPERTY.name], }
 
-    const payload = { name, }
-
+    // TODO dialog
     actions.removeJob(payload)
   }
 
   handleItemClick(event) {
-    const { actions, name, config, } = this.props
+    const { actions, job, } = this.props
 
     /** check current config is readonly */
-    const readonly = isReadonly(this.props)
-    const payload = { name, config, readonly, }
+    const readonly = isReadonly(job)
+    const payload = {
+      name: job[JOB_PROPERTY.name],
+      config: job[JOB_PROPERTY.config],
+      readonly,
+    }
 
     /**
      * preventDefault hack
@@ -155,41 +164,40 @@ export default class JobItem extends React.Component {
   }
 
   render() {
-
-    const { name, tags, } = this.props
+    const { job, } = this.props
+    const tags = job[JOB_PROPERTY.tags]
+    const name = job[JOB_PROPERTY.name]
 
     /** 1. Remove Button */
-
-    const readonly = isReadonly(this.props)
+    const readonly = isReadonly(job)
     const removeButton = JobItem.createRemoveButton(
       0, readonly, this.handleRemoveButtonClick.bind(this))
 
     /** 2. Disable Toggle */
+    const readonlyToggleInactive = isReadonlyToggleDisabled(job)
+    const readonlyToggleDefaultToggled = isReadonlyToggleDefaultToggled(job)
 
-    const disableToggleInactive = isDisableToggleInactive(this.props)
-    const disableToggleDefaultToggled = isDisableToggleDefaultToggled(this.props)
-
-    const disableToggle = JobItem.createDisableToggle(
-      1, disableToggleInactive, disableToggleDefaultToggled,
-      this.handleDisableToggleChange.bind(this))
+    const readonlyToggle = JobItem.createReadonlyToggle(
+      1, readonlyToggleInactive, readonlyToggleDefaultToggled,
+      this.handleReadonlyToggleChange.bind(this))
 
     /** 3. Running Toggle */
+    const runningToggleInactive = isRunningToggleDisabled(job)
+    const runningToggleDefaultToggled = isRunningToggleDefaultToggled(job)
 
-    const runningToggleInactive = isRunningToggleInactive(this.props)
-    const runningToggleDefaultToggled = isRunningToggleDefaultToggled(this.props)
     const runningToggle = JobItem.createRunningToggle(
       2, runningToggleInactive, runningToggleDefaultToggled,
       this.handleRunningToggleChange.bind(this))
 
     /** 4. spin */
-    const spinIcon = JobItem.createSpinIcon(this.props)
+    const spinIcon = JobItem.createSpinIcon(job)
 
     return (
       <ListItem onClick={this.handleItemClick.bind(this)}
                 primaryText={name}
                 secondaryText={tags.join(', ')}
                 leftIcon={spinIcon}
-                nestedItems={[runningToggle, disableToggle, removeButton,]} />
+                nestedItems={[runningToggle, readonlyToggle, removeButton,]} />
     )
   }
 }

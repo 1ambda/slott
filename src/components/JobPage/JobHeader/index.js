@@ -8,6 +8,7 @@ import Sorter from '../../Common/Sorter'
 import * as style from './style'
 
 import JobSortingStrategies from '../../../constants/JobSortStrategies'
+import { JOB_PROPERTY, isRunning, } from '../../../reducers/JobReducer/job'
 
 /** TODO filter, */
 export default class JobHeader extends React.Component {
@@ -19,7 +20,7 @@ export default class JobHeader extends React.Component {
 
   static createSummaryWithPopover(jobs, stopAllPopoverDOM) {
     const totalJobCount = jobs.length
-    const runningJobCount = jobs.filter(j => j.running).length
+    const runningJobCount = jobs.filter(job => isRunning(job)).length
 
     return (
       <div style={style.summaryContainer}>
@@ -73,12 +74,6 @@ export default class JobHeader extends React.Component {
     this.setState({ open: false, })
   }
 
-  handlePopoverButtonClick() {
-    const { actions, } = this.props
-
-    console.log('popover clicked')
-  }
-
   handleStartAllJobs() {
     const { actions, } = this.props
     this.setState({ open: false, })
@@ -108,13 +103,13 @@ export default class JobHeader extends React.Component {
   }
 
   render() {
-    const { sortingStrategy, jobs, actions, } = this.props
+    const { sortingStrategy, jobs, } = this.props
     const { open, anchorEl, } = this.state
 
 
     /** 1. create popover */
     const isAtLeastOneJobIsRunning= jobs.reduce((acc, job) => {
-      return acc || job.running
+      return acc || isRunning(job)
     }, false)
 
     const popoverOpenLabel = (isAtLeastOneJobIsRunning) ?

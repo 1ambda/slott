@@ -3,7 +3,7 @@ import { take, put, call, fork, } from 'redux-saga/effects'
 
 import * as JobActions from '../actions/JobActions'
 import * as JobActionTypes from '../constants/JobActionTypes'
-import { sortJob, } from '../reducers/JobReducer'
+import { sortJob, } from '../reducers/JobReducer/job'
 import * as JobSortStrategies from '../constants/JobSortStrategies'
 import * as api from './api'
 
@@ -28,20 +28,20 @@ function* initialize() {
 function* watchStartJob() {
   while(always) {
     const { payload, } = yield take(JobActionTypes.START)
-    yield put(JobActions.enterTransition(payload))
+    yield put(JobActions.startSwitching(payload))
     yield put(JobActions.startJob(payload))
     yield call(api.delay, JOB_TRANSITION_DELAY)
-    yield put(JobActions.exitTransition(payload))
+    yield put(JobActions.endSwitching(payload))
   }
 }
 
 function* watchStop() {
   while(always) {
     const { payload, } = yield take(JobActionTypes.STOP)
-    yield put(JobActions.enterTransition(payload))
+    yield put(JobActions.startSwitching(payload))
     yield put(JobActions.stopJob(payload))
     yield call(api.delay, JOB_TRANSITION_DELAY)
-    yield put(JobActions.exitTransition(payload))
+    yield put(JobActions.endSwitching(payload))
   }
 }
 

@@ -1,12 +1,12 @@
 import * as JobActionTypes from '../constants/JobActionTypes'
 
 /** for job item */
-export const enableJob = (payload) => { return { type: JobActionTypes.ENABLE, payload, } }
-export const disableJob = (payload) => { return { type: JobActionTypes.DISABLE, payload, } }
+export const unsetReadonly = (payload) => { return { type: JobActionTypes.UNSET_READONLY, payload, } }
+export const setReadonly = (payload) => { return { type: JobActionTypes.SET_READONLY, payload, } }
 export const startJob = (payload) => { return { type: JobActionTypes.START, payload, } }
 export const stopJob = (payload) => { return { type: JobActionTypes.STOP, payload, } }
-export const enterTransition = (payload) => { return { type: JobActionTypes.ENTER_TRANSITION, payload, } }
-export const exitTransition = (payload) => { return { type: JobActionTypes.EXIT_TRANSITION, payload, } }
+export const startSwitching = (payload) => { return { type: JobActionTypes.START_SWITCHING, payload, } }
+export const endSwitching = (payload) => { return { type: JobActionTypes.END_SWITCHING, payload, } }
 export const removeJob = (payload) => { return { type: JobActionTypes.REMOVE, payload, } }
 export const stopAllJobs = () => { return { type: JobActionTypes.STOP_ALL, } }
 export const startAllJobs = () => { return { type: JobActionTypes.START_ALL, } }

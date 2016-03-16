@@ -3,7 +3,7 @@ import { routerReducer, } from 'react-router-redux'
 import createSagaMiddleware from 'redux-saga'
 
 import RootReducer from '../reducers'
-import sagas from '../sagas'
+import sagas from '../middlewares/sagas'
 const sagaMiddleware = createSagaMiddleware(sagas)
 
 const middlewares = [sagaMiddleware,]

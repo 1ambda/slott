@@ -14,9 +14,7 @@ export default class JobList extends React.Component {
   }
 
   static createJobItem(job, actions) {
-    return (<JobItem {...job}
-                     key={job.name}
-                     actions={actions} />)
+    return (<JobItem job={job} key={job.name} actions={actions} />)
   }
 
   render() {
