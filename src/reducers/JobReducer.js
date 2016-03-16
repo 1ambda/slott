@@ -17,21 +17,23 @@ export const editJobByName = (state, name, prop, value) =>
     return (job.name === name) ? editJob(job, prop, value) : job
   })
 
-
 export const stopJob = (state, name) => editJobByName(state, name, JOB_PROPERTY.running, false)
 export const startJob = (state, name) => editJobByName(state, name, JOB_PROPERTY.running, true)
 export const disableJob = (state, name) => editJobByName(state, name, JOB_PROPERTY.disabled, true)
 export const enableJob = (state, name) => editJobByName(state, name, JOB_PROPERTY.disabled, false)
 export const enterJobTransition = (state, name) => editJobByName(state, name, JOB_PROPERTY.inTransition, true)
 export const exitJobTransition = (state, name) => editJobByName(state, name, JOB_PROPERTY.inTransition, false)
+
+export const removeJob = (state, name) => { /** iff job is not running, not disabled */
+  return state.filter(job => (job.name !== name && !job.running && !job.disabled))
+}
+
 export const stopAllJobs = (state) => /** iff job is running */
   state.map(job => (job[JOB_PROPERTY.running]) ?
-      editJob(job, JOB_PROPERTY.running, false) : job
-  )
+      editJob(job, JOB_PROPERTY.running, false) : job)
 export const startAllJobs = (state) => /** iff not running and not disabled */
   state.map(job => (!job[JOB_PROPERTY.running] && !job[JOB_PROPERTY.disabled]) ?
-      editJob(job, JOB_PROPERTY.running, true) : job
-  )
+      editJob(job, JOB_PROPERTY.running, true) : job)
 
 export function sortByRunning(job1, job2) {
   if (job1.running && !job2.running) return -1
@@ -99,8 +101,7 @@ export function handleJobItems(state = [], action = null) {
     case JobActionTypes.START:
       return startJob(state, payload.name)
     case JobActionTypes.REMOVE:
-      console.log(`TODO: ${JobActionTypes.REMOVE}`)
-      return state
+      return removeJob(state, payload.name)
     case JobActionTypes.SORT:
       return sortJob(state, payload.strategy)
     case JobActionTypes.STOP_ALL:

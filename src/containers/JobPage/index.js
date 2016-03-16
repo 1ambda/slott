@@ -5,7 +5,6 @@ import { bindActionCreators, } from 'redux'
 
 import JobList from '../../components/JobPage/JobList'
 import JobHeader from '../../components/JobPage/JobHeader'
-import JobFooter from '../../components/JobPage/JobFooter'
 import Paginator from '../../components/Common/Paginator'
 import ConfigDialog from '../../components/Common/ConfigDialog'
 
@@ -60,7 +59,6 @@ class JobPage extends React.Component {
       <div>
         <JobHeader sortingStrategy={sortingStrategy} jobs={jobs} actions={actions} />
         <JobList filterKeyword={filterKeyword} jobs={sliced} actions={actions} />
-        <JobFooter jobs={jobs} actions={actions} />
         <div className="center" style={style.paginator}>
           <Paginator itemCountPerPage={itemCountPerPage}
                      currentPageOffset={currentPageOffset}

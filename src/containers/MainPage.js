@@ -4,7 +4,7 @@ import { bindActionCreators, } from 'redux'
 
 import * as actions from '../actions'
 
-
+/** responsible for drawing job summary */
 class MainPage extends React.Component {
   static propTypes = {
     actions: PropTypes.object.isRequired,
@@ -19,7 +19,7 @@ class MainPage extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    appState: {}, /** TODO */
+    jobs: state.job.items
   }
 }
 
