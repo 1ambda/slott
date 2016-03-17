@@ -11,7 +11,6 @@ export default (
   <Route path="/" component={App}>
     <IndexRoute component={MainPage} />
     <Route path="job" component={JobPage}/>
-    <Route path="history" component={HistoryPage}/>
     <Route path="*" component={NotFoundPage} />
   </Route>
 )

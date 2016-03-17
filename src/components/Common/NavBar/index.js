@@ -29,8 +29,6 @@ export default class NavBar extends React.Component {
                         style={style.title} />
           <FlatButton disabled label={<Link to="/job" style={style.text}>Job</Link>}
                       style={style.linkButton} />
-          <FlatButton disabled label={<Link to="/history" style={style.text}>History</Link>}
-                      style={style.linkButton} />
         </ToolbarGroup>
         <ToolbarGroup float="right">
           <IconMenu
