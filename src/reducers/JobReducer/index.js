@@ -26,6 +26,8 @@ export function handleJobItems(state = [], action = null) {
       return Job.stopJob(state, payload.name)
     case JobActionTypes.START:
       return Job.startJob(state, payload.name)
+    case JobActionTypes.UPDATE_CONFIG:
+      return Job.updateConfig(state, payload.name, payload.config)
     case JobActionTypes.REMOVE:
       return Job.removeJob(state, payload.name)
     case JobActionTypes.SORT:
@@ -88,10 +90,9 @@ export function handleJobSorter(state = JobSortStrategies.INITIAL, action = null
 }
 
 const INITIAL_CONFIG_DIALOG_STATE = {
-  title: '',
+  job: {},
   opened: false,
   readonly: true,
-  config: {},
 }
 
 export function handleConfigDialog(state = INITIAL_CONFIG_DIALOG_STATE, action = null) {
@@ -100,7 +101,7 @@ export function handleConfigDialog(state = INITIAL_CONFIG_DIALOG_STATE, action =
   switch(type) {
     case JobActionTypes.OPEN_CONFIG_DIALOG:
       return Object.assign({}, state, {
-        title: payload.name, opened: true, readonly: payload.readonly, config: payload.config,
+        job: payload.job, opened: true, readonly: payload.readonly,
       })
 
     case JobActionTypes.CLOSE_CONFIG_DIALOG:

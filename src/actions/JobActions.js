@@ -8,6 +8,7 @@ export const stopJob = (payload) => { return { type: JobActionTypes.STOP, payloa
 export const startSwitching = (payload) => { return { type: JobActionTypes.START_SWITCHING, payload, } }
 export const endSwitching = (payload) => { return { type: JobActionTypes.END_SWITCHING, payload, } }
 export const removeJob = (payload) => { return { type: JobActionTypes.REMOVE, payload, } }
+export const updateConfig = (payload) => { return { type: JobActionTypes.UPDATE_CONFIG, payload, } }
 export const stopAllJobs = () => { return { type: JobActionTypes.STOP_ALL, } }
 export const startAllJobs = () => { return { type: JobActionTypes.START_ALL, } }
 
@@ -26,4 +27,3 @@ export const closeRemoveDialog = () => { return { type: JobActionTypes.CLOSE_REM
 export const fetchJobs = () => { return { type: JobActionTypes.FETCH.REQUEST, } }
 export const fetchJobsSuccess = (payload) => { return { type: JobActionTypes.FETCH.SUCCESS, payload, } }
 export const fetchJobsFailure = (payload) => { return { type: JobActionTypes.FETCH.FAILURE, payload, } }
-

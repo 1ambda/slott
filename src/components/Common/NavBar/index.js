@@ -25,7 +25,7 @@ export default class NavBar extends React.Component {
     return (
       <Toolbar style={style.navbar}>
         <ToolbarGroup firstChild float="left">
-          <ToolbarTitle text={<IndexLink to="/" style={style.text}>SLOTT</IndexLink>}
+          <ToolbarTitle text={<IndexLink to="/" style={style.text}>Slott</IndexLink>}
                         style={style.title} />
           <FlatButton disabled label={<Link to="/job" style={style.text}>Job</Link>}
                       style={style.linkButton} />

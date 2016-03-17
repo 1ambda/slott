@@ -142,11 +142,7 @@ export default class JobItem extends React.Component {
 
     /** check current config is readonly */
     const readonly = isReadonly(job)
-    const payload = {
-      name: job[JOB_PROPERTY.name],
-      config: job[JOB_PROPERTY.config],
-      readonly,
-    }
+    const payload = { job, readonly, }
 
     /**
      * preventDefault hack

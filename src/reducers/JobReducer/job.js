@@ -43,6 +43,11 @@ export const startJob = (state, name) => {
   return modifyJobWithFilter(state, filter, JOB_PROPERTY.state, JOB_STATE.RUNNING)
 }
 
+export const updateConfig = (state, name, config) => {
+  const filter = (job) => (name === job[JOB_PROPERTY.name])
+  return modifyJobWithFilter(state, filter, JOB_PROPERTY.config, config)
+}
+
 export const setReadonly = (state, name) => {
   const filter = (job) => (name === job[JOB_PROPERTY.name] && isWaiting(job))
   return modifyJobWithFilter(state, filter, JOB_PROPERTY.state, JOB_STATE.STOPPED)

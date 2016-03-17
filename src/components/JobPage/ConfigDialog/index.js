@@ -7,8 +7,10 @@ import RaisedButton from 'material-ui/lib/raised-button'
 import FlatButton from 'material-ui/lib/flat-button'
 import Dialog from 'material-ui/lib/dialog'
 
-const ELEM_ID_CONFIG_EDITOR = 'config-editor'
+import { JOB_PROPERTY, modifyJob, } from '../../../reducers/JobReducer/job'
 import * as configDialogStyle from './style'
+
+const ELEM_ID_CONFIG_EDITOR = 'config-editor'
 
 export const EDITOR_MODES = {
   TREE: 'tree', VIEW: 'view', CODE: 'code',
@@ -26,9 +28,8 @@ export function getAvailableEditorModes (readonly) {
 
 export default class ConfigDialog extends React.Component {
   static propTypes = {
-    title: PropTypes.string.isRequired,
+    job: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
-    config: PropTypes.object.isRequired,
     readonly: PropTypes.bool.isRequired,
   }
 
@@ -43,7 +44,8 @@ export default class ConfigDialog extends React.Component {
   }
 
   componentDidMount() {
-    const { readonly, config, } = this.props
+    const { readonly, job, } = this.props
+    const config = job[JOB_PROPERTY.config]
 
     const defaultMode = getDefaultEditorMode(readonly)
     const availableModes = getAvailableEditorModes(readonly)
@@ -69,16 +71,17 @@ export default class ConfigDialog extends React.Component {
   }
 
   handleUpdate() {
+    const { actions, job, } = this.props
     const { editor, } = this.state
 
-    const updatedConfig = editor.get()
+    const updatedJob = modifyJob(job, JOB_PROPERTY.config, editor.get())
 
-    // TODO update
-    console.log('TODO: ConfigDialog.handleUpdate')
+    actions.updateConfig(updatedJob)
   }
 
   render() {
-    const { title, readonly, } = this.props
+    const { readonly, job, } = this.props
+    const { name: title, } = job
 
     const buttons = [
       <FlatButton
