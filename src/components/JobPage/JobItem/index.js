@@ -109,20 +109,18 @@ export default class JobItem extends React.Component {
 
   handleReadonlyToggleChange() {
     const { job, actions, } = this.props
-    const payload  = { name: job[JOB_PROPERTY.name], }
 
     /**
      * since material-ui toggle doesn't property work, (0.14.4)
      * we rely on the redux state instead of passed params of this callback
      * to send actions
      */
-    if (isReadonly(job)) actions.unsetReadonly(payload)
-    else actions.setReadonly(payload)
+    if (isReadonly(job)) actions.unsetReadonly(job)
+    else actions.setReadonly(job)
   }
 
   handleRunningToggleChange() {
     const { job, actions, } = this.props
-    const payload  = { name: job[JOB_PROPERTY.name], }
 
     /**
      * since material-ui toggle doesn't property work, (0.14.4)
@@ -130,15 +128,13 @@ export default class JobItem extends React.Component {
      * to send actions
      */
     if (isRunning(job)) actions.stopJob(job)
-    else actions.startJob(payload)
+    else actions.startJob(job)
   }
 
   handleRemoveButtonClick(event) {
     const { job, actions, } = this.props
-    const payload  = { name: job[JOB_PROPERTY.name], }
 
-    // TODO dialog
-    actions.removeJob(payload)
+    if (isWaiting(job)) actions.openRemoveDialog(job)
   }
 
   handleItemClick(event) {
@@ -158,7 +154,6 @@ export default class JobItem extends React.Component {
      * since we can't control nestedListToggle event in current material-ui version (0.14.4)
      * we have to avoid opening dialog when nestedListToggle is clicked
      */
-
     if (event.dispatchMarker.includes('Text'))
       actions.openConfigDialog(payload)
   }

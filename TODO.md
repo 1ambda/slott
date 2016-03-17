@@ -1,10 +1,14 @@
 # TODO
 
-- stop all api
 - main page (summary)
+- browser sync api 
+- stop/start all, update, remove api
+- last updated at
+- name validation
 - 400
 - 500
-- update, remove api
 - auth
+- config dialog theme
 
 # DONE
+

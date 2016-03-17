@@ -16,9 +16,11 @@ export const sortJob = (payload) => { return { type: JobActionTypes.SORT, payloa
 export const filterJob = (payload) => { return { type: JobActionTypes.FILTER, payload, } }
 export const changePageOffset = (payload) => { return { type: JobActionTypes.CHANGE_PAGE_OFFSET, payload, } }
 
-/** for config dialog */
+/** for dialogs */
 export const openConfigDialog = (payload) => { return { type: JobActionTypes.OPEN_CONFIG_DIALOG, payload, } }
 export const closeConfigDialog = () => { return { type: JobActionTypes.CLOSE_CONFIG_DIALOG, } }
+export const openRemoveDialog = (payload) => { return { type: JobActionTypes.OPEN_REMOVE_DIALOG, payload, } }
+export const closeRemoveDialog = () => { return { type: JobActionTypes.CLOSE_REMOVE_DIALOG, } }
 
 /** api calls for job item */
 export const fetchJobs = () => { return { type: JobActionTypes.FETCH.REQUEST, } }

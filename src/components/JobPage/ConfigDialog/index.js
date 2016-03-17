@@ -1,10 +1,10 @@
 import React, { PropTypes, } from 'react'
-import ReactDOM from 'react-dom'
 
 import 'jsoneditor/dist/jsoneditor.min.css'
 import JSONEditor from 'jsoneditor/dist/jsoneditor.min.js'
 
 import RaisedButton from 'material-ui/lib/raised-button'
+import FlatButton from 'material-ui/lib/flat-button'
 import Dialog from 'material-ui/lib/dialog'
 
 const ELEM_ID_CONFIG_EDITOR = 'config-editor'
@@ -27,10 +27,9 @@ export function getAvailableEditorModes (readonly) {
 export default class ConfigDialog extends React.Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
+    actions: PropTypes.object.isRequired,
     config: PropTypes.object.isRequired,
     readonly: PropTypes.bool.isRequired,
-    updateHandler: PropTypes.func.isRequired,
-    closeHandler: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -60,44 +59,42 @@ export default class ConfigDialog extends React.Component {
 
     /** external library which does not be managed by React */
     const editor = new JSONEditor(document.getElementById(ELEM_ID_CONFIG_EDITOR), options, config)
+    editor.expandAll()
     this.setState({ editor, })
   }
 
   handleClose() {
-    const { closeHandler, } = this.props
-
-    closeHandler()
+    const { actions, } = this.props
+    actions.closeConfigDialog()
   }
 
   handleUpdate() {
-    const { updateHandler, } = this.props
     const { editor, } = this.state
 
-    updateHandler(editor.get()) /** pass current config */
+    const updatedConfig = editor.get()
+
+    // TODO update
+    console.log('TODO: ConfigDialog.handleUpdate')
   }
 
   render() {
     const { title, readonly, } = this.props
 
-    const actions = [
-      <RaisedButton
-        style={configDialogStyle.actionButton}
-        key="cancel"
-        label="Cancel"
-        secondary
+    const buttons = [
+      <FlatButton
+        style={configDialogStyle.button} secondary
+        key="cancel" label="Cancel"
         onTouchTap={this.handleClose.bind(this)} />,
-      <RaisedButton
-        style={configDialogStyle.actionButton}
-        key="update"
-        label="Update"
-        primary disabled={readonly}
+      <FlatButton
+        style={configDialogStyle.button} primary disabled={readonly}
+        key="update" label="Update"
         onTouchTap={this.handleUpdate.bind(this)} />,
     ]
 
     return (
       <Dialog
-        title={title}
-        actions={actions}
+        title={title} titleStyle={configDialogStyle.title}
+        actions={buttons}
         open modal={false}
         onRequestClose={this.handleClose.bind(this)}>
         <div id={ELEM_ID_CONFIG_EDITOR} style={configDialogStyle.editor} />

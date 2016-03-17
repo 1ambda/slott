@@ -13,6 +13,7 @@ export function handleJobItems(state = [], action = null) {
   switch(type) {
     case JobActionTypes.FETCH.SUCCESS:
       return payload.jobs /** return fetched new jobs */
+      // TODO FETCH.FAILED
     case JobActionTypes.START_SWITCHING:
       return Job.startSwitching(state, payload.name)
     case JobActionTypes.END_SWITCHING:
@@ -111,10 +112,29 @@ export function handleConfigDialog(state = INITIAL_CONFIG_DIALOG_STATE, action =
   return state
 }
 
+const INITIAL_REMOVE_DIALOG_STATE = {
+  job: {},
+  opened: false,
+}
+
+export function handleRemoveDialog(state = INITIAL_REMOVE_DIALOG_STATE, action = null) {
+  const { type, payload, } = action
+
+  switch(type) {
+    case JobActionTypes.OPEN_REMOVE_DIALOG:
+      return Object.assign({}, state, { job: payload, opened: true, })
+    case JobActionTypes.CLOSE_REMOVE_DIALOG:
+      return Object.assign({}, state, { opened: false, })
+  }
+
+  return state
+}
+
 export default combineReducers({
   items: handleJobItems,
   paginator: handleJobPaginator,
   filterKeyword: handleJobFilter,
   sortingStrategy: handleJobSorter,
   configDialog: handleConfigDialog,
+  removeDialog: handleRemoveDialog,
 })

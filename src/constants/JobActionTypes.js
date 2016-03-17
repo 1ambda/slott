@@ -14,9 +14,11 @@ export const SORT = 'JOB_SORT'
 export const FILTER = 'JOB_FILTER'
 export const CHANGE_PAGE_OFFSET = 'JOB_CHANGE_PAGE_OFFSET'
 
-/** for config dialog */
+/** for dialogs */
 export const OPEN_CONFIG_DIALOG = 'JOB_OPEN_CONFIG_DIALOG'
 export const CLOSE_CONFIG_DIALOG = 'JOB_SET_CONFIG_DIALOG'
+export const OPEN_REMOVE_DIALOG = 'JOB_OPEN_REMOVE_DIALOG'
+export const CLOSE_REMOVE_DIALOG = 'JOB_SET_REMOVE_DIALOG'
 
 /** api calls for job item */
 export const FETCH = {
