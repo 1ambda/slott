@@ -26,6 +26,10 @@ export function getAvailableEditorModes (readonly) {
   else return [EDITOR_MODES.TREE, EDITOR_MODES.CODE,]
 }
 
+export function isConfigChanged(initial, updated) {
+  return !(JSON.stringify(initial) === JSON.stringify(updated))
+}
+
 export default class ConfigDialog extends React.Component {
   static propTypes = {
     job: PropTypes.object.isRequired,
@@ -37,15 +41,16 @@ export default class ConfigDialog extends React.Component {
     super(props)
 
     /**
-     * since ConfigDialog is a standalone component,
-     * it manages some internal state itself
+     * to avoid re-drawing the whole page whenever `config` is updated,
+     * ConfigDialog manages editor as it's state
      */
-    this.state = { editor: null, }
+    this.state = { editor: null, configChanged: false, }
   }
 
+  /** component life-cycle */
   componentDidMount() {
     const { readonly, job, } = this.props
-    const config = job[JOB_PROPERTY.config]
+    const initialConfig = job[JOB_PROPERTY.config]
 
     const defaultMode = getDefaultEditorMode(readonly)
     const availableModes = getAvailableEditorModes(readonly)
@@ -54,15 +59,44 @@ export default class ConfigDialog extends React.Component {
       search: false, // TODO: fix search width
       mode: defaultMode,
       modes: availableModes,
-      onError: function (err) {
-        console.error(`JSONEditor: ${err}`) // TODO: go to 500 page
-      },
+      onError: this.handleEditorError.bind(this),
+      onChange: this.handleConfigChanged.bind(this),
     }
 
     /** external library which does not be managed by React */
-    const editor = new JSONEditor(document.getElementById(ELEM_ID_CONFIG_EDITOR), options, config)
+    const editor = new JSONEditor(document.getElementById(ELEM_ID_CONFIG_EDITOR), options, initialConfig)
     editor.expandAll()
     this.setState({ editor, })
+  }
+
+  /** component life-cycle */
+  componentWillReceiveProps(nextProps) {
+    const { job: nextJob, } = nextProps
+    const { job: currentJob, } = this.props
+
+    const { config: currentConfig, } = currentJob
+    const { config: nextConfig, } = nextJob
+
+    /** if config is updated, then disable `UPDATE` button */
+    this.setState({ configChanged: isConfigChanged(currentConfig, nextConfig), })
+  }
+
+  getConfigFromEditor() {
+    const { editor, } = this.state
+    return editor.get()
+  }
+
+  handleConfigChanged() {
+    const { job, } = this.props
+    const { [JOB_PROPERTY.config]: initialConfig, } = job
+
+    const updatedConfig = this.getConfigFromEditor()
+
+    this.setState({ configChanged: isConfigChanged(initialConfig, updatedConfig), })
+  }
+
+  handleEditorError(err) {
+    console.error(`JSONEditor: ${err}`) /** TODO 500 page */
   }
 
   handleClose() {
@@ -72,16 +106,19 @@ export default class ConfigDialog extends React.Component {
 
   handleUpdate() {
     const { actions, job, } = this.props
-    const { editor, } = this.state
+    const { configChanged, } = this.state
 
-    const updatedJob = modifyJob(job, JOB_PROPERTY.config, editor.get())
-
-    actions.updateConfig(updatedJob)
+    if (configChanged) {
+      const updatedJob = modifyJob(job, JOB_PROPERTY.config, this.getConfigFromEditor())
+      actions.updateConfig(updatedJob)
+    }
   }
 
   render() {
     const { readonly, job, } = this.props
     const { name: title, } = job
+
+    const { configChanged, } = this.state
 
     const buttons = [
       <FlatButton
@@ -89,7 +126,7 @@ export default class ConfigDialog extends React.Component {
         key="cancel" label="Cancel"
         onTouchTap={this.handleClose.bind(this)} />,
       <FlatButton
-        style={configDialogStyle.button} primary disabled={readonly}
+        style={configDialogStyle.button} primary disabled={readonly || !configChanged}
         key="update" label="Update"
         onTouchTap={this.handleUpdate.bind(this)} />,
     ]
