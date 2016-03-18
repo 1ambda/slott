@@ -3,7 +3,7 @@ import { combineReducers, } from 'redux'
 import * as JobActionTypes from '../../constants/JobActionTypes'
 import * as JobSortStrategies from '../../constants/JobSortStrategies'
 
-import { EDITOR_DIALOG_MODE, } from '../../components/JobPage/EditorDialog'
+import { EDITOR_DIALOG_MODE, } from '../../components/Common/EditorDialog'
 import * as Job from './job'
 
 export function handleJobItems(state = [], action = null) {

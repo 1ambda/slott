@@ -6,8 +6,8 @@ import { bindActionCreators, } from 'redux'
 import JobList from '../../components/JobPage/JobList'
 import JobHeader from '../../components/JobPage/JobHeader'
 import Paginator from '../../components/Common/Paginator'
-import ConfigDialog, { EDITOR_DIALOG_MODE, } from '../../components/JobPage/EditorDialog'
-import ConfirmDialog from '../../components/JobPage/ConfirmDialog'
+import ConfigDialog, { EDITOR_DIALOG_MODE, } from '../../components/Common/EditorDialog'
+import ConfirmDialog from '../../components/Common/ConfirmDialog'
 
 import { JOB_PROPERTY, } from '../../reducers/JobReducer/job'
 
