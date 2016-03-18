@@ -34,6 +34,7 @@ export const closeConfirmDialog = () =>
 { return { type: JobActionTypes.CLOSE_CONFIRM_DIALOG, } }
 
 /** api calls for job item */
-export const fetchJobs = () => { return { type: JobActionTypes.FETCH.REQUEST, } }
-export const fetchJobsSuccess = (payload) => { return { type: JobActionTypes.FETCH.SUCCESS, payload, } }
-export const fetchJobsFailure = (payload) => { return { type: JobActionTypes.FETCH.FAILURE, payload, } }
+export const fetchJobsRequested = () => { return { type: JobActionTypes.FETCH.REQUESTED, } }
+export const fetchJobsSucceeded = (payload) => { return { type: JobActionTypes.FETCH.SUCCEEDED, payload, } }
+export const fetchJobsFailed = (payload) => { return { type: JobActionTypes.FETCH.FAILED, payload, } }
+

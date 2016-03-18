@@ -8,6 +8,7 @@ import FlatButton from 'material-ui/lib/flat-button'
 import Dialog from 'material-ui/lib/dialog'
 
 import { JOB_PROPERTY, modifyJob, } from '../../../reducers/JobReducer/job'
+import * as JobActions from '../../../actions/JobActions'
 import * as dialogStyle from './style'
 
 const ELEM_ID_EDITOR_DIALOG = 'editor-dialog'
@@ -116,7 +117,7 @@ export default class EditorDialog extends React.Component {
 
   handleClose() {
     const { actions, } = this.props
-    actions.closeEditorDialog()
+    actions[JobActions.closeEditorDialog.name]()
   }
 
   handleUpdate() {
@@ -125,7 +126,7 @@ export default class EditorDialog extends React.Component {
 
     if (configChanged) {
       const updatedJob = modifyJob(job, JOB_PROPERTY.config, this.getConfigFromEditor())
-      actions.updateConfig(updatedJob)
+      actions[JobActions.updateConfig.name](updatedJob)
     }
   }
 
@@ -134,8 +135,8 @@ export default class EditorDialog extends React.Component {
 
     const payload = { name: 'new job', config: this.getConfigFromEditor(), }
 
-    actions.createJob(payload)
-    actions.closeEditorDialog()
+    actions[JobActions.createJob.name](payload)
+    actions[JobActions.closeEditorDialog.name]()
   }
 
   render() {

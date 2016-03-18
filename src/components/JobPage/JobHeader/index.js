@@ -8,6 +8,7 @@ import Sorter from '../../Common/Sorter'
 import * as style from './style'
 
 import JobSortingStrategies from '../../../constants/JobSortStrategies'
+import * as JobActions from '../../../actions/JobActions'
 import { JOB_PROPERTY, isRunning, } from '../../../reducers/JobReducer/job'
 
 export default class JobHeader extends React.Component {
@@ -76,34 +77,34 @@ export default class JobHeader extends React.Component {
     const { actions, } = this.props
     this.setState({ open: false, })
 
-    actions.startAllJobs()
+    actions[JobActions.startAllJobs.name]()
   }
 
   handleStopAllJobs() {
     const { actions, } = this.props
     this.setState({ open: false, })
 
-    actions.stopAllJobs()
+    actions[JobActions.stopAllJobs.name]()
   }
 
   handleCreateJob() {
     const { actions, } = this.props
 
-    actions.openEditorDialogToCreate()
+    actions[JobActions.openEditorDialogToCreate.name]()
   }
 
   handleFilterChange(filterKeyword) {
     const payload = { filterKeyword, }
     const { actions, } = this.props
 
-    actions.filterJob(payload)
+    actions[JobActions.filterJob.name](payload)
   }
 
   handleSorterChange(strategy) {
     const payload = { strategy, }
     const { actions, } = this.props
 
-    actions.sortJob(payload)
+    actions[JobActions.sortJob.name](payload)
   }
 
   render() {

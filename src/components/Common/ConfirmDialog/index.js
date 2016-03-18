@@ -4,52 +4,58 @@ import FlatButton from 'material-ui/lib/flat-button'
 import Dialog from 'material-ui/lib/dialog'
 
 import { JOB_PROPERTY, } from '../../../reducers/JobReducer/job'
-import * as removeDialogStyle from './style'
+import * as JobActions from '../../../actions/JobActions'
+import * as dialogStyle from './style'
 
 export const CONFIRM_DIALOG_MODE = {
   ACTION_ALL: 'ACTION_ALL',
   REMOVE: 'REMOVE',
+  CLOSE: 'CLOSE',
 }
 
 export default class ConfirmDialog extends React.Component {
   static propTypes = {
     job: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
-    dialogMode: PropTypes.object.isRequired,
+    dialogMode: PropTypes.string.isRequired,
   }
 
-  static createTitle(jobName) {
+  static createTitle(element) {
     return (
-      <div className="center" style={removeDialogStyle.title}>
+      <div className="center" style={dialogStyle.title}>
         <span>Remove</span>
-        <span style={removeDialogStyle.jobName}> {jobName}</span>
+        <span style={dialogStyle.jobName}> {element}</span>
       </div>
     )
   }
 
   handleClose() {
     const { actions, } = this.props
-    actions.closeConfirmDialog()
+    actions[JobActions.closeConfirmDialog.name]()
   }
 
   handleRemove() {
     const { actions, job, } = this.props
-    actions.removeJob(job)
-    actions.closeConfirmDialog()
+    actions[JobActions.removeJob.name](job)
+    actions[JobActions.closeConfirmDialog.name]()
   }
 
   render() {
-    const { job, } = this.props
+    const { job, dialogMode, } = this.props
+
+    const submitButton = (CONFIRM_DIALOG_MODE.REMOVE === dialogMode) ?
+      (<FlatButton
+          style={dialogStyle.button} labelStyle={dialogStyle.buttonLabel}
+          key="remove" label="Remove"
+          primary onTouchTap={this.handleRemove.bind(this)} />) : null
+
 
     const buttons = [
       <FlatButton
-        style={removeDialogStyle.button} labelStyle={removeDialogStyle.buttonLabel}
+        style={dialogStyle.button} labelStyle={dialogStyle.buttonLabel}
         secondary key="cancel" label="Cancel"
         onTouchTap={this.handleClose.bind(this)} />,
-      <FlatButton
-        style={removeDialogStyle.button} labelStyle={removeDialogStyle.buttonLabel}
-        key="remove" label="Remove"
-        primary onTouchTap={this.handleRemove.bind(this)} />,
+      submitButton,
     ]
 
     const title = ConfirmDialog.createTitle(job[JOB_PROPERTY.name])

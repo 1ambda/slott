@@ -7,7 +7,7 @@ import JobList from '../../components/JobPage/JobList'
 import JobHeader from '../../components/JobPage/JobHeader'
 import Paginator from '../../components/Common/Paginator'
 import ConfigDialog, { EDITOR_DIALOG_MODE, } from '../../components/Common/EditorDialog'
-import ConfirmDialog from '../../components/Common/ConfirmDialog'
+import ConfirmDialog, { CONFIRM_DIALOG_MODE, } from '../../components/Common/ConfirmDialog'
 
 import { JOB_PROPERTY, } from '../../reducers/JobReducer/job'
 
@@ -27,7 +27,7 @@ class JobPage extends React.Component {
 
   handlePageOffsetChange(newPageOffset) {
     const { actions, } = this.props
-    actions.changePageOffset({ newPageOffset, })
+    actions[JobActions.changePageOffset.name]({ newPageOffset, })
   }
 
   render() {
@@ -37,7 +37,6 @@ class JobPage extends React.Component {
 
     /** 1. filter jobs */
     const filtered = jobs.filter(job => {
-      //const searchArea = `${job[JOB_PROPERTY.name]} ${job[JOB_PROPERTY.tags].join(' ')}`
       const searchArea = [
         job[JOB_PROPERTY.name],
         job[JOB_PROPERTY.tags],
@@ -55,8 +54,8 @@ class JobPage extends React.Component {
     const editorDialogDOM = (EDITOR_DIALOG_MODE.CLOSE !== editorDialog.dialogMode) ?
       (<ConfigDialog {...editorDialog} actions={actions} />) : null
 
-    const confirmDialogDOM = (confirmDialog.opened) ?
-      (<RemoveDialog {...confirmDialog} actions={actions} />) : null
+    const confirmDialogDOM = (CONFIRM_DIALOG_MODE.CLOSE !== confirmDialog.dialogMode) ?
+      (<ConfirmDialog {...confirmDialog} actions={actions} />) : null
 
     return (
       <div>

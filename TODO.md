@@ -1,5 +1,6 @@
 # TODO
 
+- re-design models
 - browser sync api 
 - stop/start all, update, remove api
 - last updated at

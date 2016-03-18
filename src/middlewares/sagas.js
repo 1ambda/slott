@@ -18,10 +18,10 @@ const always = true
 function* initialize() {
   const { response, error, } = yield call(api.fetchJobs)
 
-  if (error) yield put(JobActions.fetchJobsFailure({ error, }))
+  if (error) yield put(JobActions.fetchJobsFailed({ error, }))
   else {
     const sortedJobs = sortJob(response, JobSortStrategies.INITIAL)
-    yield put(JobActions.fetchJobsSuccess({ jobs: sortedJobs, }))
+    yield put(JobActions.fetchJobsSucceeded({ jobs: sortedJobs, }))
   }
 }
 

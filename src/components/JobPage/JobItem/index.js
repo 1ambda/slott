@@ -8,6 +8,7 @@ import FontIcon from 'material-ui/lib/font-icon'
 
 import * as style from './style'
 import { JobItemColors, } from '../../../constants/theme'
+import * as JobActions from '../../../actions/JobActions'
 
 import { JOB_PROPERTY, isRunning, isStopped, isWaiting, isSwitching, } from '../../../reducers/JobReducer/job'
 
@@ -115,8 +116,8 @@ export default class JobItem extends React.Component {
      * we rely on the redux state instead of passed params of this callback
      * to send actions
      */
-    if (isReadonly(job)) actions.unsetReadonly(job)
-    else actions.setReadonly(job)
+    if (isReadonly(job)) actions[JobActions.unsetReadonly.name](job)
+    else actions[JobActions.setReadonly.name](job)
   }
 
   handleRunningToggleChange() {
@@ -127,14 +128,14 @@ export default class JobItem extends React.Component {
      * we rely on the redux state instead of passed params of this callback
      * to send actions
      */
-    if (isRunning(job)) actions.stopJob(job)
-    else actions.startJob(job)
+    if (isRunning(job)) actions[JobActions.stopJob.name](job)
+    else actions[JobActions.startJob.name](job)
   }
 
   handleRemoveButtonClick(event) {
     const { job, actions, } = this.props
 
-    if (isWaiting(job)) actions.openRemoveDialog(job)
+    if (isWaiting(job)) actions[JobActions.openConfirmDialogToRemove.name](job)
   }
 
   handleItemClick(event) {
@@ -151,7 +152,7 @@ export default class JobItem extends React.Component {
      * we have to avoid opening dialog when nestedListToggle is clicked
      */
     if (event.dispatchMarker.includes('Text'))
-      actions.openEditorDialogToEdit(payload)
+      actions[JobActions.openEditorDialogToEdit.name](payload)
   }
 
   render() {

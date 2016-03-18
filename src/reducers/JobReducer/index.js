@@ -4,6 +4,7 @@ import * as JobActionTypes from '../../constants/JobActionTypes'
 import * as JobSortStrategies from '../../constants/JobSortStrategies'
 
 import { EDITOR_DIALOG_MODE, } from '../../components/Common/EditorDialog'
+import { CONFIRM_DIALOG_MODE, } from '../../components/Common/ConfirmDialog'
 import * as Job from './job'
 
 export function handleJobItems(state = [], action = null) {
@@ -12,7 +13,7 @@ export function handleJobItems(state = [], action = null) {
   const { type, payload, } = action
 
   switch(type) {
-    case JobActionTypes.FETCH.SUCCESS:
+    case JobActionTypes.FETCH.SUCCEEDED:
       return payload.jobs /** return fetched new jobs */
       // TODO FETCH.FAILED
     case JobActionTypes.START_SWITCHING:
@@ -123,17 +124,20 @@ export function handleEditorDialog(state = INITIAL_EDITOR_DIALOG_STATE, action =
 
 const INITIAL_CONFIRM_DIALOG_STATE = {
   job: {},
-  opened: false,
+  dialogMode: CONFIRM_DIALOG_MODE.CLOSE,
 }
 
 export function handleConfirmDialog(state = INITIAL_CONFIRM_DIALOG_STATE, action = null) {
   const { type, payload, } = action
 
   switch(type) {
-    case JobActionTypes.OPEN_CONFIRM_DIALOG:
-      return Object.assign({}, state, { job: payload, opened: true, })
+    case JobActionTypes.OPEN_CONFIRM_DIALOG_TO_ACTION_ALL:
+      console.error('TODO: OPEN_CONFIRM_DIALOG_TO_ACTION_ALL in JobReducer')
+      return state
+    case JobActionTypes.OPEN_CONFIRM_DIALOG_TO_REMOVE:
+      return Object.assign({}, state, { job: payload, dialogMode: CONFIRM_DIALOG_MODE.REMOVE, })
     case JobActionTypes.CLOSE_CONFIRM_DIALOG:
-      return Object.assign({}, state, { opened: false, })
+      return Object.assign({}, state, { dialogMode: CONFIRM_DIALOG_MODE.CLOSE, })
   }
 
   return state
