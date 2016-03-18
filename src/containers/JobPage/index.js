@@ -37,7 +37,14 @@ class JobPage extends React.Component {
 
     /** 1. filter jobs */
     const filtered = jobs.filter(job => {
-      const searchArea = `${job[JOB_PROPERTY.name]} ${job[JOB_PROPERTY.tags].join(' ')}`
+      //const searchArea = `${job[JOB_PROPERTY.name]} ${job[JOB_PROPERTY.tags].join(' ')}`
+      const searchArea = [
+        job[JOB_PROPERTY.name],
+        job[JOB_PROPERTY.tags],
+        JSON.stringify(job[JOB_PROPERTY.config]),
+      ].join(' ')
+
+
       return (searchArea.includes(filterKeyword))
     })
 

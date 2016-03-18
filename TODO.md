@@ -1,7 +1,5 @@
 # TODO
 
-- search area
-- create new dialog
 - browser sync api 
 - stop/start all, update, remove api
 - last updated at
@@ -14,3 +12,5 @@
 # DONE
 
 - main page
+- search area
+- create new dialog
