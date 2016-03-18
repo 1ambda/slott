@@ -1,10 +1,11 @@
 # TODO
 
-- main page (summary)
+- search area
+- create new dialog
 - browser sync api 
 - stop/start all, update, remove api
 - last updated at
-- name validation
+- name validation (saga middleware)
 - 400
 - 500
 - auth
@@ -12,3 +13,4 @@
 
 # DONE
 
+- main page

@@ -6,10 +6,16 @@ import Dialog from 'material-ui/lib/dialog'
 import { JOB_PROPERTY, } from '../../../reducers/JobReducer/job'
 import * as removeDialogStyle from './style'
 
-export default class RemoveDialog extends React.Component {
+export const CONFIRM_DIALOG_MODE = {
+  ACTION_ALL: 'ACTION_ALL',
+  REMOVE: 'REMOVE',
+}
+
+export default class ConfirmDialog extends React.Component {
   static propTypes = {
     job: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
+    dialogMode: PropTypes.object.isRequired,
   }
 
   static createTitle(jobName) {
@@ -23,13 +29,13 @@ export default class RemoveDialog extends React.Component {
 
   handleClose() {
     const { actions, } = this.props
-    actions.closeRemoveDialog()
+    actions.closeConfirmDialog()
   }
 
   handleRemove() {
     const { actions, job, } = this.props
     actions.removeJob(job)
-    actions.closeRemoveDialog()
+    actions.closeConfirmDialog()
   }
 
   render() {
@@ -37,16 +43,16 @@ export default class RemoveDialog extends React.Component {
 
     const buttons = [
       <FlatButton
-        style={removeDialogStyle.button}
-        key="cancel" label="Cancel"
-        secondary onTouchTap={this.handleClose.bind(this)} />,
+        style={removeDialogStyle.button} labelStyle={removeDialogStyle.buttonLabel}
+        secondary key="cancel" label="Cancel"
+        onTouchTap={this.handleClose.bind(this)} />,
       <FlatButton
-        style={removeDialogStyle.button}
+        style={removeDialogStyle.button} labelStyle={removeDialogStyle.buttonLabel}
         key="remove" label="Remove"
         primary onTouchTap={this.handleRemove.bind(this)} />,
     ]
 
-    const title = RemoveDialog.createTitle(job[JOB_PROPERTY.name])
+    const title = ConfirmDialog.createTitle(job[JOB_PROPERTY.name])
 
     return (
       <Dialog

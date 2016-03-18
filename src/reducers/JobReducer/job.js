@@ -16,6 +16,10 @@ export const JOB_PROPERTY = {
   config: 'config', /** object */
 }
 
+export const INITIAL_JOB_STATE = {
+  name: '', tags: [], config: '', state: JOB_STATE.WAITING, switching: false,
+}
+
 export const isRunning = (job) => job[JOB_PROPERTY.state] === JOB_STATE.RUNNING
 export const isStopped = (job) => job[JOB_PROPERTY.state] === JOB_STATE.STOPPED
 export const isWaiting = (job) => job[JOB_PROPERTY.state] === JOB_STATE.WAITING
@@ -66,6 +70,13 @@ export const startSwitching = (state, name) => {
 export const endSwitching = (state, name) => {
   const filter = (job) => (name === job[JOB_PROPERTY.name]) // TODO, more elaborate conditions
   return modifyJobWithFilter(state, filter, JOB_PROPERTY.switching, false)
+}
+
+export const createJob = (state, name, config) => {
+  const created = Object.assign({}, INITIAL_JOB_STATE, {
+    [JOB_PROPERTY.name]: name, [JOB_PROPERTY.config]: config,
+  })
+  return [created, ...state, ] /** insert new job at the front of existing jobs */
 }
 
 export const removeJob = (state, name) => {

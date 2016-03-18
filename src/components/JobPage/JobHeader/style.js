@@ -17,15 +17,18 @@ export const summaryRunningJob = {
   fontWeight: 500,
 }
 
-export const summaryText = {
+export const buttonContainer = {
+  float: 'right',
+  marginLeft: 10,
 }
 
-export const stopAllPopover = {
-  container: { float: 'right', },
-  openButtonLabel: { fontWeight: 300, },
-  popover: { padding: 20, backgroundColor: JobPageColors.popoverBackground,},
-  popoverButton: {},
-  popoverButtonLabel: { fontWeight: 300, },
+export const buttonLabel = {
+  fontWeight: 300,
+}
+
+export const popover = {
+  padding: 20,
+  backgroundColor: JobPageColors.popoverBackground,
 }
 
 export const sorter = {

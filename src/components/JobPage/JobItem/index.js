@@ -151,7 +151,7 @@ export default class JobItem extends React.Component {
      * we have to avoid opening dialog when nestedListToggle is clicked
      */
     if (event.dispatchMarker.includes('Text'))
-      actions.openConfigDialog(payload)
+      actions.openEditorDialogToEdit(payload)
   }
 
   render() {

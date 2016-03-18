@@ -10,7 +10,6 @@ import * as style from './style'
 import JobSortingStrategies from '../../../constants/JobSortStrategies'
 import { JOB_PROPERTY, isRunning, } from '../../../reducers/JobReducer/job'
 
-/** TODO filter, */
 export default class JobHeader extends React.Component {
   static propTypes = {
     sortingStrategy: PropTypes.string.isRequired,
@@ -18,16 +17,17 @@ export default class JobHeader extends React.Component {
     actions: PropTypes.object.isRequired,
   }
 
-  static createSummaryWithPopover(jobs, stopAllPopoverDOM) {
+  static createSummaryDOM(jobs, createButton, actionAllButton) {
     const totalJobCount = jobs.length
     const runningJobCount = jobs.filter(job => isRunning(job)).length
 
     return (
       <div style={style.summaryContainer}>
-        <span style={style.summaryText}>Running</span>
+        <span>Running</span>
         <span style={style.summaryRunningJob}> {runningJobCount}</span>
-        <span style={style.summaryText}> of {totalJobCount} Jobs</span>
-        {stopAllPopoverDOM}
+        <span> of {totalJobCount} Jobs</span>
+        <span style={style.buttonContainer}> {actionAllButton} </span>
+        <span style={style.buttonContainer}> {createButton} </span>
       </div>
     )
   }
@@ -39,23 +39,21 @@ export default class JobHeader extends React.Component {
                                popoverButtonHandler) {
 
     return (
-      <span style={style.stopAllPopover.container}>
-        <RaisedButton labelStyle={style.stopAllPopover.openButtonLabel}
-                      primary
-                      onTouchTap={openHandler} label={openButtonLabel} />
+      <RaisedButton labelStyle={style.buttonLabel}
+                    primary
+                    onTouchTap={openHandler} label={openButtonLabel}>
         <Popover
           open={open}
           anchorEl={anchorEl}
           onRequestClose={closeHandler}
           animation={PopoverAnimationFromTop} >
-          <div style={style.stopAllPopover.popover}>
-            <RaisedButton style={style.stopAllPopover.popoverButton}
-                          labelStyle={style.stopAllPopover.popoverButtonLabel}
+          <div style={style.popover}>
+            <RaisedButton labelStyle={style.buttonLabel}
                           onClick={popoverButtonHandler}
                           secondary label="ARE YOU SURE ?"/>
           </div>
         </Popover>
-      </span>
+      </RaisedButton>
     )
   }
 
@@ -88,6 +86,12 @@ export default class JobHeader extends React.Component {
     actions.stopAllJobs()
   }
 
+  handleCreateJob() {
+    const { actions, } = this.props
+
+    actions.openEditorDialogToCreate()
+  }
+
   handleFilterChange(filterKeyword) {
     const payload = { filterKeyword, }
     const { actions, } = this.props
@@ -107,18 +111,25 @@ export default class JobHeader extends React.Component {
     const { open, anchorEl, } = this.state
 
 
-    /** 1. create popover */
+    /** 1. create `CREATE` button */
+
+    const createButton = (
+      <RaisedButton labelStyle={style.buttonLabel}
+                    secondary label={"CREATE"}
+                    onTouchTap={this.handleCreateJob.bind(this)} />)
+
+    /** 2. create popover */
     const isAtLeastOneJobIsRunning= jobs.reduce((acc, job) => {
       return acc || isRunning(job)
     }, false)
 
-    const popoverOpenLabel = (isAtLeastOneJobIsRunning) ?
+    const actionAllButtonLabel = (isAtLeastOneJobIsRunning) ?
       'STOP ALL JOBS' : 'START ALL JOBS'
     const popoverHandler = (isAtLeastOneJobIsRunning) ?
       this.handleStopAllJobs.bind(this) : this.handleStartAllJobs.bind(this)
 
-    const popoverDOM = JobHeader.createActionAllButton(
-      popoverOpenLabel,
+    const actionAllButton = JobHeader.createActionAllButton(
+      actionAllButtonLabel,
       open,
       anchorEl,
       this.handlePopoverOpen.bind(this),
@@ -126,8 +137,8 @@ export default class JobHeader extends React.Component {
       popoverHandler
     )
 
-    /** 2. draw summary with popover */
-    const summaryWithPopover = JobHeader.createSummaryWithPopover(jobs, popoverDOM)
+    /** 3. draw summary with popover */
+    const summaryWithPopover = JobHeader.createSummaryDOM(jobs, createButton, actionAllButton)
 
     return (
       <div>

@@ -3,6 +3,7 @@ import { combineReducers, } from 'redux'
 import * as JobActionTypes from '../../constants/JobActionTypes'
 import * as JobSortStrategies from '../../constants/JobSortStrategies'
 
+import { EDITOR_DIALOG_MODE, } from '../../components/JobPage/EditorDialog'
 import * as Job from './job'
 
 export function handleJobItems(state = [], action = null) {
@@ -28,6 +29,8 @@ export function handleJobItems(state = [], action = null) {
       return Job.startJob(state, payload.name)
     case JobActionTypes.UPDATE_CONFIG:
       return Job.updateConfig(state, payload.name, payload.config)
+    case JobActionTypes.CREATE:
+      return Job.createJob(state, payload.name, payload.config)
     case JobActionTypes.REMOVE:
       return Job.removeJob(state, payload.name)
     case JobActionTypes.SORT:
@@ -89,42 +92,47 @@ export function handleJobSorter(state = JobSortStrategies.INITIAL, action = null
   return state
 }
 
-const INITIAL_CONFIG_DIALOG_STATE = {
-  job: {},
-  opened: false,
+const INITIAL_EDITOR_DIALOG_STATE = {
+  job: { config: { name: '', }, },
+  dialogMode:  EDITOR_DIALOG_MODE.CLOSE,
   readonly: true,
 }
 
-export function handleConfigDialog(state = INITIAL_CONFIG_DIALOG_STATE, action = null) {
+export function handleEditorDialog(state = INITIAL_EDITOR_DIALOG_STATE, action = null) {
   const { type, payload, } = action
 
   switch(type) {
-    case JobActionTypes.OPEN_CONFIG_DIALOG:
+    case JobActionTypes.OPEN_EDITOR_DIALOG_TO_EDIT:
       return Object.assign({}, state, {
-        job: payload.job, opened: true, readonly: payload.readonly,
+        job: payload.job, dialogMode: EDITOR_DIALOG_MODE.EDIT , readonly: payload.readonly,
       })
 
-    case JobActionTypes.CLOSE_CONFIG_DIALOG:
+    case JobActionTypes.OPEN_EDITOR_DIALOG_TO_CREATE:
       return Object.assign({}, state, {
-        opened: false,
+        job: INITIAL_EDITOR_DIALOG_STATE.job, dialogMode: EDITOR_DIALOG_MODE.CREATE,
+      })
+
+    case JobActionTypes.CLOSE_EDITOR_DIALOG:
+      return Object.assign({}, state, {
+        dialogMode: EDITOR_DIALOG_MODE.CLOSE,
       })
   }
 
   return state
 }
 
-const INITIAL_REMOVE_DIALOG_STATE = {
+const INITIAL_CONFIRM_DIALOG_STATE = {
   job: {},
   opened: false,
 }
 
-export function handleRemoveDialog(state = INITIAL_REMOVE_DIALOG_STATE, action = null) {
+export function handleConfirmDialog(state = INITIAL_CONFIRM_DIALOG_STATE, action = null) {
   const { type, payload, } = action
 
   switch(type) {
-    case JobActionTypes.OPEN_REMOVE_DIALOG:
+    case JobActionTypes.OPEN_CONFIRM_DIALOG:
       return Object.assign({}, state, { job: payload, opened: true, })
-    case JobActionTypes.CLOSE_REMOVE_DIALOG:
+    case JobActionTypes.CLOSE_CONFIRM_DIALOG:
       return Object.assign({}, state, { opened: false, })
   }
 
@@ -136,6 +144,6 @@ export default combineReducers({
   paginator: handleJobPaginator,
   filterKeyword: handleJobFilter,
   sortingStrategy: handleJobSorter,
-  configDialog: handleConfigDialog,
-  removeDialog: handleRemoveDialog,
+  editorDialog: handleEditorDialog,
+  confirmDialog: handleConfirmDialog,
 })

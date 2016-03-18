@@ -4,7 +4,6 @@ import { Route, IndexRoute, } from 'react-router'
 import App from './components/Common/App'
 import MainPage from './containers/MainPage'
 import JobPage from './containers/JobPage'
-import HistoryPage from './components/Common/HistoryPage'
 import NotFoundPage from './components/Common/NotFoundPage'
 
 export default (

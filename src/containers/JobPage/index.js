@@ -6,8 +6,8 @@ import { bindActionCreators, } from 'redux'
 import JobList from '../../components/JobPage/JobList'
 import JobHeader from '../../components/JobPage/JobHeader'
 import Paginator from '../../components/Common/Paginator'
-import ConfigDialog from '../../components/JobPage/ConfigDialog'
-import RemoveDialog from '../../components/JobPage/RemoveDialog'
+import ConfigDialog, { EDITOR_DIALOG_MODE, } from '../../components/JobPage/EditorDialog'
+import ConfirmDialog from '../../components/JobPage/ConfirmDialog'
 
 import { JOB_PROPERTY, } from '../../reducers/JobReducer/job'
 
@@ -21,8 +21,8 @@ class JobPage extends React.Component {
     paginator: PropTypes.object.isRequired,
     filterKeyword: PropTypes.string.isRequired,
     sortingStrategy: PropTypes.string.isRequired,
-    configDialog: PropTypes.object.isRequired,
-    removeDialog: PropTypes.object.isRequired,
+    editorDialog: PropTypes.object.isRequired,
+    confirmDialog: PropTypes.object.isRequired,
   }
 
   handlePageOffsetChange(newPageOffset) {
@@ -32,7 +32,7 @@ class JobPage extends React.Component {
 
   render() {
     const { actions, jobs, paginator, filterKeyword, sortingStrategy,
-      configDialog, removeDialog, } = this.props
+      editorDialog, confirmDialog, } = this.props
     const { itemCountPerPage, currentPageOffset, currentItemOffset, } = paginator
 
     /** 1. filter jobs */
@@ -45,11 +45,11 @@ class JobPage extends React.Component {
     const sliced = filtered.slice(currentItemOffset, currentItemOffset + itemCountPerPage)
 
     /** 3. draw dialogs */
-    const configDialogDOM = (configDialog.opened) ?
-      (<ConfigDialog {...configDialog} actions={actions} />) : null
+    const editorDialogDOM = (EDITOR_DIALOG_MODE.CLOSE !== editorDialog.dialogMode) ?
+      (<ConfigDialog {...editorDialog} actions={actions} />) : null
 
-    const removeDialogDOM = (removeDialog.opened) ?
-      (<RemoveDialog {...removeDialog} actions={actions} />) : null
+    const confirmDialogDOM = (confirmDialog.opened) ?
+      (<RemoveDialog {...confirmDialog} actions={actions} />) : null
 
     return (
       <div>
@@ -62,8 +62,8 @@ class JobPage extends React.Component {
                      totalItemCount={jobs.length}
                      handler={this.handlePageOffsetChange.bind(this)} />
         </div>
-        {configDialogDOM}
-        {removeDialogDOM}
+        {editorDialogDOM}
+        {confirmDialogDOM}
       </div>
     )
   }
@@ -75,8 +75,8 @@ function mapStateToProps(state) {
     paginator: state.job.paginator,
     filterKeyword: state.job.filterKeyword,
     sortingStrategy: state.job.sortingStrategy,
-    configDialog: state.job.configDialog,
-    removeDialog: state.job.removeDialog,
+    editorDialog: state.job.editorDialog,
+    confirmDialog: state.job.confirmDialog,
   }
 }
 

@@ -7,6 +7,8 @@ export const startJob = (payload) => { return { type: JobActionTypes.START, payl
 export const stopJob = (payload) => { return { type: JobActionTypes.STOP, payload, } }
 export const startSwitching = (payload) => { return { type: JobActionTypes.START_SWITCHING, payload, } }
 export const endSwitching = (payload) => { return { type: JobActionTypes.END_SWITCHING, payload, } }
+
+export const createJob = (payload) => { return { type: JobActionTypes.CREATE, payload, } }
 export const removeJob = (payload) => { return { type: JobActionTypes.REMOVE, payload, } }
 export const updateConfig = (payload) => { return { type: JobActionTypes.UPDATE_CONFIG, payload, } }
 export const stopAllJobs = () => { return { type: JobActionTypes.STOP_ALL, } }
@@ -18,10 +20,18 @@ export const filterJob = (payload) => { return { type: JobActionTypes.FILTER, pa
 export const changePageOffset = (payload) => { return { type: JobActionTypes.CHANGE_PAGE_OFFSET, payload, } }
 
 /** for dialogs */
-export const openConfigDialog = (payload) => { return { type: JobActionTypes.OPEN_CONFIG_DIALOG, payload, } }
-export const closeConfigDialog = () => { return { type: JobActionTypes.CLOSE_CONFIG_DIALOG, } }
-export const openRemoveDialog = (payload) => { return { type: JobActionTypes.OPEN_REMOVE_DIALOG, payload, } }
-export const closeRemoveDialog = () => { return { type: JobActionTypes.CLOSE_REMOVE_DIALOG, } }
+export const openEditorDialogToEdit= (payload) =>
+{ return { type: JobActionTypes.OPEN_EDITOR_DIALOG_TO_EDIT, payload, } }
+export const openEditorDialogToCreate= () =>
+{ return { type: JobActionTypes.OPEN_EDITOR_DIALOG_TO_CREATE, } }
+export const closeEditorDialog = () =>
+{ return { type: JobActionTypes.CLOSE_EDITOR_DIALOG, } }
+export const openConfirmDialogToRemove = (payload) =>
+{ return { type: JobActionTypes.OPEN_CONFIRM_DIALOG_TO_REMOVE, payload, } }
+export const openConfirmDialogToActionAll = (payload) =>
+{ return { type: JobActionTypes.OPEN_CONFIRM_DIALOG_TO_ACTION_ALL, payload, } }
+export const closeConfirmDialog = () =>
+{ return { type: JobActionTypes.CLOSE_CONFIRM_DIALOG, } }
 
 /** api calls for job item */
 export const fetchJobs = () => { return { type: JobActionTypes.FETCH.REQUEST, } }

@@ -10,3 +10,7 @@ export const button = {
   marginRight: 15,
   marginBottom: 15,
 }
+
+export const buttonLabel = {
+  fontWeight: 300,
+}
