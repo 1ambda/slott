@@ -19,7 +19,7 @@ function fetchJSON(url) {
 
 
 export function* fetchJobs() {
-  return fetchJSON('/api/jobs.json')
+  return fetchJSON('/api/jobs')
 }
 
 export function delay(millis) {

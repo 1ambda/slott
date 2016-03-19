@@ -6,28 +6,35 @@ import webpackDevMiddleware from 'webpack-dev-middleware'
 import webpackHotMiddleware from 'webpack-hot-middleware'
 import webpackConfigBuilder from '../webpack.config'
 
+import proxyMiddleware from './proxy'
+
 const webpackConfig = webpackConfigBuilder('development')
 const bundler = webpack(webpackConfig)
 
-browserSync({
+const options = {
+  target: 'http://localhost:3000',
+  changeOrigin: true,
+  ws: true,
+  proxyTable: { 'localhost:3000' : 'http://localhost:3002' },
+}
+
+browserSync.init({
   server: {
-    baseDir: ['src', 'resource',],
+    baseDir: ['src',],
 
     middleware: [
+      proxyMiddleware,
       webpackDevMiddleware(bundler, {
         publicPath: webpackConfig.output.publicPath,
         stats: { colors: true, },
         noInfo: true,
       }),
-
       webpackHotMiddleware(bundler),
-
       historyApiFallback(),
     ],
   },
 
   files: [
     'src/*.html',
-    'resource/**/*.*',
   ],
 })

@@ -123,7 +123,6 @@ function getConfig(env) {
   return {
     debug: true,
     devtool: env === productionEnvironment  ? 'source-map' : 'cheap-module-eval-source-map', // more info:https://webpack.github.io/docs/build-performance.html#sourcemaps and https://webpack.github.io/docs/configuration.html#devtool
-    noInfo: true,
     entry: getEntry(env),
     target: env === testEnvironment ? 'node' : 'web',
     output: {
@@ -137,6 +136,22 @@ function getConfig(env) {
     plugins: getPlugins(env),
     module: { loaders: getLoaders(env), },
     postcss: getPostcssPlugins(),
+
+    /** logging */
+
+    /** suppress error shown in console, so it has to be set to false */
+    quiet: false,
+    noInfo: true,
+    stats: {
+      /** Config for minimal console.log mess. */
+      assets: false,
+      colors: true,
+      version: false,
+      hash: false,
+      timings: false,
+      chunks: false,
+      chunkModules: false
+    }
   }
 }
 

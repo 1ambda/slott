@@ -1,19 +1,18 @@
 import browserSync from 'browser-sync'
 import historyApiFallback from 'connect-history-api-fallback'
+import proxyMiddleware from './proxy'
 
-browserSync({
+browserSync.init({
   port: 3000,
-  ui: {
-    port: 3001,
-  },
+  ui: { port: 3001, },
   server: {
-    baseDir: ['dist', 'resource',],
+    baseDir: ['dist',],
   },
 
-  files: [
-    'src/*.html',
-    'resource/**/*.*',
-  ],
+  files: [ 'src/*.html', ],
 
-  middleware: [historyApiFallback(),],
+  middleware: [
+    proxyMiddleware,
+    historyApiFallback(),
+  ],
 })
