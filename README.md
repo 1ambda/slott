@@ -11,6 +11,6 @@ Stream-like Job Controller
 ## Development
 
 ```
-$ npm start -s    # terminal 1
-$ npm run server  # terminal 2
+$ npm run server  # terminal 1
+$ npm start -s    # terminal 2
 ```

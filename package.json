@@ -5,7 +5,7 @@
   "scripts": {
     "prestart": "npm run remove-dist",
     "start": "parallelshell \"npm run lint:tools\" \"npm run test:watch\" \"npm run open:src\"",
-    "server": " json-server resource/db.json --routes resource/routes.json --port 3002",
+    "server": "babel-node tools/resource.js && json-server resource/db.json --routes resource/routes.json --port 3002",
     "open:src": "babel-node tools/srcServer.js",
     "open:dist": "babel-node tools/distServer.js",
     "lint:tools": "eslint webpack.config.js tools",
@@ -21,6 +21,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "connect-history-api-fallback": "1.1.0",
+    "fs-extra": "0.26.7",
     "isomorphic-fetch": "2.2.1",
     "jsoneditor": "5.1.5",
     "material-ui": "0.14.4",
