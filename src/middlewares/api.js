@@ -87,23 +87,19 @@ export function removeIgnroedProps(config, propsToIgnore) {
 
 export function* fetchJobConfig(id) {
   return getJSON(`/api/jobs/${id}/config`)
-    .then(({ response, }) => { /** extract element from array */
-      if (Array.isArray(response) && response.length > 0) return { response: response[0], }
-      else return { response, }
-    })
-    .then(({ response, }) => { /** remove ignored props */
+    .then(({ response, }) => {
       return { response: removeIgnroedProps(response, IGNORED_CONFIG_PROPS), }
     })
 }
 
 export function* updateJobConfig(id, config) {
   return putJSON(`/api/jobs/${id}/config`, config)
-    .then(({ response, }) => { /** extract element from array */
-      if (Array.isArray(response) && response.length > 0) return { response: response[0], }
-      else return { response, }
-    })
     .then(({ response, }) => {
       return { response: removeIgnroedProps(response, IGNORED_CONFIG_PROPS), }
     })
+}
+
+export function* removeJob(id) {
+  return deleteJSON(`/api/jobs/${id}`)
 }
 

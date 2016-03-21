@@ -1,4 +1,5 @@
 import * as JobActionTypes from '../constants/JobActionTypes'
+import { createAction, } from 'redux-actions'
 
 /** for job item */
 export const unsetReadonly = (payload) => { return { type: JobActionTypes.UNSET_READONLY, payload, } }
@@ -35,19 +36,23 @@ export const closeConfirmDialog = () =>
 
 /** api calls for job item */
 export const fetchJobsSucceeded = (payload) =>
-{ return { type: JobActionTypes.FETCH_JOBS.SUCCEEDED, payload, } }
-export const fetchJobsFailed = (payload) =>
-{ return { type: JobActionTypes.FETCH_JOBS.FAILED, payload, } }
+{ return { type: JobActionTypes.API_FETCH_JOBS.SUCCEEDED, payload, } }
+export const fetchJobsFailed = (payload) => // TODO error
+{ return { type: JobActionTypes.API_FETCH_JOBS.FAILED, payload, } }
+export const removeJobSucceeded = (payload) => // TODO snack bar
+{ return { type: JobActionTypes.API_REMOVE_JOB.SUCCEEDED, payload, }}
+export const removeJobFailed = (payload) => // TODO error
+{ return { type: JobActionTypes.API_REMOVE_JOB.FAILED, payload, }}
 
 /** api calls for job config */
 export const fetchJobConfigSucceeded = (payload) =>
-{ return { type: JobActionTypes.FETCH_JOB_CONFIG.SUCCEEDED, payload, } }
-export const fetchJobConfigFailed = (payload) =>
-{ return { type: JobActionTypes.FETCH_JOB_CONFIG.FAILED, payload, } }
+{ return { type: JobActionTypes.API_FETCH_JOB_CONFIG.SUCCEEDED, payload, } }
+export const fetchJobConfigFailed = (payload) => // TODO error
+{ return { type: JobActionTypes.API_FETCH_JOB_CONFIG.FAILED, payload, } }
 export const updateJobConfigSucceeded = (payload) =>
-{ return { type: JobActionTypes.UPDATE_JOB_CONFIG.SUCCEEDED, payload, } }
-export const updateJobConfigFailed = (payload) =>
-{ return { type: JobActionTypes.UPDATE_JOB_CONFIG.FAILED, payload, } }
+{ return { type: JobActionTypes.API_UPDATE_JOB_CONFIG.SUCCEEDED, payload, } }
+export const updateJobConfigFailed = (payload) => // TODO error
+{ return { type: JobActionTypes.API_UPDATE_JOB_CONFIG.FAILED, payload, } }
 
 
 

@@ -13,9 +13,9 @@ export function handleJobItems(state = [], action = null) {
   const { type, payload, } = action
 
   switch(type) {
-    case JobActionTypes.FETCH_JOBS.SUCCEEDED:
+    case JobActionTypes.API_FETCH_JOBS.SUCCEEDED:
       return payload.jobs /** return fetched new jobs */
-      // TODO FETCH_JOBS.FAILED
+      // TODO API_FETCH_JOBS.FAILED
     case JobActionTypes.START_SWITCHING:
       return Job.startSwitching(state, payload.id)
     case JobActionTypes.END_SWITCHING:
@@ -30,8 +30,6 @@ export function handleJobItems(state = [], action = null) {
       return Job.startJob(state, payload.id)
     case JobActionTypes.CREATE:
       return Job.createJob(state, payload.id, payload.config)
-    case JobActionTypes.REMOVE:
-      return Job.removeJob(state, payload.id)
     case JobActionTypes.SORT:
       return Job.sortJob(state, payload.strategy)
     case JobActionTypes.STOP_ALL:
@@ -39,9 +37,12 @@ export function handleJobItems(state = [], action = null) {
     case JobActionTypes.START_ALL:
       return Job.startAllJobs(state)
 
-    case JobActionTypes.FETCH_JOB_CONFIG.SUCCEEDED: /** update job config */
-    case JobActionTypes.UPDATE_JOB_CONFIG.SUCCEEDED:
+    case JobActionTypes.API_FETCH_JOB_CONFIG.SUCCEEDED: /** update job config */
+    case JobActionTypes.API_UPDATE_JOB_CONFIG.SUCCEEDED:
       return Job.updateConfig(state, payload.id, payload.config)
+
+    case JobActionTypes.API_REMOVE_JOB.SUCCEEDED:
+      return Job.removeJob(state, payload.id)
   }
 
   return state
@@ -106,7 +107,7 @@ export function handleEditorDialog(state = INITIAL_EDITOR_DIALOG_STATE, action =
   const { type, payload, } = action
 
   switch(type) {
-    case JobActionTypes.FETCH_JOB_CONFIG.SUCCEEDED:
+    case JobActionTypes.API_FETCH_JOB_CONFIG.SUCCEEDED:
       return Object.assign({}, INITIAL_EDITOR_DIALOG_STATE, {
         id: payload.id,
         readonly: payload.readonly,
