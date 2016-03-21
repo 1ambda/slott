@@ -1,26 +1,77 @@
 import fetch from 'isomorphic-fetch'
 
 /**
- * fetch JSON
+ * common APIs
  *
- * return format is { response, error, }
+ * return format: { response, error, }
  */
-function fetchJSON(url) {
-  return fetch(url)
+
+function handleResponse(url, method, promise) {
+  return promise
     .then(response => {
-      if (response.status !== 200) throw new Error(`Failed to fetch ${url} (${response.status})`)
+      if (response.status !== 200) throw new Error(`Failed to ${method} ${url} (${response.status})`)
       else return response.json()
     })
     .then(response => {
       return { response, }
     })
     .catch(error => {
+      console.error(error)
       return { error, }
     })
 }
 
+function getJSON(url) {
+  return handleResponse(url, 'GET', fetch(url, {
+    method: 'get',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+  }))
+}
+
+function postJSON(url, body) {
+  return handleResponse(url, 'POST', fetch(url, {
+    method: 'post',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  }))
+}
+
+function putJSON(url, body) {
+  return handleResponse(url, 'PUT', fetch(url, {
+    method: 'put',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  }))
+}
+
+function deleteJSON(url) {
+  return handleResponse(url, 'DELETE', fetch(url, {
+    method: 'delete',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+  }))
+}
+
+
+/** job related APIs */
+
+export function delay(millis) {
+  return new Promise(resolve => setTimeout(() => { resolve() }, millis))
+}
+
 export function* fetchJobs() {
-  return fetchJSON('/api/jobs')
+  return getJSON('/api/jobs')
 }
 
 export const IGNORED_CONFIG_PROPS = [
@@ -35,13 +86,24 @@ export function removeIgnroedProps(config, propsToIgnore) {
 }
 
 export function* fetchJobConfig(id) {
-  return fetchJSON(`/api/jobs/${id}`)
-    .then(({ response, }) => {
-      return { response: removeIgnroedProps(response.config, IGNORED_CONFIG_PROPS), }
+  return getJSON(`/api/jobs/${id}/config`)
+    .then(({ response, }) => { /** extract element from array */
+      if (Array.isArray(response) && response.length > 0) return { response: response[0], }
+      else return { response, }
+    })
+    .then(({ response, }) => { /** remove ignored props */
+      return { response: removeIgnroedProps(response, IGNORED_CONFIG_PROPS), }
     })
 }
 
-export function delay(millis) {
-  return new Promise(resolve => setTimeout(() => { resolve() }, millis))
+export function* updateJobConfig(id, config) {
+  return putJSON(`/api/jobs/${id}/config`, config)
+    .then(({ response, }) => { /** extract element from array */
+      if (Array.isArray(response) && response.length > 0) return { response: response[0], }
+      else return { response, }
+    })
+    .then(({ response, }) => {
+      return { response: removeIgnroedProps(response, IGNORED_CONFIG_PROPS), }
+    })
 }
 

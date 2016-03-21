@@ -28,8 +28,6 @@ export function handleJobItems(state = [], action = null) {
       return Job.stopJob(state, payload.id)
     case JobActionTypes.START:
       return Job.startJob(state, payload.id)
-    case JobActionTypes.UPDATE_CONFIG:
-      return Job.updateConfig(state, payload.id, payload.config)
     case JobActionTypes.CREATE:
       return Job.createJob(state, payload.id, payload.config)
     case JobActionTypes.REMOVE:

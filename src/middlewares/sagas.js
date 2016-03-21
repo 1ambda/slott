@@ -56,9 +56,25 @@ function* watchOpenEditorDialogToEdit() {
   }
 }
 
+function* watchUpdateConfig() {
+  while(always) {
+    const { payload, } = yield take(JobActionTypes.UPDATE_CONFIG)
+    const { id, config, } = payload
+    const { response, error, } = yield call(api.updateJobConfig, id, config)
+
+    if (error) yield put(JobActions.updateJobConfigFailed({ error, }))
+    else {
+      const payloadWithConfig = Object.assign({}, payload, { config: response, })
+      yield put(JobActions.updateJobConfigSucceeded(payloadWithConfig))
+    }
+
+  }
+}
+
 export default function* root() {
   yield fork(initialize)
   yield fork(watchStartJob)
   yield fork(watchStop)
   yield fork(watchOpenEditorDialogToEdit)
+  yield fork(watchUpdateConfig)
 }

@@ -1,3 +1,4 @@
 {
+  "/api/jobs/:id/config": "/config/:id",
   "/api/": "/"
 }

@@ -118,13 +118,12 @@ export default class EditorDialog extends React.Component {
   }
 
   handleUpdate() {
-    const { actions, } = this.props
+    const { actions, id, } = this.props
     const { configChanged, } = this.state
 
     if (configChanged) {
-      // TODO: apiu
-      //const updatedJob = modifyJob(job, JOB_PROPERTY.config, this.getConfigFromEditor())
-      //actions[JobActions.updateConfig.name](updatedJob)
+      const payload = { id, config: this.getConfigFromEditor(), }
+      actions[JobActions.updateConfig.name](payload)
     }
   }
 

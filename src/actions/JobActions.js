@@ -39,15 +39,15 @@ export const fetchJobsSucceeded = (payload) =>
 export const fetchJobsFailed = (payload) =>
 { return { type: JobActionTypes.FETCH_JOBS.FAILED, payload, } }
 
-/** api calls for job item */
-export const fetchJobConfigRequested = (payload) =>
-{ return { type: JobActionTypes.FETCH_JOB_CONFIG.REQUESTED, payload, } }
+/** api calls for job config */
 export const fetchJobConfigSucceeded = (payload) =>
 { return { type: JobActionTypes.FETCH_JOB_CONFIG.SUCCEEDED, payload, } }
 export const fetchJobConfigFailed = (payload) =>
 { return { type: JobActionTypes.FETCH_JOB_CONFIG.FAILED, payload, } }
-
-
+export const updateJobConfigSucceeded = (payload) =>
+{ return { type: JobActionTypes.UPDATE_JOB_CONFIG.SUCCEEDED, payload, } }
+export const updateJobConfigFailed = (payload) =>
+{ return { type: JobActionTypes.UPDATE_JOB_CONFIG.FAILED, payload, } }
 
 
 
