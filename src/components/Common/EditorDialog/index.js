@@ -114,7 +114,7 @@ export default class EditorDialog extends React.Component {
 
   handleClose() {
     const { actions, } = this.props
-    actions[JobActions.closeEditorDialog.name]()
+    actions.closeEditorDialog()
   }
 
   handleUpdate() {
@@ -123,7 +123,7 @@ export default class EditorDialog extends React.Component {
 
     if (configChanged) {
       const payload = { id, config: this.getConfigFromEditor(), }
-      actions[JobActions.updateConfig.name](payload)
+      actions.updateConfig(payload)
     }
   }
 
@@ -133,8 +133,8 @@ export default class EditorDialog extends React.Component {
     const payload = { id: 'new job', config: this.getConfigFromEditor(), }
 
     // TODO: api
-    actions[JobActions.createJob.name](payload)
-    actions[JobActions.closeEditorDialog.name]()
+    actions.createJob(payload)
+    actions.closeEditorDialog()
   }
 
   render() {

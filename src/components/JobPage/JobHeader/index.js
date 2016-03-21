@@ -77,34 +77,34 @@ export default class JobHeader extends React.Component {
     const { actions, } = this.props
     this.setState({ open: false, })
 
-    actions[JobActions.startAllJobs.name]()
+    actions.startAllJobs()
   }
 
   handleStopAllJobs() {
     const { actions, } = this.props
     this.setState({ open: false, })
 
-    actions[JobActions.stopAllJobs.name]()
+    actions.stopAllJobs()
   }
 
   handleCreateJob() {
     const { actions, } = this.props
 
-    actions[JobActions.openEditorDialogToCreate.name]()
+    actions.openEditorDialogToCreate()
   }
 
   handleFilterChange(filterKeyword) {
     const payload = { filterKeyword, }
     const { actions, } = this.props
 
-    actions[JobActions.filterJob.name](payload)
+    actions.filterJob(payload)
   }
 
   handleSorterChange(strategy) {
     const payload = { strategy, }
     const { actions, } = this.props
 
-    actions[JobActions.sortJob.name](payload)
+    actions.sortJob(payload)
   }
 
   render() {

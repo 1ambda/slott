@@ -27,7 +27,8 @@ class JobPage extends React.Component {
 
   handlePageOffsetChange(newPageOffset) {
     const { actions, } = this.props
-    actions[JobActions.changePageOffset.name]({ newPageOffset, })
+    const payload = { newPageOffset, }
+    actions.changePageOffset(payload)
   }
 
   render() {

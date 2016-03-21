@@ -31,13 +31,13 @@ export default class ConfirmDialog extends React.Component {
 
   handleClose() {
     const { actions, } = this.props
-    actions[JobActions.closeConfirmDialog.name]()
+    actions.closeConfirmDialog()
   }
 
   handleRemove() {
     const { actions, job, } = this.props
-    actions[JobActions.removeJob.name](job)
-    actions[JobActions.closeConfirmDialog.name]()
+    actions.removeJob(job)
+    actions.closeConfirmDialog()
   }
 
   render() {
