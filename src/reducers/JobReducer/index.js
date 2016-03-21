@@ -1,4 +1,5 @@
 import { combineReducers, } from 'redux'
+import { handleActions, } from 'redux-actions'
 
 import * as JobActionTypes from '../../constants/JobActionTypes'
 import * as JobSortStrategies from '../../constants/JobSortStrategies'
@@ -7,46 +8,55 @@ import { EDITOR_DIALOG_MODE, } from '../../components/Common/EditorDialog'
 import { CONFIRM_DIALOG_MODE, } from '../../components/Common/ConfirmDialog'
 import * as Job from './job'
 
-export function handleJobItems(state = [], action = null) {
-  if (null == action) return state
+const INITIAL_JOBS = []
 
-  const { type, payload, } = action
+export const handleJobItems = handleActions({
+  [JobActionTypes.API_FETCH_JOBS.SUCCEEDED]: (state, { payload, }) =>
+    payload.jobs,
 
-  switch(type) {
-    case JobActionTypes.API_FETCH_JOBS.SUCCEEDED:
-      return payload.jobs /** return fetched new jobs */
-      // TODO API_FETCH_JOBS.FAILED
-    case JobActionTypes.START_SWITCHING:
-      return Job.startSwitching(state, payload.id)
-    case JobActionTypes.END_SWITCHING:
-      return Job.endSwitching(state, payload.id)
-    case JobActionTypes.SET_READONLY:
-      return Job.setReadonly(state, payload.id)
-    case JobActionTypes.UNSET_READONLY:
-      return Job.unsetReadonly(state, payload.id)
-    case JobActionTypes.STOP:
-      return Job.stopJob(state, payload.id)
-    case JobActionTypes.START:
-      return Job.startJob(state, payload.id)
-    case JobActionTypes.CREATE:
-      return Job.createJob(state, payload.id, payload.config)
-    case JobActionTypes.SORT:
-      return Job.sortJob(state, payload.strategy)
-    case JobActionTypes.STOP_ALL:
-      return Job.stopAllJobs(state)
-    case JobActionTypes.START_ALL:
-      return Job.startAllJobs(state)
+  [JobActionTypes.API_FETCH_JOBS.FAILED]: (state, action) =>
+    console.error(`TODO: failed to fetch jobs`),
 
-    case JobActionTypes.API_FETCH_JOB_CONFIG.SUCCEEDED: /** update job config */
-    case JobActionTypes.API_UPDATE_JOB_CONFIG.SUCCEEDED:
-      return Job.updateConfig(state, payload.id, payload.config)
+  [JobActionTypes.START_SWITCHING]: (state, { payload, }) =>
+    Job.startSwitching(state, payload.id),
 
-    case JobActionTypes.API_REMOVE_JOB.SUCCEEDED:
-      return Job.removeJob(state, payload.id)
-  }
+  [JobActionTypes.END_SWITCHING]: (state, { payload, }) =>
+    Job.endSwitching(state, payload.id),
 
-  return state
-}
+  [JobActionTypes.UNSET_READONLY]: (state, { payload, }) =>
+    Job.unsetReadonly(state, payload.id),
+
+  [JobActionTypes.SET_READONLY]: (state, { payload, }) =>
+    Job.setReadonly(state, payload.id),
+
+  [JobActionTypes.STOP]: (state, { payload, }) =>
+    Job.stopJob(state, payload.id),
+
+  [JobActionTypes.START]: (state, { payload, }) =>
+    Job.startJob(state, payload.id),
+
+  [JobActionTypes.CREATE]: (state, { payload, }) =>
+    Job.createJob(state, payload.id, payload.config),
+
+  [JobActionTypes.SORT]: (state, { payload, }) =>
+    Job.sortJob(state, payload.strategy),
+
+  [JobActionTypes.STOP_ALL]: (state) =>
+    Job.stopAllJobs(state),
+
+  [JobActionTypes.START_ALL]: (state) =>
+    Job.startAllJobs(state),
+
+  [JobActionTypes.API_FETCH_JOB_CONFIG.SUCCEEDED]: (state, { payload, }) =>
+    Job.updateConfig(state, payload.id, payload.config),
+
+  [JobActionTypes.API_UPDATE_JOB_CONFIG.SUCCEEDED]: (state, { payload, }) =>
+    Job.updateConfig(state, payload.id, payload.config),
+
+  [JobActionTypes.API_REMOVE_JOB.SUCCEEDED]: (state, { payload, }) =>
+    Job.removeJob(state, payload.id),
+
+}, INITIAL_JOBS)
 
 const INITIAL_PAGINATOR_STATE = {
   currentPageOffset: 0,
@@ -54,47 +64,28 @@ const INITIAL_PAGINATOR_STATE = {
   itemCountPerPage: 8,
 }
 
-export function handleJobPaginator(state = INITIAL_PAGINATOR_STATE, action = null) {
+const handleJobPaginator = handleActions({
+  [JobActionTypes.CHANGE_PAGE_OFFSET]: (state, { payload, }) => {
+    const { newPageOffset, } = payload
+    const currentItemOffset = newPageOffset * state.itemCountPerPage
+    return Object.assign({}, state, {currentPageOffset: newPageOffset, currentItemOffset,})
+  },
 
-  const { type, payload, } = action
+  /** reset paginator if filter or sorter action is occurred */
+  [JobActionTypes.SORT]: (state) => INITIAL_PAGINATOR_STATE,
+  [JobActionTypes.FILTER]: (state) => INITIAL_PAGINATOR_STATE,
+}, INITIAL_PAGINATOR_STATE)
 
-  switch(type) {
-    case JobActionTypes.CHANGE_PAGE_OFFSET: {
-      const { newPageOffset, } = payload
-      const currentItemOffset = newPageOffset * state.itemCountPerPage
-      return Object.assign({}, state, { currentPageOffset: newPageOffset, currentItemOffset, })
-    }
 
-    /** reset paginator if filter or sorter action is occurred */
-    case JobActionTypes.SORT:
-    case JobActionTypes.FILTER:
-      return INITIAL_PAGINATOR_STATE
-  }
+export const handleJobFilter = handleActions({
+  [JobActionTypes.FILTER]: (state, { payload, }) =>
+    payload.filterKeyword, /** string is immutable */
+}, '' /** initial state of filterKeyworld */)
 
-  return state
-}
-
-export function handleJobFilter(state = '', action = null) {
-  const { type, payload, } = action
-
-  switch(type) {
-    case JobActionTypes.FILTER:
-      return payload.filterKeyword /** string is immutable */
-  }
-
-  return state
-}
-
-export function handleJobSorter(state = JobSortStrategies.INITIAL, action = null) {
-  const { type, payload, } = action
-
-  switch(type) {
-    case JobActionTypes.SORT:
-      return payload.strategy /** string is immutable */
-  }
-
-  return state
-}
+export const handleJobSorter = handleActions({
+  [JobActionTypes.SORT]: (state, { payload, }) => /** string is immutable */
+    payload.strategy,
+}, JobSortStrategies.INITIAL)
 
 const INITIAL_EDITOR_DIALOG_STATE = {
   id: '',
@@ -103,52 +94,38 @@ const INITIAL_EDITOR_DIALOG_STATE = {
   readonly: true,
 }
 
-export function handleEditorDialog(state = INITIAL_EDITOR_DIALOG_STATE, action = null) {
-  const { type, payload, } = action
+export const handleEditorDialog = handleActions({
+  [JobActionTypes.API_FETCH_JOB_CONFIG.SUCCEEDED]: (state, { payload, }) =>
+    Object.assign({}, INITIAL_EDITOR_DIALOG_STATE, {
+      id: payload.id,
+      readonly: payload.readonly,
+      dialogMode: EDITOR_DIALOG_MODE.EDIT,
+      config: payload.config,
+    }),
 
-  switch(type) {
-    case JobActionTypes.API_FETCH_JOB_CONFIG.SUCCEEDED:
-      return Object.assign({}, INITIAL_EDITOR_DIALOG_STATE, {
-        id: payload.id,
-        readonly: payload.readonly,
-        dialogMode: EDITOR_DIALOG_MODE.EDIT,
-        config: payload.config,
-      })
+  [JobActionTypes.OPEN_EDITOR_DIALOG_TO_CREATE]: () =>
+    Object.assign({}, INITIAL_EDITOR_DIALOG_STATE, { dialogMode: EDITOR_DIALOG_MODE.CREATE, }),
 
-    case JobActionTypes.OPEN_EDITOR_DIALOG_TO_CREATE:
-      return Object.assign({}, INITIAL_EDITOR_DIALOG_STATE, {
-        dialogMode: EDITOR_DIALOG_MODE.CREATE,
-      })
-
-    case JobActionTypes.CLOSE_EDITOR_DIALOG:
-      return Object.assign({}, state, {
-        dialogMode: EDITOR_DIALOG_MODE.CLOSE,
-      })
-  }
-
-  return state
-}
+  [JobActionTypes.CLOSE_EDITOR_DIALOG]: (state) =>
+    Object.assign({}, state, { dialogMode: EDITOR_DIALOG_MODE.CLOSE, }),
+}, INITIAL_EDITOR_DIALOG_STATE)
 
 const INITIAL_CONFIRM_DIALOG_STATE = {
   job: {},
   dialogMode: CONFIRM_DIALOG_MODE.CLOSE,
 }
 
-export function handleConfirmDialog(state = INITIAL_CONFIRM_DIALOG_STATE, action = null) {
-  const { type, payload, } = action
+export const handleConfirmDialog = handleActions({
+  [JobActionTypes.OPEN_CONFIRM_DIALOG_TO_ACTION_ALL]: (state, { payload, }) =>
+    console.error('TODO: OPEN_CONFIRM_DIALOG_TO_ACTION_ALL in JobReducer'),
 
-  switch(type) {
-    case JobActionTypes.OPEN_CONFIRM_DIALOG_TO_ACTION_ALL:
-      console.error('TODO: OPEN_CONFIRM_DIALOG_TO_ACTION_ALL in JobReducer')
-      return state
-    case JobActionTypes.OPEN_CONFIRM_DIALOG_TO_REMOVE:
-      return Object.assign({}, state, { job: payload, dialogMode: CONFIRM_DIALOG_MODE.REMOVE, })
-    case JobActionTypes.CLOSE_CONFIRM_DIALOG:
-      return Object.assign({}, state, { dialogMode: CONFIRM_DIALOG_MODE.CLOSE, })
-  }
+  [JobActionTypes.OPEN_CONFIRM_DIALOG_TO_REMOVE]: (state, { payload, }) =>
+    Object.assign({}, state, { job: payload, dialogMode: CONFIRM_DIALOG_MODE.REMOVE, }),
 
-  return state
-}
+  [JobActionTypes.CLOSE_CONFIRM_DIALOG]: (state, { payload, }) =>
+    Object.assign({}, state, { dialogMode: CONFIRM_DIALOG_MODE.CLOSE, }),
+
+}, INITIAL_CONFIRM_DIALOG_STATE)
 
 export default combineReducers({
   items: handleJobItems,
