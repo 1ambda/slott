@@ -48,9 +48,6 @@ export const handleJobItems = handleActions({
   [JobActionTypes.API_FETCH_JOB_CONFIG.SUCCEEDED]: (state, { payload, }) =>
     Job.updateConfig(state, payload.id, payload.config),
 
-  [JobActionTypes.API_UPDATE_JOB_CONFIG.SUCCEEDED]: (state, { payload, }) =>
-    Job.updateConfig(state, payload.id, payload.config),
-
   [JobActionTypes.API_REMOVE_JOB.SUCCEEDED]: (state, { payload, }) =>
     Job.removeJob(state, payload.id),
 

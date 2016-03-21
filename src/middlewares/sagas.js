@@ -64,6 +64,7 @@ function* watchUpdateConfig() {
 
     if (error) yield put(JobActions.updateJobConfigFailed({ id, error, }))
     else {
+      yield call(initialize) /** update all jobs since `job.id` might be changed */
       const payloadWithConfig = Object.assign({}, payload, { config: response, })
       yield put(JobActions.updateJobConfigSucceeded(payloadWithConfig))
     }
