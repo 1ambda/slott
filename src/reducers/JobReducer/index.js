@@ -38,6 +38,10 @@ export function handleJobItems(state = [], action = null) {
       return Job.stopAllJobs(state)
     case JobActionTypes.START_ALL:
       return Job.startAllJobs(state)
+
+    case JobActionTypes.FETCH_JOB_CONFIG.SUCCEEDED: /** update job config */
+    case JobActionTypes.UPDATE_JOB_CONFIG.SUCCEEDED:
+      return Job.updateConfig(state, payload.id, payload.config)
   }
 
   return state

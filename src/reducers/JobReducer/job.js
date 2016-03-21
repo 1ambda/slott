@@ -32,7 +32,7 @@ export const convertServerJobToClientJob = (job) => {
     [JOB_PROPERTY.id]: job[JOB_PROPERTY.id],
     [JOB_PROPERTY.tags]: job[JOB_PROPERTY.tags],
     [JOB_PROPERTY.config]: job[JOB_PROPERTY.config],
-    [JOB_PROPERTY.state]: interpretServerJobState(job)
+    [JOB_PROPERTY.state]: interpretServerJobState(job),
   })
 }
 
@@ -57,50 +57,50 @@ export const modifyJobWithFilter = (state, filter, prop, value) =>
 export const removeJobByFilter = (state, filter) =>
   state.filter(job => !filter(job))
 
-export const stopJob = (state, name) => {
-  const filter = (job) => (name === job[JOB_PROPERTY.id] && isRunning(job))
+export const stopJob = (state, id) => {
+  const filter = (job) => (id === job[JOB_PROPERTY.id] && isRunning(job))
   return modifyJobWithFilter(state, filter, JOB_PROPERTY.state, JOB_STATE.WAITING)
 }
 
-export const startJob = (state, name) => {
-  const filter = (job) => (name === job[JOB_PROPERTY.id] && isWaiting(job))
+export const startJob = (state, id) => {
+  const filter = (job) => (id === job[JOB_PROPERTY.id] && isWaiting(job))
   return modifyJobWithFilter(state, filter, JOB_PROPERTY.state, JOB_STATE.RUNNING)
 }
 
-export const updateConfig = (state, name, config) => {
-  const filter = (job) => (name === job[JOB_PROPERTY.id])
+export const updateConfig = (state, id, config) => {
+  const filter = (job) => (id === job[JOB_PROPERTY.id])
   return modifyJobWithFilter(state, filter, JOB_PROPERTY.config, config)
 }
 
-export const setReadonly = (state, name) => {
-  const filter = (job) => (name === job[JOB_PROPERTY.id] && isWaiting(job))
+export const setReadonly = (state, id) => {
+  const filter = (job) => (id === job[JOB_PROPERTY.id] && isWaiting(job))
   return modifyJobWithFilter(state, filter, JOB_PROPERTY.state, JOB_STATE.STOPPED)
 }
 
-export const unsetReadonly = (state, name) => {
-  const filter = (job) => (name === job[JOB_PROPERTY.id] && isStopped(job))
+export const unsetReadonly = (state, id) => {
+  const filter = (job) => (id === job[JOB_PROPERTY.id] && isStopped(job))
   return modifyJobWithFilter(state, filter, JOB_PROPERTY.state, JOB_STATE.WAITING)
 }
 
-export const startSwitching = (state, name) => {
-  const filter = (job) => (name === job[JOB_PROPERTY.id]) // TODO, more elaborate conditions
+export const startSwitching = (state, id) => {
+  const filter = (job) => (id === job[JOB_PROPERTY.id]) // TODO, more elaborate conditions
   return modifyJobWithFilter(state, filter, JOB_PROPERTY.switching, true)
 }
 
-export const endSwitching = (state, name) => {
-  const filter = (job) => (name === job[JOB_PROPERTY.id]) // TODO, more elaborate conditions
+export const endSwitching = (state, id) => {
+  const filter = (job) => (id === job[JOB_PROPERTY.id]) // TODO, more elaborate conditions
   return modifyJobWithFilter(state, filter, JOB_PROPERTY.switching, false)
 }
 
-export const createJob = (state, name, config) => {
+export const createJob = (state, id, config) => {
   const created = Object.assign({}, INITIAL_JOB_STATE, {
-    [JOB_PROPERTY.id]: name, [JOB_PROPERTY.config]: config,
+    [JOB_PROPERTY.id]: id, [JOB_PROPERTY.config]: config,
   })
   return [created, ...state, ] /** insert new job at the front of existing jobs */
 }
 
-export const removeJob = (state, name) => {
-  const filter = (job) => (name === job[JOB_PROPERTY.id] && !(isRunning(job) || isStopped(job)))
+export const removeJob = (state, id) => {
+  const filter = (job) => (id === job[JOB_PROPERTY.id] && !(isRunning(job) || isStopped(job)))
   return removeJobByFilter(state, filter)
 }
 
