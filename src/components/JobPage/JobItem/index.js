@@ -31,7 +31,6 @@ export function isRunningToggleDefaultToggled(job) {
   return isRunning(job)
 }
 
-
 export default class JobItem extends React.Component {
   static propTypes = {
     job: PropTypes.object.isRequired,
@@ -143,7 +142,7 @@ export default class JobItem extends React.Component {
 
     /** check current config is readonly */
     const readonly = isReadonly(job)
-    const payload = { job, readonly, }
+    const payload = { id: job[JOB_PROPERTY.id], readonly, }
 
     /**
      * preventDefault hack
@@ -158,7 +157,7 @@ export default class JobItem extends React.Component {
   render() {
     const { job, } = this.props
     const tags = job[JOB_PROPERTY.tags]
-    const name = job[JOB_PROPERTY.name]
+    const id = job[JOB_PROPERTY.id]
 
     /** 1. Remove Button */
     const readonly = isReadonly(job)
@@ -184,10 +183,13 @@ export default class JobItem extends React.Component {
     /** 4. spin */
     const spinIcon = JobItem.createSpinIcon(job)
 
+    /** 5. tags */
+    const tagString = (tags) ? tags.join(', ') : null
+
     return (
       <ListItem onClick={this.handleItemClick.bind(this)}
-                primaryText={name}
-                secondaryText={tags.join(', ')}
+                primaryText={id}
+                secondaryText={tagString}
                 leftIcon={spinIcon}
                 nestedItems={[runningToggle, readonlyToggle, removeButton,]} />
     )

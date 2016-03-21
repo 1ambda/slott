@@ -33,12 +33,13 @@ class JobPage extends React.Component {
   render() {
     const { actions, jobs, paginator, filterKeyword, sortingStrategy,
       editorDialog, confirmDialog, } = this.props
+
     const { itemCountPerPage, currentPageOffset, currentItemOffset, } = paginator
 
     /** 1. filter jobs */
     const filtered = jobs.filter(job => {
       const searchArea = [
-        job[JOB_PROPERTY.name],
+        job[JOB_PROPERTY.id],
         job[JOB_PROPERTY.tags],
         JSON.stringify(job[JOB_PROPERTY.config]),
       ].join(' ')

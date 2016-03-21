@@ -131,7 +131,7 @@ function getConfig(env) {
       filename: 'bundle.js',
     },
     externals: {
-      //required: 'var name',
+      //required: 'variable',
     },
     plugins: getPlugins(env),
     module: { loaders: getLoaders(env), },

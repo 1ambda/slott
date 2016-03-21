@@ -27,8 +27,8 @@ export default class JobHeader extends React.Component {
         <span>Running</span>
         <span style={style.summaryRunningJob}> {runningJobCount}</span>
         <span> of {totalJobCount} Jobs</span>
-        <span style={style.buttonContainer}> {actionAllButton} </span>
         <span style={style.buttonContainer}> {createButton} </span>
+        <span style={style.buttonContainer}> {actionAllButton} </span>
       </div>
     )
   }
@@ -125,7 +125,7 @@ export default class JobHeader extends React.Component {
     }, false)
 
     const actionAllButtonLabel = (isAtLeastOneJobIsRunning) ?
-      'STOP ALL JOBS' : 'START ALL JOBS'
+      'STOP  ALL JOBS' : 'START ALL JOBS'
     const popoverHandler = (isAtLeastOneJobIsRunning) ?
       this.handleStopAllJobs.bind(this) : this.handleStartAllJobs.bind(this)
 

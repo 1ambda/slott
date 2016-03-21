@@ -58,7 +58,7 @@ export default class ConfirmDialog extends React.Component {
       submitButton,
     ]
 
-    const title = ConfirmDialog.createTitle(job[JOB_PROPERTY.name])
+    const title = ConfirmDialog.createTitle(job[JOB_PROPERTY.id])
 
     return (
       <Dialog

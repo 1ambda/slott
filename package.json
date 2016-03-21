@@ -1,5 +1,5 @@
 {
-  "name": "slott",
+  "id": "slott",
   "version": "0.0.1",
   "description": "",
   "scripts": {
@@ -32,7 +32,7 @@
     "react-router-redux": "4.0.0",
     "react-tap-event-plugin": "0.2.1",
     "redux": "3.3.1",
-    "redux-saga": "0.9.3"
+    "redux-saga": "0.9.5"
   },
   "devDependencies": {
     "autoprefixer": "6.3.3",
@@ -72,6 +72,7 @@
     "react-transform-catch-errors": "1.0.1",
     "react-transform-hmr": "1.0.1",
     "redbox-react": "1.2.0",
+    "redux-saga": "0.9.5",
     "rimraf": "2.5.0",
     "sass-loader": "3.1.2",
     "style-loader": "0.13.0",

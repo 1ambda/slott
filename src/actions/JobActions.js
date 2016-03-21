@@ -34,7 +34,20 @@ export const closeConfirmDialog = () =>
 { return { type: JobActionTypes.CLOSE_CONFIRM_DIALOG, } }
 
 /** api calls for job item */
-export const fetchJobsRequested = () => { return { type: JobActionTypes.FETCH.REQUESTED, } }
-export const fetchJobsSucceeded = (payload) => { return { type: JobActionTypes.FETCH.SUCCEEDED, payload, } }
-export const fetchJobsFailed = (payload) => { return { type: JobActionTypes.FETCH.FAILED, payload, } }
+export const fetchJobsSucceeded = (payload) =>
+{ return { type: JobActionTypes.FETCH_JOBS.SUCCEEDED, payload, } }
+export const fetchJobsFailed = (payload) =>
+{ return { type: JobActionTypes.FETCH_JOBS.FAILED, payload, } }
+
+/** api calls for job item */
+export const fetchJobConfigRequested = (payload) =>
+{ return { type: JobActionTypes.FETCH_JOB_CONFIG.REQUESTED, payload, } }
+export const fetchJobConfigSucceeded = (payload) =>
+{ return { type: JobActionTypes.FETCH_JOB_CONFIG.SUCCEEDED, payload, } }
+export const fetchJobConfigFailed = (payload) =>
+{ return { type: JobActionTypes.FETCH_JOB_CONFIG.FAILED, payload, } }
+
+
+
+
 

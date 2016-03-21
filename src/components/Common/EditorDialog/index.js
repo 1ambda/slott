@@ -41,7 +41,8 @@ export function isConfigChanged(initial, updated) {
 
 export default class EditorDialog extends React.Component {
   static propTypes = {
-    job: PropTypes.object.isRequired,
+    id: PropTypes.string.isRequired,
+    config: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
     readonly: PropTypes.bool.isRequired,
     dialogMode: PropTypes.string.isRequired, /** EDITOR_DIALOG_MODE */
@@ -59,8 +60,8 @@ export default class EditorDialog extends React.Component {
 
   /** component life-cycle */
   componentDidMount() {
-    const { job, readonly, dialogMode, } = this.props
-    const initialConfig = job[JOB_PROPERTY.config]
+    const { config, readonly, dialogMode, } = this.props
+    const initialConfig = config
 
     const defaultMode = getDefaultEditorMode(readonly, dialogMode)
     const availableModes = getAvailableEditorModes(readonly, dialogMode)
@@ -87,11 +88,8 @@ export default class EditorDialog extends React.Component {
 
   /** component life-cycle */
   componentWillReceiveProps(nextProps) {
-    const { job: nextJob, } = nextProps
-    const { job: currentJob, } = this.props
-
-    const { config: currentConfig, } = currentJob
-    const { config: nextConfig, } = nextJob
+    const { config: currentConfig, } = this.props
+    const { config: nextConfig, } = nextProps
 
     /** if config is not changed, then disable `UPDATE` button */
     this.setState({ configChanged: isConfigChanged(currentConfig, nextConfig), })
@@ -103,12 +101,11 @@ export default class EditorDialog extends React.Component {
   }
 
   handleConfigChanged() {
-    const { job, } = this.props
-    const { [JOB_PROPERTY.config]: initialConfig, } = job
+    const { config: prevConfig, } = this.props
 
     const updatedConfig = this.getConfigFromEditor()
 
-    this.setState({ configChanged: isConfigChanged(initialConfig, updatedConfig), })
+    this.setState({ configChanged: isConfigChanged(prevConfig, updatedConfig), })
   }
 
   handleEditorError(err) {
@@ -121,28 +118,28 @@ export default class EditorDialog extends React.Component {
   }
 
   handleUpdate() {
-    const { actions, job, } = this.props
+    const { actions, } = this.props
     const { configChanged, } = this.state
 
     if (configChanged) {
-      const updatedJob = modifyJob(job, JOB_PROPERTY.config, this.getConfigFromEditor())
-      actions[JobActions.updateConfig.name](updatedJob)
+      // TODO: apiu
+      //const updatedJob = modifyJob(job, JOB_PROPERTY.config, this.getConfigFromEditor())
+      //actions[JobActions.updateConfig.name](updatedJob)
     }
   }
 
   handleCreate() {
-    const { actions, job, } = this.props
+    const { actions, } = this.props
 
-    const payload = { name: 'new job', config: this.getConfigFromEditor(), }
+    const payload = { id: 'new job', config: this.getConfigFromEditor(), }
 
+    // TODO: api
     actions[JobActions.createJob.name](payload)
     actions[JobActions.closeEditorDialog.name]()
   }
 
   render() {
-    const { readonly, job, dialogMode, } = this.props
-    const { name: title, } = job
-
+    const { readonly, id, dialogMode, } = this.props
     const { configChanged, } = this.state
 
     const submitButton = (EDITOR_DIALOG_MODE.EDIT === dialogMode) ?
@@ -166,7 +163,7 @@ export default class EditorDialog extends React.Component {
 
     return (
       <Dialog
-        title={title} titleStyle={dialogStyle.title}
+        title={id} titleStyle={dialogStyle.title}
         actions={buttons}
         open modal={false}
         onRequestClose={this.handleClose.bind(this)}>

@@ -1,7 +1,7 @@
 # TODO
 
+- editor filter _$id
 - re-design models
-- browser sync api 
 - stop/start all, update, remove api
 - last updated at
 - name validation (saga middleware)

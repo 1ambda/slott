@@ -1,18 +1,14 @@
-import { takeEvery, } from 'redux-saga'
 import { take, put, call, fork, } from 'redux-saga/effects'
 
 import * as JobActions from '../actions/JobActions'
 import * as JobActionTypes from '../constants/JobActionTypes'
-import { sortJob, } from '../reducers/JobReducer/job'
+import { sortJob, convertServerJobToClientJob, } from '../reducers/JobReducer/job'
 import * as JobSortStrategies from '../constants/JobSortStrategies'
 import * as api from './api'
 
 const JOB_TRANSITION_DELAY = 1000
-const always = true
 
-// TODO: global error page
-// TODO: remove, start/stop, enable/disable api
-// TODO config, json editor
+const always = true /** takeEvery does'n work. (redux-saga 0.9.5) */
 
 /** fetch initial jobs */
 function* initialize() {
@@ -20,13 +16,14 @@ function* initialize() {
 
   if (error) yield put(JobActions.fetchJobsFailed({ error, }))
   else {
-    const sortedJobs = sortJob(response, JobSortStrategies.INITIAL)
+    const converted = response.map(convertServerJobToClientJob)
+    const sortedJobs = sortJob(converted, JobSortStrategies.INITIAL)
     yield put(JobActions.fetchJobsSucceeded({ jobs: sortedJobs, }))
   }
 }
 
 function* watchStartJob() {
-  while(always) {
+  while (always) {
     const { payload, } = yield take(JobActionTypes.START)
     yield put(JobActions.startSwitching(payload))
     yield put(JobActions.startJob(payload))
@@ -36,7 +33,7 @@ function* watchStartJob() {
 }
 
 function* watchStop() {
-  while(always) {
+  while (always) {
     const { payload, } = yield take(JobActionTypes.STOP)
     yield put(JobActions.startSwitching(payload))
     yield put(JobActions.stopJob(payload))
@@ -45,8 +42,23 @@ function* watchStop() {
   }
 }
 
-export default function* () {
+function* watchOpenEditorDialogToEdit() {
+  while (always) {
+    const { payload, } = yield take(JobActionTypes.OPEN_EDITOR_DIALOG_TO_EDIT)
+    const { id, } = payload
+    const { response, error, } = yield call(api.fetchJobConfig, id)
+
+    if (error) yield put(JobActions.fetchJobConfigFailed({ error, }))
+    else {
+      const payloadWithConfig = Object.assign({}, payload, { config: response, })
+      yield put(JobActions.fetchJobConfigSucceeded(payloadWithConfig))
+    }
+  }
+}
+
+export default function* root() {
   yield fork(initialize)
   yield fork(watchStartJob)
   yield fork(watchStop)
+  yield fork(watchOpenEditorDialogToEdit)
 }

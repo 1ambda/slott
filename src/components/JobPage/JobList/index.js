@@ -14,7 +14,7 @@ export default class JobList extends React.Component {
   }
 
   static createJobItem(job, actions) {
-    return (<JobItem job={job} key={job.name} actions={actions} />)
+    return (<JobItem job={job} key={job.id} actions={actions} />)
   }
 
   render() {
@@ -23,7 +23,7 @@ export default class JobList extends React.Component {
     const jobItems = jobs
       .reduce((acc, job) => {
         acc.push(JobList.createJobItem(job, actions))
-        acc.push(<Divider key={`divider-${job.name}`} />)
+        acc.push(<Divider key={`divider-${job.id}`} />)
         return acc
       }, [])
 

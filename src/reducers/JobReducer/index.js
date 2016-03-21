@@ -13,27 +13,27 @@ export function handleJobItems(state = [], action = null) {
   const { type, payload, } = action
 
   switch(type) {
-    case JobActionTypes.FETCH.SUCCEEDED:
+    case JobActionTypes.FETCH_JOBS.SUCCEEDED:
       return payload.jobs /** return fetched new jobs */
-      // TODO FETCH.FAILED
+      // TODO FETCH_JOBS.FAILED
     case JobActionTypes.START_SWITCHING:
-      return Job.startSwitching(state, payload.name)
+      return Job.startSwitching(state, payload.id)
     case JobActionTypes.END_SWITCHING:
-      return Job.endSwitching(state, payload.name)
+      return Job.endSwitching(state, payload.id)
     case JobActionTypes.SET_READONLY:
-      return Job.setReadonly(state, payload.name)
+      return Job.setReadonly(state, payload.id)
     case JobActionTypes.UNSET_READONLY:
-      return Job.unsetReadonly(state, payload.name)
+      return Job.unsetReadonly(state, payload.id)
     case JobActionTypes.STOP:
-      return Job.stopJob(state, payload.name)
+      return Job.stopJob(state, payload.id)
     case JobActionTypes.START:
-      return Job.startJob(state, payload.name)
+      return Job.startJob(state, payload.id)
     case JobActionTypes.UPDATE_CONFIG:
-      return Job.updateConfig(state, payload.name, payload.config)
+      return Job.updateConfig(state, payload.id, payload.config)
     case JobActionTypes.CREATE:
-      return Job.createJob(state, payload.name, payload.config)
+      return Job.createJob(state, payload.id, payload.config)
     case JobActionTypes.REMOVE:
-      return Job.removeJob(state, payload.name)
+      return Job.removeJob(state, payload.id)
     case JobActionTypes.SORT:
       return Job.sortJob(state, payload.strategy)
     case JobActionTypes.STOP_ALL:
@@ -94,7 +94,8 @@ export function handleJobSorter(state = JobSortStrategies.INITIAL, action = null
 }
 
 const INITIAL_EDITOR_DIALOG_STATE = {
-  job: { config: { name: '', }, },
+  id: '',
+  config: {},
   dialogMode:  EDITOR_DIALOG_MODE.CLOSE,
   readonly: true,
 }
@@ -103,14 +104,17 @@ export function handleEditorDialog(state = INITIAL_EDITOR_DIALOG_STATE, action =
   const { type, payload, } = action
 
   switch(type) {
-    case JobActionTypes.OPEN_EDITOR_DIALOG_TO_EDIT:
-      return Object.assign({}, state, {
-        job: payload.job, dialogMode: EDITOR_DIALOG_MODE.EDIT , readonly: payload.readonly,
+    case JobActionTypes.FETCH_JOB_CONFIG.SUCCEEDED:
+      return Object.assign({}, INITIAL_EDITOR_DIALOG_STATE, {
+        id: payload.id,
+        readonly: payload.readonly,
+        dialogMode: EDITOR_DIALOG_MODE.EDIT,
+        config: payload.config,
       })
 
     case JobActionTypes.OPEN_EDITOR_DIALOG_TO_CREATE:
-      return Object.assign({}, state, {
-        job: INITIAL_EDITOR_DIALOG_STATE.job, dialogMode: EDITOR_DIALOG_MODE.CREATE,
+      return Object.assign({}, INITIAL_EDITOR_DIALOG_STATE, {
+        dialogMode: EDITOR_DIALOG_MODE.CREATE,
       })
 
     case JobActionTypes.CLOSE_EDITOR_DIALOG:
