@@ -9,7 +9,7 @@ import fetch from 'isomorphic-fetch'
 function handleResponse(url, method, promise) {
   return promise
     .then(response => {
-      if (response.status !== 200) throw new Error(`Failed to ${method} ${url} (${response.status})`)
+      if (response.status !== 200) throw new Error(`${method} ${url}, status: ${response.status}`)
       else return response.json()
     })
     .then(response => {

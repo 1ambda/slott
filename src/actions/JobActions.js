@@ -21,24 +21,25 @@ export const sortJob = createAction(JobActionTypes.SORT)
 export const filterJob = createAction(JobActionTypes.FILTER)
 export const changePageOffset = createAction(JobActionTypes.CHANGE_PAGE_OFFSET)
 
-/** for dialogs */
+/** for dialogs, snackbar */
 export const openEditorDialogToEdit= createAction(JobActionTypes.OPEN_EDITOR_DIALOG_TO_EDIT)
 export const openEditorDialogToCreate= createAction(JobActionTypes.OPEN_EDITOR_DIALOG_TO_CREATE)
-
 export const closeEditorDialog = createAction(JobActionTypes.CLOSE_EDITOR_DIALOG)
 export const openConfirmDialogToRemove = createAction(JobActionTypes.OPEN_CONFIRM_DIALOG_TO_REMOVE)
 export const closeConfirmDialog = createAction(JobActionTypes.CLOSE_CONFIRM_DIALOG)
+export const openSnackbar = createAction(JobActionTypes.OPEN_SNACKBAR)
+export const closeSnackbar = createAction(JobActionTypes.CLOSE_SNACKBAR)
 
 /** api calls for job item */
 export const fetchJobsSucceeded = createAction(JobActionTypes.API_FETCH_JOBS.SUCCEEDED)
-export const fetchJobsFailed = createAction(JobActionTypes.API_FETCH_JOBS.FAILED) // TODO error
-export const removeJobSucceeded = createAction(JobActionTypes.API_REMOVE_JOB.SUCCEEDED) // TODO snack bar
-export const removeJobFailed = createAction(JobActionTypes.API_REMOVE_JOB.FAILED) // TODO error
+export const fetchJobsFailed = createAction(JobActionTypes.API_FETCH_JOBS.FAILED)
+export const removeJobSucceeded = createAction(JobActionTypes.API_REMOVE_JOB.SUCCEEDED)
+export const removeJobFailed = createAction(JobActionTypes.API_REMOVE_JOB.FAILED)
 
 /** api calls for job config */
-export const fetchJobConfigSucceeded = createAction(JobActionTypes.API_FETCH_JOB_CONFIG.SUCCEEDED) // TODO snack bar
-export const fetchJobConfigFailed = createAction(JobActionTypes.API_FETCH_JOB_CONFIG.FAILED)  // TODO error
-export const updateJobConfigSucceeded = createAction(JobActionTypes.API_UPDATE_JOB_CONFIG.SUCCEEDED) // TODO snack bar
-export const updateJobConfigFailed = createAction(JobActionTypes.API_UPDATE_JOB_CONFIG.FAILED) // TODO error
+export const fetchJobConfigSucceeded = createAction(JobActionTypes.API_FETCH_JOB_CONFIG.SUCCEEDED)
+export const fetchJobConfigFailed = createAction(JobActionTypes.API_FETCH_JOB_CONFIG.FAILED)
+export const updateJobConfigSucceeded = createAction(JobActionTypes.API_UPDATE_JOB_CONFIG.SUCCEEDED)
+export const updateJobConfigFailed = createAction(JobActionTypes.API_UPDATE_JOB_CONFIG.FAILED)
 
 

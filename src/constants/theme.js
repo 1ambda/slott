@@ -1,5 +1,7 @@
+const THEME_DEFAULT = '#546e7a'
+
 export const NavBarColors = {
-  backgroundColor: '#78909c',
+  backgroundColor: THEME_DEFAULT,
   textColor: '#f5f5f5',
   iconMenuColor: '#f5f5f5',
 }
@@ -14,5 +16,9 @@ export const JobItemColors = {
 }
 
 export const JobPageColors = {
-  popoverBackground: '#78909c',
+  popoverBackground: 'white',
+}
+
+export const ClosableSnackbar = {
+  backgroundColor: THEME_DEFAULT,
 }

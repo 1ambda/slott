@@ -62,7 +62,7 @@ function* watchUpdateConfig() {
     const { id, config, } = payload
     const { response, error, } = yield call(API.updateJobConfig, id, config)
 
-    if (error) yield put(JobActions.updateJobConfigFailed({ error, }))
+    if (error) yield put(JobActions.updateJobConfigFailed({ id, error, }))
     else {
       const payloadWithConfig = Object.assign({}, payload, { config: response, })
       yield put(JobActions.updateJobConfigSucceeded(payloadWithConfig))
@@ -76,7 +76,7 @@ function* watchRemoveJob() {
     const { id, } = payload
     const { error, } = yield call(API.removeJob, id)
 
-    if (error) yield put(JobActions.removeJobFailed(payload))
+    if (error) yield put(JobActions.removeJobFailed({ id, error, }))
     else yield put(JobActions.removeJobSucceeded(payload))
   }
 }

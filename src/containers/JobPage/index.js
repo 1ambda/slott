@@ -8,6 +8,7 @@ import JobHeader from '../../components/JobPage/JobHeader'
 import Paginator from '../../components/Common/Paginator'
 import ConfigDialog, { EDITOR_DIALOG_MODE, } from '../../components/Common/EditorDialog'
 import ConfirmDialog, { CONFIRM_DIALOG_MODE, } from '../../components/Common/ConfirmDialog'
+import ClosableSnackbar, { CLOSABLE_SNACKBAR_MODE, } from '../../components/Common/ClosableSnackbar'
 
 import { JOB_PROPERTY, } from '../../reducers/JobReducer/job'
 
@@ -23,6 +24,7 @@ class JobPage extends React.Component {
     sortingStrategy: PropTypes.string.isRequired,
     editorDialog: PropTypes.object.isRequired,
     confirmDialog: PropTypes.object.isRequired,
+    snackbar: PropTypes.object.isRequired,
   }
 
   handlePageOffsetChange(newPageOffset) {
@@ -33,7 +35,7 @@ class JobPage extends React.Component {
 
   render() {
     const { actions, jobs, paginator, filterKeyword, sortingStrategy,
-      editorDialog, confirmDialog, } = this.props
+      editorDialog, confirmDialog, snackbar, } = this.props
 
     const { itemCountPerPage, currentPageOffset, currentItemOffset, } = paginator
 
@@ -52,12 +54,15 @@ class JobPage extends React.Component {
     /** 2. select jobs to be curated */
     const sliced = filtered.slice(currentItemOffset, currentItemOffset + itemCountPerPage)
 
-    /** 3. draw dialogs */
+    /** 3. draw dialogs, snackbar */
     const editorDialogDOM = (EDITOR_DIALOG_MODE.CLOSE !== editorDialog.dialogMode) ?
       (<ConfigDialog {...editorDialog} actions={actions} />) : null
 
     const confirmDialogDOM = (CONFIRM_DIALOG_MODE.CLOSE !== confirmDialog.dialogMode) ?
       (<ConfirmDialog {...confirmDialog} actions={actions} />) : null
+
+    const snackbarDOM = (CLOSABLE_SNACKBAR_MODE.CLOSE !== snackbar.snackbarMode) ?
+      (<ClosableSnackbar {...snackbar} closeHandler={actions.closeSnackbar} />) : null
 
     return (
       <div>
@@ -72,6 +77,7 @@ class JobPage extends React.Component {
         </div>
         {editorDialogDOM}
         {confirmDialogDOM}
+        {snackbarDOM}
       </div>
     )
   }
@@ -85,6 +91,7 @@ function mapStateToProps(state) {
     sortingStrategy: state.job.sortingStrategy,
     editorDialog: state.job.editorDialog,
     confirmDialog: state.job.confirmDialog,
+    snackbar: state.job.snackbar,
   }
 }
 

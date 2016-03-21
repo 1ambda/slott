@@ -6,6 +6,7 @@ import * as JobSortStrategies from '../../constants/JobSortStrategies'
 
 import { EDITOR_DIALOG_MODE, } from '../../components/Common/EditorDialog'
 import { CONFIRM_DIALOG_MODE, } from '../../components/Common/ConfirmDialog'
+import { CLOSABLE_SNACKBAR_MODE, } from '../../components/Common/ClosableSnackbar'
 import * as Job from './job'
 
 const INITIAL_JOBS = []
@@ -13,9 +14,6 @@ const INITIAL_JOBS = []
 export const handleJobItems = handleActions({
   [JobActionTypes.API_FETCH_JOBS.SUCCEEDED]: (state, { payload, }) =>
     payload.jobs,
-
-  [JobActionTypes.API_FETCH_JOBS.FAILED]: (state, action) =>
-    console.error(`TODO: failed to fetch jobs`),
 
   [JobActionTypes.START_SWITCHING]: (state, { payload, }) =>
     Job.startSwitching(state, payload.id),
@@ -127,6 +125,50 @@ export const handleConfirmDialog = handleActions({
 
 }, INITIAL_CONFIRM_DIALOG_STATE)
 
+const INITIAL_SNACKBAR_STATE = {
+  snackbarMode: CLOSABLE_SNACKBAR_MODE.CLOSE,
+  message: '',
+}
+
+export const showInfoSnackbar = (state, message) =>
+  Object.assign({}, state, {
+    snackbarMode: CLOSABLE_SNACKBAR_MODE.OPEN,
+    message: `[INFO] ${message}`,
+  })
+
+export const showErrorSnackbar = (state, message, error) =>
+  Object.assign({}, state, {
+    snackbarMode: CLOSABLE_SNACKBAR_MODE.OPEN,
+    message: `[ERROR] ${message} (${error})`,
+  })
+
+export const handleClosableSnackbar = handleActions({
+  [JobActionTypes.CLOSE_SNACKBAR]: (state) =>
+    Object.assign({}, state, { snackbarMode: CLOSABLE_SNACKBAR_MODE.CLOSE, }),
+
+  [JobActionTypes.OPEN_SNACKBAR]: (state, { payload, }) =>
+    Object.assign({}, state, { snackbarMode: CLOSABLE_SNACKBAR_MODE.OPEN, message: payload.message, }),
+
+  [JobActionTypes.API_FETCH_JOBS.FAILED]: (state, { type, payload, }) =>
+    showErrorSnackbar(state, `${type}`, payload.error.message),
+
+  [JobActionTypes.API_REMOVE_JOB.SUCCEEDED]: (state, { payload, }) =>
+    showInfoSnackbar(state, `${payload.id} was removed`),
+
+  [JobActionTypes.API_REMOVE_JOB.FAILED]: (state, { type, payload, }) =>
+    showErrorSnackbar(state, `${type} ${payload.id}`, payload.error.message),
+
+  [JobActionTypes.API_FETCH_JOB_CONFIG.FAILED]: (state, { type, payload, }) =>
+    showErrorSnackbar(state, `${type} ${payload.id}`, payload.error.message),
+
+  [JobActionTypes.API_UPDATE_JOB_CONFIG.SUCCEEDED]: (state, { payload, }) =>
+    showInfoSnackbar(state, `${payload.id} was updated`),
+
+  [JobActionTypes.API_UPDATE_JOB_CONFIG.FAILED]: (state, { type, payload, }) =>
+    showErrorSnackbar(state, `${type} ${payload.id}`, payload.error.message),
+
+}, INITIAL_SNACKBAR_STATE)
+
 export default combineReducers({
   items: handleJobItems,
   paginator: handleJobPaginator,
@@ -134,4 +176,5 @@ export default combineReducers({
   sortingStrategy: handleJobSorter,
   editorDialog: handleEditorDialog,
   confirmDialog: handleConfirmDialog,
+  snackbar: handleClosableSnackbar,
 })
