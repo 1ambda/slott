@@ -72,13 +72,6 @@ export const endSwitching = (state, id) => {
   return modifyJobWithFilter(state, filter, JOB_PROPERTY.switching, false)
 }
 
-export const createJob = (state, id, config) => {
-  const created = Object.assign({}, INITIAL_JOB_STATE, {
-    [JOB_PROPERTY.id]: id, [JOB_PROPERTY.config]: config,
-  })
-  return [created, ...state, ] /** insert new job at the front of existing jobs */
-}
-
 export const removeJob = (state, id) => {
   const filter = (job) => (id === job[JOB_PROPERTY.id] && !(isRunning(job) || isStopped(job)))
   return removeJobByFilter(state, filter)

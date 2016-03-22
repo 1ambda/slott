@@ -95,7 +95,7 @@ export default class EditorDialog extends React.Component {
     this.setState({ configChanged: isConfigChanged(currentConfig, nextConfig), })
   }
 
-  getConfigFromEditor() {
+  getEditorConfigValue() {
     const { editor, } = this.state
     return editor.get()
   }
@@ -103,7 +103,7 @@ export default class EditorDialog extends React.Component {
   handleConfigChanged() {
     const { config: prevConfig, } = this.props
 
-    const updatedConfig = this.getConfigFromEditor()
+    const updatedConfig = this.getEditorConfigValue()
 
     this.setState({ configChanged: isConfigChanged(prevConfig, updatedConfig), })
   }
@@ -122,19 +122,18 @@ export default class EditorDialog extends React.Component {
     const { configChanged, } = this.state
 
     if (configChanged) {
-      const payload = { id, config: this.getConfigFromEditor(), }
+      const payload = { id, config: this.getEditorConfigValue(), }
       actions.updateConfig(payload)
     }
   }
 
   handleCreate() {
     const { actions, } = this.props
+    const config = this.getEditorConfigValue()
 
-    const payload = { id: 'new job', config: this.getConfigFromEditor(), }
+    const payload = { config, }
 
-    // TODO: api
     actions.createJob(payload)
-    actions.closeEditorDialog()
   }
 
   render() {

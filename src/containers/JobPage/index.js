@@ -10,7 +10,9 @@ import ConfigDialog, { EDITOR_DIALOG_MODE, } from '../../components/Common/Edito
 import ConfirmDialog, { CONFIRM_DIALOG_MODE, } from '../../components/Common/ConfirmDialog'
 import ClosableSnackbar, { CLOSABLE_SNACKBAR_MODE, } from '../../components/Common/ClosableSnackbar'
 
+
 import { JOB_PROPERTY, } from '../../reducers/JobReducer/job'
+import { JOB_STATE_PROPERTY, } from '../../reducers/JobReducer'
 
 import * as JobActions from '../../actions/JobActions'
 import * as style from './style'
@@ -85,13 +87,13 @@ class JobPage extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    jobs: state.job.items,
-    paginator: state.job.paginator,
-    filterKeyword: state.job.filterKeyword,
-    sortingStrategy: state.job.sortingStrategy,
-    editorDialog: state.job.editorDialog,
-    confirmDialog: state.job.confirmDialog,
-    snackbar: state.job.snackbar,
+    jobs: state.job[JOB_STATE_PROPERTY.JOB_ITEMS],
+    paginator: state.job[JOB_STATE_PROPERTY.PAGINATOR],
+    filterKeyword: state.job[JOB_STATE_PROPERTY.FILTER],
+    sortingStrategy: state.job[JOB_STATE_PROPERTY.SORTER],
+    editorDialog: state.job[JOB_STATE_PROPERTY.EDITOR_DIALOG],
+    confirmDialog: state.job[JOB_STATE_PROPERTY.CONFIRM_DIALOG],
+    snackbar: state.job[JOB_STATE_PROPERTY.SNACKBAR],
   }
 }
 

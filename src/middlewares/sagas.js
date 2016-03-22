@@ -1,17 +1,18 @@
-import { take, put, call, fork, } from 'redux-saga/effects'
+import { take, put, call, fork, select, } from 'redux-saga/effects'
 
 import * as JobActions from '../actions/JobActions'
 import * as JobActionTypes from '../constants/JobActionTypes'
-import { sortJob, } from '../reducers/JobReducer/job'
+import { sortJob, JOB_PROPERTY, } from '../reducers/JobReducer/job'
 import * as JobSortStrategies from '../constants/JobSortStrategies'
 import * as API from './api'
+import * as Selectors from '../reducers/JobReducer/selector'
 
 const JOB_TRANSITION_DELAY = 1000
 
 const always = true /** takeEvery does'n work. (redux-saga 0.9.5) */
 
-/** fetch initial jobs */
-function* initialize() {
+/** fetch all jobs, used to initialize  */
+function* fetchJobs() {
   const { response, error, } = yield call(API.fetchJobs)
 
   if (error) yield put(JobActions.fetchJobsFailed({ error, }))
@@ -63,20 +64,58 @@ function* watchUpdateConfig() {
 
     if (error) yield put(JobActions.updateJobConfigFailed({ id, error, }))
     else {
-      yield call(initialize) /** update all jobs since `job.id` might be changed */
+      yield call(fetchJobs) /** update all jobs since `job.id` might be changed */
       const payloadWithConfig = Object.assign({}, payload)
       yield put(JobActions.updateJobConfigSucceeded(payloadWithConfig))
     }
   }
 }
 
-//function* watchCreateJob() {
-//  while(always) {
-//    const { payload, } = yield take(JobActionTypes.CREATE)
-//    const { config, } = payload
-//    const { response, error, } = yield call(API.createJob, config)
-//  }
-//}
+function* watchCreateJob() {
+  while (always) {
+    const { payload, } = yield take(JobActionTypes.CREATE)
+    console.log(payload)
+    const { config, } = payload
+
+    /** validate config */
+    if (config === void 0 || Object.keys(config).length === 0) {
+      /** if undefined or empty object */
+      yield put(JobActions.createJobFailed({error: new Error('Empty config'),}))
+      continue
+    }
+
+    const id = config[JOB_PROPERTY.id]
+    /** id might be undefined */
+
+    /** validate id */
+    if (id === void 0 || '' === id) {
+      yield put(JobActions.createJobFailed({error: new Error('Empty id'),}))
+      continue
+    }
+
+    /** check already exists in client jobs */
+    const jobItems = yield select(Selectors.getJobItems)
+    const alreadyExistingId = jobItems.reduce((exist, job) => {
+      return exist || id === job[JOB_PROPERTY.id]
+    }, false)
+
+    if (alreadyExistingId) {
+      yield put(JobActions.createJobFailed({error: new Error(`Already exists: ${id}`),}))
+      continue
+    }
+
+    /** create */
+    const { error, } = yield call(API.createJob, config)
+
+    if (error)
+      yield put(JobActions.createJobFailed({ error, }))
+    else {
+      yield call(fetchJobs)
+      /** fetch all job */
+      yield put(JobActions.createJobSucceeded({ id, config, }))
+    }
+  }
+}
 
 function* watchRemoveJob() {
   while(always) {
@@ -85,16 +124,20 @@ function* watchRemoveJob() {
     const { error, } = yield call(API.removeJob, id)
 
     if (error) yield put(JobActions.removeJobFailed({ id, error, }))
-    else yield put(JobActions.removeJobSucceeded(payload))
+    else {
+      yield call(fetchJobs) /** fetch all job */
+      yield put(JobActions.removeJobSucceeded(payload))
+    }
+
   }
 }
 
 export default function* root() {
-  yield fork(initialize)
+  yield fork(fetchJobs)
   yield fork(watchStartJob)
   yield fork(watchStop)
   yield fork(watchOpenEditorDialogToEdit)
   yield fork(watchUpdateConfig)
   yield fork(watchRemoveJob)
-  //yield fork(watchCreateJob)
+  yield fork(watchCreateJob)
 }

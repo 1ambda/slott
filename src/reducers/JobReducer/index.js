@@ -33,9 +33,6 @@ export const handleJobItems = handleActions({
   [JobActionTypes.START]: (state, { payload, }) =>
     Job.startJob(state, payload.id),
 
-  [JobActionTypes.CREATE]: (state, { payload, }) =>
-    Job.createJob(state, payload.id, payload.config),
-
   [JobActionTypes.SORT]: (state, { payload, }) =>
     Job.sortJob(state, payload.strategy),
 
@@ -47,9 +44,6 @@ export const handleJobItems = handleActions({
 
   [JobActionTypes.API_FETCH_CONFIG.SUCCEEDED]: (state, { payload, }) =>
     Job.updateConfig(state, payload.id, payload.config),
-
-  [JobActionTypes.API_REMOVE.SUCCEEDED]: (state, { payload, }) =>
-    Job.removeJob(state, payload.id),
 
 }, INITIAL_JOBS)
 
@@ -90,6 +84,7 @@ const INITIAL_EDITOR_DIALOG_STATE = {
 }
 
 export const handleEditorDialog = handleActions({
+  /** open editor dialog to edit */
   [JobActionTypes.API_FETCH_CONFIG.SUCCEEDED]: (state, { payload, }) =>
     Object.assign({}, INITIAL_EDITOR_DIALOG_STATE, {
       id: payload.id,
@@ -98,11 +93,22 @@ export const handleEditorDialog = handleActions({
       config: payload.config,
     }),
 
+  [JobActionTypes.API_CREATE.SUCCEEDED]: (state, { payload, }) =>
+    Object.assign({}, state, {
+      id: payload.id,
+      dialogMode: EDITOR_DIALOG_MODE.CLOSE,
+    }),
+
   [JobActionTypes.OPEN_EDITOR_DIALOG_TO_CREATE]: () =>
-    Object.assign({}, INITIAL_EDITOR_DIALOG_STATE, { dialogMode: EDITOR_DIALOG_MODE.CREATE, }),
+    Object.assign({}, INITIAL_EDITOR_DIALOG_STATE, {
+      dialogMode: EDITOR_DIALOG_MODE.CREATE,
+    }),
 
   [JobActionTypes.CLOSE_EDITOR_DIALOG]: (state) =>
-    Object.assign({}, state, { dialogMode: EDITOR_DIALOG_MODE.CLOSE, }),
+    Object.assign({}, INITIAL_EDITOR_DIALOG_STATE /** reset config */, {
+      dialogMode: EDITOR_DIALOG_MODE.CLOSE,
+      readonly: false,
+    }),
 }, INITIAL_EDITOR_DIALOG_STATE)
 
 const INITIAL_CONFIRM_DIALOG_STATE = {
@@ -149,6 +155,12 @@ export const handleClosableSnackbar = handleActions({
   [JobActionTypes.API_FETCH_ALL.FAILED]: (state, { type, payload, }) =>
     showErrorSnackbar(state, `${type}`, payload.error.message),
 
+  [JobActionTypes.API_CREATE.SUCCEEDED]: (state, { payload, }) =>
+    showInfoSnackbar(state, `${payload.id} was created`),
+
+  [JobActionTypes.API_CREATE.FAILED]: (state, { type, payload, }) =>
+    showErrorSnackbar(state, `${type}`, payload.error.message),
+
   [JobActionTypes.API_REMOVE.SUCCEEDED]: (state, { payload, }) =>
     showInfoSnackbar(state, `${payload.id} was removed`),
 
@@ -166,12 +178,22 @@ export const handleClosableSnackbar = handleActions({
 
 }, INITIAL_SNACKBAR_STATE)
 
+export const JOB_STATE_PROPERTY = {
+  JOB_ITEMS: 'items',
+  PAGINATOR: 'paginator',
+  FILTER: 'filterKeyword',
+  EDITOR_DIALOG: 'editorDialog',
+  CONFIRM_DIALOG: 'confirmDialog',
+  SORTER: 'sortingStrategy',
+  SNACKBAR: 'snackbar',
+}
+
 export default combineReducers({
-  items: handleJobItems,
-  paginator: handleJobPaginator,
-  filterKeyword: handleJobFilter,
-  sortingStrategy: handleJobSorter,
-  editorDialog: handleEditorDialog,
-  confirmDialog: handleConfirmDialog,
-  snackbar: handleClosableSnackbar,
+  [JOB_STATE_PROPERTY.JOB_ITEMS]: handleJobItems,
+  [JOB_STATE_PROPERTY.PAGINATOR]: handleJobPaginator,
+  [JOB_STATE_PROPERTY.FILTER]: handleJobFilter,
+  [JOB_STATE_PROPERTY.SORTER]: handleJobSorter,
+  [JOB_STATE_PROPERTY.EDITOR_DIALOG]: handleEditorDialog,
+  [JOB_STATE_PROPERTY.CONFIRM_DIALOG]: handleConfirmDialog,
+  [JOB_STATE_PROPERTY.SNACKBAR]: handleClosableSnackbar,
 })

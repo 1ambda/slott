@@ -1,5 +1,22 @@
 import { INITIAL_JOB_STATE, JOB_PROPERTY, JOB_STATE, } from '../reducers/JobReducer/job'
 
+export const SERVER_JOB_PROPERTY = {
+  _id: '_id',
+  enabled: 'enabled',
+  active: 'active',
+}
+
+export const IGNORED_SERVER_PROPS = [
+  SERVER_JOB_PROPERTY._id,
+  SERVER_JOB_PROPERTY.enabled,
+  SERVER_JOB_PROPERTY.active,
+]
+
+export const IGNORED_CLIENT_PROPS = [
+  JOB_PROPERTY.switching,
+  JOB_PROPERTY.state,
+]
+
 /**
  * jobs returned from server contains
  *
@@ -11,7 +28,7 @@ import { INITIAL_JOB_STATE, JOB_PROPERTY, JOB_STATE, } from '../reducers/JobRedu
 export function interpretServerJobState(serverJob) {
   const { active, enabled, } = serverJob
   if (active === void 0 || enabled === void 0) /** if one of prop is undefined */
-    throw new Error(`Invalid server job: ${JSON.stringify(serverJob)}`)
+    throw new Error(`Fetched job ${serverJob[JOB_PROPERTY.id]} has no ${SERVER_JOB_PROPERTY.enabled} property`)
 
   if (active && !enabled) return JOB_STATE.RUNNING
   else if (!active && enabled) return JOB_STATE.WAITING
@@ -45,18 +62,19 @@ export function convertServerJobToClientJob (job) {
   })
 }
 
-export function convertServerJobConfigToClientJobConfig(config) {
+/** remove server specific config props, used to */
+export function removeServerSpecificConfigProps(config) {
   const filtered = removeServerSpecificProps(Object.assign({}, config))
   return Object.assign({}, filtered)
 }
 
-export const IGNORED_SERVER_PROPS = [
-  '_id', 'enabled', 'active',
-]
-
-export const IGNORED_CLIENT_PROPS = [
-  'switching', 'state',
-]
+export function refineClientConfigPropsToCreate(config) {
+  const filtered = removeServerSpecificProps(Object.assign({}, config))
+  return Object.assign({}, filtered, {
+    [SERVER_JOB_PROPERTY.enabled]: true,
+    [SERVER_JOB_PROPERTY.active]: false, // TODO remove
+  })
+}
 
 export function removeIgnored(job, propsToIgnore) {
   return propsToIgnore.reduce((acc, ignoredProp) => {
