@@ -74,7 +74,6 @@ function* watchUpdateConfig() {
 function* watchCreateJob() {
   while (always) {
     const { payload, } = yield take(JobActionTypes.CREATE)
-    console.log(payload)
     const { config, } = payload
 
     /** validate config */

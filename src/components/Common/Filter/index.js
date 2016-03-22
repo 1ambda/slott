@@ -21,7 +21,7 @@ export default class Filter extends React.Component {
 
     return (
       <TextField inputStyle={style}
-                 onChange={this.handleFilterChange.bind(this)}
+                 onEnterKeyDown={this.handleFilterChange.bind(this)}
                  floatingLabelText={floatingLabel || 'Insert Filter'} />
     )
   }
