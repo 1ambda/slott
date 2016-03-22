@@ -1,51 +1,28 @@
 {
-  "config": [
-    {
-      "id": "akka-cluster-00",
-      "kafka": {"topic": "akka-1", "consumer-group": "cluster-consumer-1"},
-      "hdfs": "/data/akka/cluster"
-    },
-    {
-      "id": "storm-trident-01",
-      "kafka": {"topic": "storm-1", "consumer-group": "trident-consumer-1"},
-      "hdfs": "/data/storm/trident"
-    },
-    {
-      "id": "daily-batch-1",
-      "kafka": {"topic": "batch-1", "consumer-group": "daily-batch-consumer-1"},
-      "hdfs": "/data/batch/daily"
-    }
-  ],
   "jobs": [
     {
       "id": "akka-cluster-00",
       "tags": ["akka"],
       "active": true,
       "enabled": false,
-      "config": {
-        "kafka": {"topic": "akka-1", "consumer-group": "cluster-consumer-1"},
-        "hdfs": "/data/akka/cluster"
-      }
+      "kafka": {"topic": "akka-1", "consumer-group": "cluster-consumer-1"},
+      "hdfs": "/data/akka/cluster"
     },
     {
       "id": "storm-trident-01",
       "tags": ["storm", "trident"],
       "active": false,
       "enabled": false,
-      "config": {
-        "kafka": {"topic": "storm-1", "consumer-group": "trident-consumer-1"},
-        "hdfs": "/data/storm/trident"
-      }
+      "kafka": {"topic": "storm-1", "consumer-group": "trident-consumer-1"},
+      "hdfs": "/data/storm/trident"
     },
     {
       "id": "daily-batch-1",
       "tags": ["batch"],
       "active": false,
       "enabled": true,
-      "config": {
-        "kafka": {"topic": "batch-1", "consumer-group": "daily-batch-consumer-1"},
-        "hdfs": "/data/batch/daily"
-      }
+      "kafka": {"topic": "batch-1", "consumer-group": "daily-batch-consumer-1"},
+      "hdfs": "/data/batch/daily"
     }
   ]
 }

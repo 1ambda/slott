@@ -16,26 +16,6 @@ export const JOB_PROPERTY = {
   config: 'config', /** object */
 }
 
-export function interpretServerJobState(serverJob) {
-  const { active, enabled, } = serverJob
-  if (active === void 0 || enabled === void 0) /** if one of prop is undefined */
-    throw new Error(`Invalid server job: ${JSON.stringify(serverJob)}`)
-
-  if (active && !enabled) return JOB_STATE.RUNNING
-  else if (!active && enabled) return JOB_STATE.WAITING
-  else if (!active && !enabled) return JOB_STATE.STOPPED
-  else throw new Error(`Invalid server job: ${JSON.stringify(serverJob)}`)
-}
-
-export const convertServerJobToClientJob = (job) => {
-  return Object.assign({}, INITIAL_JOB_STATE, {
-    [JOB_PROPERTY.id]: job[JOB_PROPERTY.id],
-    [JOB_PROPERTY.tags]: job[JOB_PROPERTY.tags],
-    [JOB_PROPERTY.config]: job[JOB_PROPERTY.config],
-    [JOB_PROPERTY.state]: interpretServerJobState(job),
-  })
-}
-
 export const INITIAL_JOB_STATE = {
   id: '', tags: [], config: {}, state: JOB_STATE.WAITING, switching: false,
 }

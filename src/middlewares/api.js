@@ -1,29 +1,28 @@
 import fetch from 'isomorphic-fetch'
+import * as Converter from './converter'
 
 /**
  * common APIs
  *
- * return format: { response, error, }
+ * return format: { response, }
+ *
+ * doesn't handle exceptions
  */
 
-function handleResponse(url, method, promise) {
+function handleJsonResponse(url, method, promise) {
   return promise
     .then(response => {
       if (response.status !== 200) throw new Error(`${method} ${url}, status: ${response.status}`)
       else return response.json()
     })
-    .then(response => {
-      return { response, }
-    })
-    .catch(error => {
-      console.error(error)
-      return { error, }
-    })
+    .then(response => { return { response, } })
 }
 
 function getJSON(url) {
-  return handleResponse(url, 'GET', fetch(url, {
-    method: 'get',
+  const method = 'GET'
+
+  return handleJsonResponse(url, method, fetch(url, {
+    method,
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -32,8 +31,23 @@ function getJSON(url) {
 }
 
 function postJSON(url, body) {
-  return handleResponse(url, 'POST', fetch(url, {
-    method: 'post',
+  const method = 'POST'
+
+  return handleJsonResponse(url, method, fetch(url, {
+    method,
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  }))
+}
+
+function patchJSON(url, body) {
+  const method = 'PATCH'
+
+  return handleJsonResponse(url, method, fetch(url, {
+    method,
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -43,8 +57,10 @@ function postJSON(url, body) {
 }
 
 function putJSON(url, body) {
-  return handleResponse(url, 'PUT', fetch(url, {
-    method: 'put',
+  const method = 'PUT'
+
+  return handleJsonResponse(url, method, fetch(url, {
+    method,
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -54,8 +70,10 @@ function putJSON(url, body) {
 }
 
 function deleteJSON(url) {
-  return handleResponse(url, 'DELETE', fetch(url, {
-    method: 'delete',
+  const method = 'DELETE'
+
+  return handleJsonResponse(url, 'DELETE', fetch(url, {
+    method,
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -64,42 +82,50 @@ function deleteJSON(url) {
 }
 
 
-/** job related APIs */
+/** job related functions */
 
 export function delay(millis) {
   return new Promise(resolve => setTimeout(() => { resolve() }, millis))
 }
 
+export function handleError(error) { console.error(error); return { error, } }
+
+/**
+ * high level API
+ *
+ * should handle exceptions
+ */
 export function* fetchJobs() {
-  return getJSON('/api/jobs')
-}
+  const url = '/api/jobs'
 
-export const IGNORED_CONFIG_PROPS = [
-  '_id', 'enabled',
-]
+  return getJSON(url)
+    .then(({ response, }) => {
+      if (!Array.isArray(response))
+        throw new Error(`GET ${url} didn't return an array, got ${response}`)
 
-export function removeIgnroedProps(config, propsToIgnore) {
-  return propsToIgnore.reduce((acc, ignoredProp) => {
-    delete acc[ignoredProp]
-    return acc
-  }, config)
+      return { response: response.map(Converter.convertServerJobToClientJob), }
+    })
+    .catch(handleError)
 }
 
 export function* fetchJobConfig(id) {
-  return getJSON(`/api/jobs/${id}/config`)
+  return getJSON(`/api/jobs/${id}`)
     .then(({ response, }) => {
-      return { response: removeIgnroedProps(response, IGNORED_CONFIG_PROPS), }
+      return { response: Converter.convertServerJobConfigToClientJobConfig(response), }
     })
+    .catch(handleError)
 }
 
 export function* updateJobConfig(id, config) {
-  return putJSON(`/api/jobs/${id}/config`, config)
+  return patchJSON(`/api/jobs/${id}`, Converter.convertServerJobConfigToClientJobConfig(config))
     .then(({ response, }) => {
-      return { response: removeIgnroedProps(response, IGNORED_CONFIG_PROPS), }
+      return { response: {}, /** ignore, we will fetch all jobs again */ }
     })
+    .catch(handleError)
 }
 
 export function* removeJob(id) {
   return deleteJSON(`/api/jobs/${id}`)
+    .catch(handleError)
 }
 

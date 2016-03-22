@@ -31,15 +31,15 @@ export const openSnackbar = createAction(JobActionTypes.OPEN_SNACKBAR)
 export const closeSnackbar = createAction(JobActionTypes.CLOSE_SNACKBAR)
 
 /** api calls for job item */
-export const fetchJobsSucceeded = createAction(JobActionTypes.API_FETCH_JOBS.SUCCEEDED)
-export const fetchJobsFailed = createAction(JobActionTypes.API_FETCH_JOBS.FAILED)
-export const removeJobSucceeded = createAction(JobActionTypes.API_REMOVE_JOB.SUCCEEDED)
-export const removeJobFailed = createAction(JobActionTypes.API_REMOVE_JOB.FAILED)
+export const fetchJobsSucceeded = createAction(JobActionTypes.API_FETCH_ALL.SUCCEEDED)
+export const fetchJobsFailed = createAction(JobActionTypes.API_FETCH_ALL.FAILED)
+export const removeJobSucceeded = createAction(JobActionTypes.API_REMOVE.SUCCEEDED)
+export const removeJobFailed = createAction(JobActionTypes.API_REMOVE.FAILED)
 
 /** api calls for job config */
-export const fetchJobConfigSucceeded = createAction(JobActionTypes.API_FETCH_JOB_CONFIG.SUCCEEDED)
-export const fetchJobConfigFailed = createAction(JobActionTypes.API_FETCH_JOB_CONFIG.FAILED)
-export const updateJobConfigSucceeded = createAction(JobActionTypes.API_UPDATE_JOB_CONFIG.SUCCEEDED)
-export const updateJobConfigFailed = createAction(JobActionTypes.API_UPDATE_JOB_CONFIG.FAILED)
+export const fetchJobConfigSucceeded = createAction(JobActionTypes.API_FETCH_CONFIG.SUCCEEDED)
+export const fetchJobConfigFailed = createAction(JobActionTypes.API_FETCH_CONFIG.FAILED)
+export const updateJobConfigSucceeded = createAction(JobActionTypes.API_UPDATE_CONFIG.SUCCEEDED)
+export const updateJobConfigFailed = createAction(JobActionTypes.API_UPDATE_CONFIG.FAILED)
 
 

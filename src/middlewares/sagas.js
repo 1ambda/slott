@@ -2,7 +2,7 @@ import { take, put, call, fork, } from 'redux-saga/effects'
 
 import * as JobActions from '../actions/JobActions'
 import * as JobActionTypes from '../constants/JobActionTypes'
-import { sortJob, convertServerJobToClientJob, } from '../reducers/JobReducer/job'
+import { sortJob, } from '../reducers/JobReducer/job'
 import * as JobSortStrategies from '../constants/JobSortStrategies'
 import * as API from './api'
 
@@ -16,8 +16,7 @@ function* initialize() {
 
   if (error) yield put(JobActions.fetchJobsFailed({ error, }))
   else {
-    const converted = response.map(convertServerJobToClientJob)
-    const sortedJobs = sortJob(converted, JobSortStrategies.INITIAL)
+    const sortedJobs = sortJob(response, JobSortStrategies.INITIAL)
     yield put(JobActions.fetchJobsSucceeded({ jobs: sortedJobs, }))
   }
 }
@@ -60,16 +59,24 @@ function* watchUpdateConfig() {
   while(always) {
     const { payload, } = yield take(JobActionTypes.UPDATE_CONFIG)
     const { id, config, } = payload
-    const { response, error, } = yield call(API.updateJobConfig, id, config)
+    const { error, } = yield call(API.updateJobConfig, id, config)
 
     if (error) yield put(JobActions.updateJobConfigFailed({ id, error, }))
     else {
       yield call(initialize) /** update all jobs since `job.id` might be changed */
-      const payloadWithConfig = Object.assign({}, payload, { config: response, })
+      const payloadWithConfig = Object.assign({}, payload)
       yield put(JobActions.updateJobConfigSucceeded(payloadWithConfig))
     }
   }
 }
+
+//function* watchCreateJob() {
+//  while(always) {
+//    const { payload, } = yield take(JobActionTypes.CREATE)
+//    const { config, } = payload
+//    const { response, error, } = yield call(API.createJob, config)
+//  }
+//}
 
 function* watchRemoveJob() {
   while(always) {
@@ -89,4 +96,5 @@ export default function* root() {
   yield fork(watchOpenEditorDialogToEdit)
   yield fork(watchUpdateConfig)
   yield fork(watchRemoveJob)
+  //yield fork(watchCreateJob)
 }

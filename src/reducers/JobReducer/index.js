@@ -12,7 +12,7 @@ import * as Job from './job'
 const INITIAL_JOBS = []
 
 export const handleJobItems = handleActions({
-  [JobActionTypes.API_FETCH_JOBS.SUCCEEDED]: (state, { payload, }) =>
+  [JobActionTypes.API_FETCH_ALL.SUCCEEDED]: (state, { payload, }) =>
     payload.jobs,
 
   [JobActionTypes.START_SWITCHING]: (state, { payload, }) =>
@@ -45,10 +45,10 @@ export const handleJobItems = handleActions({
   [JobActionTypes.START_ALL]: (state) =>
     Job.startAllJobs(state),
 
-  [JobActionTypes.API_FETCH_JOB_CONFIG.SUCCEEDED]: (state, { payload, }) =>
+  [JobActionTypes.API_FETCH_CONFIG.SUCCEEDED]: (state, { payload, }) =>
     Job.updateConfig(state, payload.id, payload.config),
 
-  [JobActionTypes.API_REMOVE_JOB.SUCCEEDED]: (state, { payload, }) =>
+  [JobActionTypes.API_REMOVE.SUCCEEDED]: (state, { payload, }) =>
     Job.removeJob(state, payload.id),
 
 }, INITIAL_JOBS)
@@ -90,7 +90,7 @@ const INITIAL_EDITOR_DIALOG_STATE = {
 }
 
 export const handleEditorDialog = handleActions({
-  [JobActionTypes.API_FETCH_JOB_CONFIG.SUCCEEDED]: (state, { payload, }) =>
+  [JobActionTypes.API_FETCH_CONFIG.SUCCEEDED]: (state, { payload, }) =>
     Object.assign({}, INITIAL_EDITOR_DIALOG_STATE, {
       id: payload.id,
       readonly: payload.readonly,
@@ -146,22 +146,22 @@ export const handleClosableSnackbar = handleActions({
   [JobActionTypes.OPEN_SNACKBAR]: (state, { payload, }) =>
     Object.assign({}, state, { snackbarMode: CLOSABLE_SNACKBAR_MODE.OPEN, message: payload.message, }),
 
-  [JobActionTypes.API_FETCH_JOBS.FAILED]: (state, { type, payload, }) =>
+  [JobActionTypes.API_FETCH_ALL.FAILED]: (state, { type, payload, }) =>
     showErrorSnackbar(state, `${type}`, payload.error.message),
 
-  [JobActionTypes.API_REMOVE_JOB.SUCCEEDED]: (state, { payload, }) =>
+  [JobActionTypes.API_REMOVE.SUCCEEDED]: (state, { payload, }) =>
     showInfoSnackbar(state, `${payload.id} was removed`),
 
-  [JobActionTypes.API_REMOVE_JOB.FAILED]: (state, { type, payload, }) =>
+  [JobActionTypes.API_REMOVE.FAILED]: (state, { type, payload, }) =>
     showErrorSnackbar(state, `${type} ${payload.id}`, payload.error.message),
 
-  [JobActionTypes.API_FETCH_JOB_CONFIG.FAILED]: (state, { type, payload, }) =>
+  [JobActionTypes.API_FETCH_CONFIG.FAILED]: (state, { type, payload, }) =>
     showErrorSnackbar(state, `${type} ${payload.id}`, payload.error.message),
 
-  [JobActionTypes.API_UPDATE_JOB_CONFIG.SUCCEEDED]: (state, { payload, }) =>
+  [JobActionTypes.API_UPDATE_CONFIG.SUCCEEDED]: (state, { payload, }) =>
     showInfoSnackbar(state, `${payload.id} was updated`),
 
-  [JobActionTypes.API_UPDATE_JOB_CONFIG.FAILED]: (state, { type, payload, }) =>
+  [JobActionTypes.API_UPDATE_CONFIG.FAILED]: (state, { type, payload, }) =>
     showErrorSnackbar(state, `${type} ${payload.id}`, payload.error.message),
 
 }, INITIAL_SNACKBAR_STATE)
