@@ -26,12 +26,17 @@ export const isWaiting = (job) => job[JOB_PROPERTY.state] === JOB_STATE.WAITING
 
 export const isSwitching = (job) => job[JOB_PROPERTY.switching]
 
-export const modifyJob = (job, prop, value) =>
+export const modifyJobProp = (job, prop, value) =>
   Object.assign({}, job, {[prop]: value,})
 
 export const modifyJobWithFilter = (state, filter, prop, value) =>
   state.map(job => {
-    return (filter(job)) ? modifyJob(job, prop, value) : job
+    return (filter(job)) ? modifyJobProp(job, prop, value) : job
+  })
+
+export const replaceJobWithFilter = (state, filter, updatedJob) =>
+  state.map(job => {
+    return (filter(job)) ? updatedJob : job
   })
 
 export const removeJobByFilter = (state, filter) =>
@@ -45,6 +50,11 @@ export const stopJob = (state, id) => {
 export const startJob = (state, id) => {
   const filter = (job) => (id === job[JOB_PROPERTY.id] && isWaiting(job))
   return modifyJobWithFilter(state, filter, JOB_PROPERTY.state, JOB_STATE.RUNNING)
+}
+
+export const updateJob = (state, updatedJob) => {
+  const filter = (job) => (updatedJob[JOB_PROPERTY.id] === job[JOB_PROPERTY.id])
+  return replaceJobWithFilter(state, filter, updatedJob)
 }
 
 export const updateConfig = (state, id, config) => {

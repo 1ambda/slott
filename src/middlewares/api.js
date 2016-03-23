@@ -1,4 +1,6 @@
 import fetch from 'isomorphic-fetch'
+import { take, put, call, fork, select, } from 'redux-saga/effects'
+
 import * as Converter from './converter'
 
 /**
@@ -88,13 +90,16 @@ export function delay(millis) {
   return new Promise(resolve => setTimeout(() => { resolve() }, millis))
 }
 
-export function handleError(error) { console.error(error); return { error, } }
-
 /**
  * high level API (business related)
  *
+ * return format: { response, error, }
+ *
  * should handle exceptions
  */
+
+export function handleError(error) { console.error(error); return { error, } }
+
 export function* fetchJobs() {
   const url = '/api/jobs'
 
@@ -111,18 +116,31 @@ export function* fetchJobs() {
 export function* fetchJobConfig(id) {
   return getJSON(`/api/jobs/${id}`)
     .then(({ response, }) => {
-      return { response: Converter.removeServerSpecificConfigProps(response), }
+      return { response: Converter.removeServerSpecificProps(response), }
     })
     .catch(handleError)
 }
 
 export function* updateJobConfig(id, config) {
-  return patchJSON(`/api/jobs/${id}`, Converter.removeServerSpecificConfigProps(config))
-    .catch(handleError) /** ignore response, we will fetch all jobs again in watcher */
+  return patchJSON(`/api/jobs/${id}`, Converter.refineClientPropsToUpdate(config))
+    .then(({ response, }) => { /** return job, instead of config, will be fixed (TODO) */
+      return { response: Converter.convertServerJobToClientJob(response), }
+    })
+    .catch(handleError)
+}
+
+export function* setReadonly(id) {
+  const { response, error, } = yield call(updateJobConfig, id, Converter.createPropToSetReadonly())
+  return { response, error, }
+}
+
+export function* unsetReadonly(id) {
+  const { response, error, } = yield call(updateJobConfig, id, Converter.createPropToUnsetReadonly())
+  return { response, error, }
 }
 
 export function* createJob(config) {
-  return postJSON('/api/jobs', Converter.refineClientConfigPropsToCreate(config))
+  return postJSON('/api/jobs', Converter.refineClientPropsToCreate(config))
     .catch(handleError) /** ignore response, we will fetch all jobs again in watcher */
 }
 
@@ -130,4 +148,5 @@ export function* removeJob(id) {
   return deleteJSON(`/api/jobs/${id}`)
     .catch(handleError) /** ignore response, we will fetch all jobs again in watcher */
 }
+
 

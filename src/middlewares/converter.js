@@ -17,6 +17,31 @@ export const IGNORED_CLIENT_PROPS = [
   JOB_PROPERTY.state,
 ]
 
+export const IGNORED_CLIENT_PROPS_FOR_UPDATING_CONFIG = [
+  SERVER_JOB_PROPERTY.active,
+  SERVER_JOB_PROPERTY._id,
+  JOB_PROPERTY.id, /** do not allow to modify `id` field */
+]
+
+/**
+ * @param props Object
+ * @param propsToIgnore Array of String
+ */
+export function removeProps(props, propsToIgnore) {
+  /** copy before removing properties */
+  const copied = Object.assign({}, props)
+
+  return propsToIgnore.reduce((acc, ignoredProp) => {
+    delete acc[ignoredProp]
+    return acc
+  }, copied)
+}
+
+export function removeServerSpecificProps(props) {
+  return removeProps(props, IGNORED_SERVER_PROPS)
+}
+
+
 /**
  * jobs returned from server contains
  *
@@ -50,44 +75,40 @@ export function interpretClientJobState(clientJob) {
 
 /** responsible for converting server jobs to client jobs, used to fetch all jobs */
 export function convertServerJobToClientJob (job) {
-
-  /** copy before removing properties */
-  const config = removeServerSpecificProps(Object.assign({}, job))
+  const filtered = removeServerSpecificProps(job)
 
   return Object.assign({}, INITIAL_JOB_STATE, {
     [JOB_PROPERTY.id]: job[JOB_PROPERTY.id],
     [JOB_PROPERTY.tags]: job[JOB_PROPERTY.tags],
-    [JOB_PROPERTY.config]: config,
+    [JOB_PROPERTY.config]: filtered, // TODO remove
     [JOB_PROPERTY.state]: interpretServerJobState(job),
   })
 }
 
-/** remove server specific config props, used to */
-export function removeServerSpecificConfigProps(config) {
-  const filtered = removeServerSpecificProps(Object.assign({}, config))
-  return Object.assign({}, filtered)
+export function convertReadonlyPropToEnabled(readonly) {
+  return { [SERVER_JOB_PROPERTY.enabled]: !readonly, }
 }
 
-export function refineClientConfigPropsToCreate(config) {
-  const filtered = removeServerSpecificProps(Object.assign({}, config))
+export function createPropToSetReadonly() {
+  const readonly = true
+  return convertReadonlyPropToEnabled(readonly)
+}
+
+export function createPropToUnsetReadonly() {
+  const readonly = false
+  return convertReadonlyPropToEnabled(readonly)
+}
+
+export function refineClientPropsToCreate(props) {
+  const filtered = removeProps(props, IGNORED_CLIENT_PROPS)
+
   return Object.assign({}, filtered, {
     [SERVER_JOB_PROPERTY.enabled]: true,
     [SERVER_JOB_PROPERTY.active]: false, // TODO remove
   })
 }
 
-export function removeIgnored(job, propsToIgnore) {
-  return propsToIgnore.reduce((acc, ignoredProp) => {
-    delete acc[ignoredProp]
-    return acc
-  }, job)
-}
-
-export function removeServerSpecificProps(job) {
-  return removeIgnored(job, IGNORED_SERVER_PROPS)
-}
-
-export function removeClientSpecificProps(job) {
-  return removeIgnored(job, IGNORED_CLIENT_PROPS)
+export function refineClientPropsToUpdate(props) {
+  return removeProps(props, IGNORED_CLIENT_PROPS_FOR_UPDATING_CONFIG)
 }
 

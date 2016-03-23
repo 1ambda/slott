@@ -11,6 +11,7 @@ import * as Job from './job'
 
 const INITIAL_JOBS = []
 
+/** client related actions. */
 export const handleJobItems = handleActions({
   [JobActionTypes.API_FETCH_ALL.SUCCEEDED]: (state, { payload, }) =>
     payload.jobs,
@@ -21,11 +22,14 @@ export const handleJobItems = handleActions({
   [JobActionTypes.END_SWITCHING]: (state, { payload, }) =>
     Job.endSwitching(state, payload.id),
 
-  [JobActionTypes.UNSET_READONLY]: (state, { payload, }) =>
+  [JobActionTypes.API_UNSET_READONLY.SUCCEEDED]: (state, { payload, }) =>
     Job.unsetReadonly(state, payload.id),
 
-  [JobActionTypes.SET_READONLY]: (state, { payload, }) =>
+  [JobActionTypes.API_SET_READONLY.SUCCEEDED]: (state, { payload, }) =>
     Job.setReadonly(state, payload.id),
+
+  [JobActionTypes.API_UPDATE_CONFIG.SUCCEEDED]: (state, { payload, }) =>
+    Job.updateJob(state, payload.updatedJob),
 
   [JobActionTypes.STOP]: (state, { payload, }) =>
     Job.stopJob(state, payload.id),
@@ -146,34 +150,38 @@ export const showErrorSnackbar = (state, message, error) =>
   })
 
 export const handleClosableSnackbar = handleActions({
+  /** snackbar related */
   [JobActionTypes.CLOSE_SNACKBAR]: (state) =>
     Object.assign({}, state, { snackbarMode: CLOSABLE_SNACKBAR_MODE.CLOSE, }),
-
   [JobActionTypes.OPEN_SNACKBAR]: (state, { payload, }) =>
     Object.assign({}, state, { snackbarMode: CLOSABLE_SNACKBAR_MODE.OPEN, message: payload.message, }),
 
+  /** fetch all failure */
   [JobActionTypes.API_FETCH_ALL.FAILED]: (state, { type, payload, }) =>
     showErrorSnackbar(state, `${type}`, payload.error.message),
 
+  /** remove, created job */
   [JobActionTypes.API_CREATE.SUCCEEDED]: (state, { payload, }) =>
     showInfoSnackbar(state, `${payload.id} was created`),
-
   [JobActionTypes.API_CREATE.FAILED]: (state, { type, payload, }) =>
     showErrorSnackbar(state, `${type}`, payload.error.message),
-
   [JobActionTypes.API_REMOVE.SUCCEEDED]: (state, { payload, }) =>
     showInfoSnackbar(state, `${payload.id} was removed`),
-
   [JobActionTypes.API_REMOVE.FAILED]: (state, { type, payload, }) =>
     showErrorSnackbar(state, `${type} ${payload.id}`, payload.error.message),
 
+  /** fetch, update config related */
   [JobActionTypes.API_FETCH_CONFIG.FAILED]: (state, { type, payload, }) =>
     showErrorSnackbar(state, `${type} ${payload.id}`, payload.error.message),
-
   [JobActionTypes.API_UPDATE_CONFIG.SUCCEEDED]: (state, { payload, }) =>
     showInfoSnackbar(state, `${payload.id} was updated`),
-
   [JobActionTypes.API_UPDATE_CONFIG.FAILED]: (state, { type, payload, }) =>
+    showErrorSnackbar(state, `${type} ${payload.id}`, payload.error.message),
+
+  /** set readonly, unset readonly */
+  [JobActionTypes.API_SET_READONLY.FAILED]: (state, { type, payload, }) =>
+    showErrorSnackbar(state, `${type} ${payload.id}`, payload.error.message),
+  [JobActionTypes.API_UNSET_READONLY.FAILED]: (state, { type, payload, }) =>
     showErrorSnackbar(state, `${type} ${payload.id}`, payload.error.message),
 
 }, INITIAL_SNACKBAR_STATE)

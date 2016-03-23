@@ -33,9 +33,9 @@ export const closeSnackbar = createAction(JobActionTypes.CLOSE_SNACKBAR)
 /** api calls for job item */
 export const fetchJobsSucceeded = createAction(JobActionTypes.API_FETCH_ALL.SUCCEEDED)
 export const fetchJobsFailed = createAction(JobActionTypes.API_FETCH_ALL.FAILED)
+
 export const removeJobSucceeded = createAction(JobActionTypes.API_REMOVE.SUCCEEDED)
 export const removeJobFailed = createAction(JobActionTypes.API_REMOVE.FAILED)
-
 export const createJobSucceeded = createAction(JobActionTypes.API_CREATE.SUCCEEDED)
 export const createJobFailed = createAction(JobActionTypes.API_CREATE.FAILED)
 
@@ -44,4 +44,10 @@ export const fetchJobConfigFailed = createAction(JobActionTypes.API_FETCH_CONFIG
 export const updateJobConfigSucceeded = createAction(JobActionTypes.API_UPDATE_CONFIG.SUCCEEDED)
 export const updateJobConfigFailed = createAction(JobActionTypes.API_UPDATE_CONFIG.FAILED)
 
+
+export const setReadonlySucceeded = createAction(JobActionTypes.API_SET_READONLY.SUCCEEDED)
+export const setReadonlyFailed = createAction(JobActionTypes.API_SET_READONLY.FAILED)
+
+export const unsetReadonlySucceeded = createAction(JobActionTypes.API_UNSET_READONLY.SUCCEEDED)
+export const unsetReadonlyFailed = createAction(JobActionTypes.API_UNSET_READONLY.FAILED)
 

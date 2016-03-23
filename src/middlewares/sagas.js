@@ -60,14 +60,10 @@ function* watchUpdateConfig() {
   while(always) {
     const { payload, } = yield take(JobActionTypes.UPDATE_CONFIG)
     const { id, config, } = payload
-    const { error, } = yield call(API.updateJobConfig, id, config)
+    const { response: updatedJob, error, } = yield call(API.updateJobConfig, id, config)
 
     if (error) yield put(JobActions.updateJobConfigFailed({ id, error, }))
-    else {
-      yield call(fetchJobs) /** update all jobs since `job.id` might be changed */
-      const payloadWithConfig = Object.assign({}, payload)
-      yield put(JobActions.updateJobConfigSucceeded(payloadWithConfig))
-    }
+    else yield put(JobActions.updateJobConfigSucceeded({ id, updatedJob, }))
   }
 }
 
@@ -127,16 +123,45 @@ function* watchRemoveJob() {
       yield call(fetchJobs) /** fetch all job */
       yield put(JobActions.removeJobSucceeded(payload))
     }
+  }
+}
 
+function* watchSetReadonly() {
+  while(always) {
+    const { payload, } = yield take(JobActionTypes.SET_READONLY)
+    const { id, } = payload
+    const { response: updatedJob, error, } = yield call(API.setReadonly, id)
+
+    if (error) yield put(JobActions.setReadonlyFailed({ id, error, }))
+    else {
+      yield put(JobActions.setReadonlySucceeded({ id: updatedJob.id, }))
+    }
+   }
+}
+
+function* watchUnsetReadonly() {
+  while(always) {
+    const { payload, } = yield take(JobActionTypes.UNSET_READONLY)
+    const { id, } = payload
+    const { response: updatedJob, error, } = yield call(API.unsetReadonly, id)
+
+    if (error) yield put(JobActions.unsetReadonlyFailed({ id, error, }))
+    else {
+      yield put(JobActions.unsetReadonlySucceeded({ id: updatedJob.id, }))
+    }
   }
 }
 
 export default function* root() {
-  yield fork(fetchJobs)
-  yield fork(watchStartJob)
-  yield fork(watchStop)
-  yield fork(watchOpenEditorDialogToEdit)
-  yield fork(watchUpdateConfig)
-  yield fork(watchRemoveJob)
-  yield fork(watchCreateJob)
+  yield [
+    fork(fetchJobs),
+    fork(watchStartJob),
+    fork(watchStop),
+    fork(watchOpenEditorDialogToEdit),
+    fork(watchUpdateConfig),
+    fork(watchRemoveJob),
+    fork(watchCreateJob),
+    fork(watchSetReadonly),
+    fork(watchUnsetReadonly),
+  ]
 }

@@ -7,7 +7,7 @@ import RaisedButton from 'material-ui/lib/raised-button'
 import FlatButton from 'material-ui/lib/flat-button'
 import Dialog from 'material-ui/lib/dialog'
 
-import { JOB_PROPERTY, modifyJob, } from '../../../reducers/JobReducer/job'
+import { JOB_PROPERTY, modifyJobProp, } from '../../../reducers/JobReducer/job'
 import * as JobActions from '../../../actions/JobActions'
 import * as dialogStyle from './style'
 
