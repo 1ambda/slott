@@ -144,6 +144,16 @@ export function* createJob(job) {
     .catch(handleError) /** ignore response, we will fetch all jobs again in watcher */
 }
 
+export function* startJob(id) {
+  return patchJSON(`api/jobs/${id}/state`, Converter.createPropsToStartJob())
+    .catch(handleError) /** ignore response, we will fetch the changed job again in watcher */
+}
+
+export function* stopJob(id) {
+  return patchJSON(`api/jobs/${id}/state`, Converter.createPropsToStopJob())
+    .catch(handleError) /** ignore response, we will fetch the changed job again in watcher */
+}
+
 export function* removeJob(id) {
   return deleteJSON(`/api/jobs/${id}`)
     .catch(handleError) /** ignore response, we will fetch all jobs again in watcher */

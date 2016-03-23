@@ -1,4 +1,4 @@
 {
-  "/api/jobs/:id/config": "/config/:id",
-  "/api/": "/"
+  "/api/": "/",
+  "/:resource/:id/state": "/:resource/:id"
 }

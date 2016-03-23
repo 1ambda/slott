@@ -44,10 +44,15 @@ export const fetchJobFailed = createAction(JobActionTypes.API_FETCH.FAILED)
 export const updateJobSucceeded = createAction(JobActionTypes.API_UPDATE.SUCCEEDED)
 export const updateJobFailed = createAction(JobActionTypes.API_UPDATE.FAILED)
 
-
 export const setReadonlySucceeded = createAction(JobActionTypes.API_SET_READONLY.SUCCEEDED)
 export const setReadonlyFailed = createAction(JobActionTypes.API_SET_READONLY.FAILED)
 
 export const unsetReadonlySucceeded = createAction(JobActionTypes.API_UNSET_READONLY.SUCCEEDED)
 export const unsetReadonlyFailed = createAction(JobActionTypes.API_UNSET_READONLY.FAILED)
+
+export const startJobSucceeded = createAction(JobActionTypes.API_START.SUCCEEDED)
+export const startJobFailed = createAction(JobActionTypes.API_START.FAILED)
+
+export const stopJobSucceeded = createAction(JobActionTypes.API_STOP.SUCCEEDED)
+export const stopJobFailed = createAction(JobActionTypes.API_STOP.FAILED)
 

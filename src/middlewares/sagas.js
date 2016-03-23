@@ -23,26 +23,6 @@ function* fetchJobs() {
   }
 }
 
-function* watchStartJob() {
-  while (always) {
-    const { payload, } = yield take(JobActionTypes.START)
-    yield put(JobActions.startSwitching(payload))
-    yield put(JobActions.startJob(payload))
-    yield call(API.delay, JOB_TRANSITION_DELAY)
-    yield put(JobActions.endSwitching(payload))
-  }
-}
-
-function* watchStop() {
-  while (always) {
-    const { payload, } = yield take(JobActionTypes.STOP)
-    yield put(JobActions.startSwitching(payload))
-    yield put(JobActions.stopJob(payload))
-    yield call(API.delay, JOB_TRANSITION_DELAY)
-    yield put(JobActions.endSwitching(payload))
-  }
-}
-
 function* watchOpenEditorDialogToEdit() {
   while (always) {
     const { payload, } = yield take(JobActionTypes.OPEN_EDITOR_DIALOG_TO_EDIT)
@@ -154,11 +134,47 @@ function* watchUnsetReadonly() {
   }
 }
 
+function* watchStartJob() {
+  while(always) {
+    const { payload, } = yield take(JobActionTypes.START)
+    const { id, } = payload
+
+    yield put(JobActions.startSwitching({ id, }))
+    const { error, } = yield call(API.startJob, id)
+
+    if (error) yield put(JobActions.startJobFailed({ id, error, }))
+    else {
+      yield call(API.delay, JOB_TRANSITION_DELAY)
+      yield put(JobActions.startJobSucceeded({ id, }))
+    }
+
+    yield put(JobActions.endSwitching({ id, }))
+  }
+}
+
+function* watchStopJob() {
+  while(always) {
+    const { payload, } = yield take(JobActionTypes.STOP)
+    const { id, } = payload
+
+    yield put(JobActions.startSwitching({ id, }))
+    const { error, } = yield call(API.stopJob, id)
+
+    if (error) yield put(JobActions.stopJobFailed({ id, error, }))
+    else {
+      yield call(API.delay, JOB_TRANSITION_DELAY)
+      yield put(JobActions.stopJobSucceeded({ id, }))
+    }
+
+    yield put(JobActions.endSwitching(payload))
+  }
+}
+
 export default function* root() {
   yield [
     fork(fetchJobs),
     fork(watchStartJob),
-    fork(watchStop),
+    fork(watchStopJob),
     fork(watchOpenEditorDialogToEdit),
     fork(watchUpdateJob),
     fork(watchRemoveJob),

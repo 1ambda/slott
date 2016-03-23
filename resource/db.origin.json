@@ -2,26 +2,42 @@
   "jobs": [
     {
       "id": "akka-cluster-00",
-      "tags": ["akka"],
+      "tags": [
+        "akka"
+      ],
       "active": true,
-      "enabled": false,
-      "kafka": {"topic": "akka-1", "consumer-group": "cluster-consumer-1"},
+      "enabled": true,
+      "kafka": {
+        "topic": "akka-1",
+        "consumer-group": "cluster-consumer-1"
+      },
       "hdfs": "/data/akka/cluster"
     },
     {
       "id": "storm-trident-01",
-      "tags": ["storm", "trident"],
+      "tags": [
+        "storm",
+        "trident"
+      ],
       "active": false,
       "enabled": false,
-      "kafka": {"topic": "storm-1", "consumer-group": "trident-consumer-1"},
+      "kafka": {
+        "topic": "storm-1",
+        "consumer-group": "trident-consumer-1"
+      },
       "hdfs": "/data/storm/trident"
     },
     {
       "id": "daily-batch-1",
-      "tags": ["batch"],
+      "tags": [
+        "batch"
+      ],
       "active": false,
       "enabled": true,
-      "kafka": {"topic": "batch-1", "consumer-group": "daily-batch-consumer-1"},
+      "kafka": {
+        "topic": "batch-1",
+        "consumer-group": "daily-batch-consumer-1"
+      },
       "hdfs": "/data/batch/daily"
     }
   ]

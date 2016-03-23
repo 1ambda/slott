@@ -55,7 +55,7 @@ export function interpretServerJobState(serverJob) {
   if (active === void 0 || enabled === void 0) /** if one of prop is undefined */
     throw new Error(`Fetched job ${serverJob[JOB_PROPERTY.id]} has no ${SERVER_JOB_PROPERTY.enabled} property`)
 
-  if (active && !enabled) return JOB_STATE.RUNNING
+  if (active) return JOB_STATE.RUNNING
   else if (!active && enabled) return JOB_STATE.WAITING
   else if (!active && !enabled) return JOB_STATE.STOPPED
   else throw new Error(`Invalid server job: ${JSON.stringify(serverJob)}`)
@@ -86,19 +86,13 @@ export function convertServerJobToClientJob (job) {
   })
 }
 
-export function convertReadonlyPropToEnabled(readonly) {
-  return { [SERVER_JOB_PROPERTY.enabled]: !readonly, }
-}
+export function createEnabledProp(readonly) { return { [SERVER_JOB_PROPERTY.enabled]: !readonly, } }
+export function createPropToSetReadonly() { return createEnabledProp(true) }
+export function createPropToUnsetReadonly() { return createEnabledProp(false) }
 
-export function createPropToSetReadonly() {
-  const readonly = true
-  return convertReadonlyPropToEnabled(readonly)
-}
-
-export function createPropToUnsetReadonly() {
-  const readonly = false
-  return convertReadonlyPropToEnabled(readonly)
-}
+export function createActiveProp(active) { return { [SERVER_JOB_PROPERTY.active]: active, } }
+export function createPropsToStartJob() { return createActiveProp(true) }
+export function createPropsToStopJob() { return createActiveProp(false) }
 
 export function refineClientPropsToCreate(props) {
   const filtered = removeProps(props, IGNORED_CLIENT_PROPS)

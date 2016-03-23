@@ -12,6 +12,7 @@ import * as Job from './job'
 const INITIAL_JOBS = []
 
 /** client related actions. */
+  // TODOTODO refactor 일반 함수로 변경, payload 내부에서 추출해서 사용
 export const handleJobItems = handleActions({
   [JobActionTypes.API_FETCH_ALL.SUCCEEDED]: (state, { payload, }) =>
     payload.jobs,
@@ -31,10 +32,10 @@ export const handleJobItems = handleActions({
   [JobActionTypes.API_UPDATE.SUCCEEDED]: (state, { payload, }) =>
     Job.updateJob(state, payload.job),
 
-  [JobActionTypes.STOP]: (state, { payload, }) =>
+  [JobActionTypes.API_STOP.SUCCEEDED]: (state, { payload, }) =>
     Job.stopJob(state, payload.id),
 
-  [JobActionTypes.START]: (state, { payload, }) =>
+  [JobActionTypes.API_START.SUCCEEDED]: (state, { payload, }) =>
     Job.startJob(state, payload.id),
 
   [JobActionTypes.SORT]: (state, { payload, }) =>
@@ -156,33 +157,33 @@ export const handleClosableSnackbar = handleActions({
   [JobActionTypes.OPEN_SNACKBAR]: (state, { payload, }) =>
     Object.assign({}, state, { snackbarMode: CLOSABLE_SNACKBAR_MODE.OPEN, message: payload.message, }),
 
-  /** fetch all failure */
-  [JobActionTypes.API_FETCH_ALL.FAILED]: (state, { type, payload, }) =>
-    showErrorSnackbar(state, `${type}`, payload.error.message),
-
-  /** remove, created job */
+  /** remove, created, update job */
   [JobActionTypes.API_CREATE.SUCCEEDED]: (state, { payload, }) =>
     showInfoSnackbar(state, `${payload.id} was created`),
-  [JobActionTypes.API_CREATE.FAILED]: (state, { type, payload, }) =>
-    showErrorSnackbar(state, `${type}`, payload.error.message),
   [JobActionTypes.API_REMOVE.SUCCEEDED]: (state, { payload, }) =>
     showInfoSnackbar(state, `${payload.id} was removed`),
-  [JobActionTypes.API_REMOVE.FAILED]: (state, { type, payload, }) =>
-    showErrorSnackbar(state, `${type} ${payload.id}`, payload.error.message),
-
-  /** fetch, update related */
-  [JobActionTypes.API_FETCH.FAILED]: (state, { type, payload, }) =>
-    showErrorSnackbar(state, `${type} ${payload.id}`, payload.error.message),
   [JobActionTypes.API_UPDATE.SUCCEEDED]: (state, { payload, }) =>
     showInfoSnackbar(state, `${payload.id} was updated`),
-  [JobActionTypes.API_UPDATE.FAILED]: (state, { type, payload, }) =>
-    showErrorSnackbar(state, `${type} ${payload.id}`, payload.error.message),
 
-  /** set readonly, unset readonly */
+  /** failed */
+  [JobActionTypes.API_FETCH_ALL.FAILED]: (state, { type, payload, }) =>
+    showErrorSnackbar(state, `${type}`, payload.error.message),
   [JobActionTypes.API_SET_READONLY.FAILED]: (state, { type, payload, }) =>
     showErrorSnackbar(state, `${type} ${payload.id}`, payload.error.message),
   [JobActionTypes.API_UNSET_READONLY.FAILED]: (state, { type, payload, }) =>
     showErrorSnackbar(state, `${type} ${payload.id}`, payload.error.message),
+  [JobActionTypes.API_UPDATE.FAILED]: (state, { type, payload, }) =>
+    showErrorSnackbar(state, `${type} ${payload.id}`, payload.error.message),
+  [JobActionTypes.API_FETCH.FAILED]: (state, { type, payload, }) =>
+    showErrorSnackbar(state, `${type} ${payload.id}`, payload.error.message),
+  [JobActionTypes.API_REMOVE.FAILED]: (state, { type, payload, }) =>
+    showErrorSnackbar(state, `${type} ${payload.id}`, payload.error.message),
+  [JobActionTypes.API_CREATE.FAILED]: (state, { type, payload, }) =>
+    showErrorSnackbar(state, `${type}`, payload.error.message),
+  [JobActionTypes.API_START.FAILED]: (state, { type, payload, }) =>
+    showErrorSnackbar(state, `${type}`, payload.error.message),
+  [JobActionTypes.API_STOP.FAILED]: (state, { type, payload, }) =>
+    showErrorSnackbar(state, `${type}`, payload.error.message),
 
 }, INITIAL_SNACKBAR_STATE)
 
