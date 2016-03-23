@@ -140,7 +140,7 @@ export default class JobItem extends React.Component {
   handleItemClick(event) {
     const { actions, job, } = this.props
 
-    /** check current config is readonly */
+    /** check current job is readonly */
     const readonly = isReadonly(job)
     const payload = { id: job[JOB_PROPERTY.id], readonly, }
 

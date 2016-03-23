@@ -6,7 +6,7 @@ import { bindActionCreators, } from 'redux'
 import JobList from '../../components/JobPage/JobList'
 import JobHeader from '../../components/JobPage/JobHeader'
 import Paginator from '../../components/Common/Paginator'
-import ConfigDialog, { EDITOR_DIALOG_MODE, } from '../../components/Common/EditorDialog'
+import EditorDialog, { EDITOR_DIALOG_MODE, } from '../../components/Common/EditorDialog'
 import ConfirmDialog, { CONFIRM_DIALOG_MODE, } from '../../components/Common/ConfirmDialog'
 import ClosableSnackbar, { CLOSABLE_SNACKBAR_MODE, } from '../../components/Common/ClosableSnackbar'
 
@@ -43,13 +43,7 @@ class JobPage extends React.Component {
 
     /** 1. filter jobs */
     const filtered = jobs.filter(job => {
-      const searchArea = [
-        job[JOB_PROPERTY.id],
-        job[JOB_PROPERTY.tags],
-        JSON.stringify(job[JOB_PROPERTY.config]),
-      ].join(' ')
-
-
+      const searchArea = JSON.stringify(job)
       return (searchArea.includes(filterKeyword))
     })
 
@@ -58,7 +52,7 @@ class JobPage extends React.Component {
 
     /** 3. draw dialogs, snackbar */
     const editorDialogDOM = (EDITOR_DIALOG_MODE.CLOSE !== editorDialog.dialogMode) ?
-      (<ConfigDialog {...editorDialog} actions={actions} />) : null
+      (<EditorDialog {...editorDialog} actions={actions} />) : null
 
     const confirmDialogDOM = (CONFIRM_DIALOG_MODE.CLOSE !== confirmDialog.dialogMode) ?
       (<ConfirmDialog {...confirmDialog} actions={actions} />) : null

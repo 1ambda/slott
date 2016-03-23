@@ -6,6 +6,7 @@ import { sortJob, JOB_PROPERTY, } from '../reducers/JobReducer/job'
 import * as JobSortStrategies from '../constants/JobSortStrategies'
 import * as API from './api'
 import * as Selectors from '../reducers/JobReducer/selector'
+import * as Converter from './converter'
 
 const JOB_TRANSITION_DELAY = 1000
 
@@ -45,41 +46,42 @@ function* watchStop() {
 function* watchOpenEditorDialogToEdit() {
   while (always) {
     const { payload, } = yield take(JobActionTypes.OPEN_EDITOR_DIALOG_TO_EDIT)
-    const { id, } = payload
-    const { response, error, } = yield call(API.fetchJobConfig, id)
+    const { id, readonly, } = payload
+    const { response, error, } = yield call(API.fetchJob, id)
 
-    if (error) yield put(JobActions.fetchJobConfigFailed({ error, }))
+    if (error) yield put(JobActions.fetchJobFailed({ error, }))
     else {
-      const payloadWithConfig = Object.assign({}, payload, { config: response, })
-      yield put(JobActions.fetchJobConfigSucceeded(payloadWithConfig))
+      /** remove state, switching props */
+      const filtered = Converter.refineClientPropsToRenderEditorDialog(response)
+      yield put(JobActions.fetchJobSucceeded({ id, readonly, job: response, filteredJob: filtered, }))
     }
   }
 }
 
-function* watchUpdateConfig() {
+function* watchUpdateJob() {
   while(always) {
-    const { payload, } = yield take(JobActionTypes.UPDATE_CONFIG)
-    const { id, config, } = payload
-    const { response: updatedJob, error, } = yield call(API.updateJobConfig, id, config)
+    const { payload, } = yield take(JobActionTypes.UPDATE)
+    const { id, job, } = payload
+    const { response: updatedJob, error, } = yield call(API.updateJob, id, job)
 
-    if (error) yield put(JobActions.updateJobConfigFailed({ id, error, }))
-    else yield put(JobActions.updateJobConfigSucceeded({ id, updatedJob, }))
+    if (error) yield put(JobActions.updateJobFailed({ id, error, }))
+    else yield put(JobActions.updateJobSucceeded({ id, job: updatedJob, }))
   }
 }
 
 function* watchCreateJob() {
   while (always) {
     const { payload, } = yield take(JobActionTypes.CREATE)
-    const { config, } = payload
+    const { job, } = payload
 
-    /** validate config */
-    if (config === void 0 || Object.keys(config).length === 0) {
+    /** validate job */
+    if (job === void 0 || Object.keys(job).length === 0) {
       /** if undefined or empty object */
-      yield put(JobActions.createJobFailed({error: new Error('Empty config'),}))
+      yield put(JobActions.createJobFailed({error: new Error('Empty job'),}))
       continue
     }
 
-    const id = config[JOB_PROPERTY.id]
+    const id = job[JOB_PROPERTY.id]
     /** id might be undefined */
 
     /** validate id */
@@ -100,14 +102,14 @@ function* watchCreateJob() {
     }
 
     /** create */
-    const { error, } = yield call(API.createJob, config)
+    const { error, } = yield call(API.createJob, job)
 
     if (error)
       yield put(JobActions.createJobFailed({ error, }))
     else {
       yield call(fetchJobs)
       /** fetch all job */
-      yield put(JobActions.createJobSucceeded({ id, config, }))
+      yield put(JobActions.createJobSucceeded({ id, job, }))
     }
   }
 }
@@ -158,7 +160,7 @@ export default function* root() {
     fork(watchStartJob),
     fork(watchStop),
     fork(watchOpenEditorDialogToEdit),
-    fork(watchUpdateConfig),
+    fork(watchUpdateJob),
     fork(watchRemoveJob),
     fork(watchCreateJob),
     fork(watchSetReadonly),

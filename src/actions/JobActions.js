@@ -11,7 +11,7 @@ export const endSwitching = createAction(JobActionTypes.END_SWITCHING)
 
 export const createJob = createAction(JobActionTypes.CREATE)
 export const removeJob = createAction(JobActionTypes.REMOVE)
-export const updateConfig = createAction(JobActionTypes.UPDATE_CONFIG)
+export const updateJob = createAction(JobActionTypes.UPDATE)
 
 export const stopAllJobs = createAction(JobActionTypes.STOP_ALL)
 export const startAllJobs = createAction(JobActionTypes.START_ALL)
@@ -39,10 +39,10 @@ export const removeJobFailed = createAction(JobActionTypes.API_REMOVE.FAILED)
 export const createJobSucceeded = createAction(JobActionTypes.API_CREATE.SUCCEEDED)
 export const createJobFailed = createAction(JobActionTypes.API_CREATE.FAILED)
 
-export const fetchJobConfigSucceeded = createAction(JobActionTypes.API_FETCH_CONFIG.SUCCEEDED)
-export const fetchJobConfigFailed = createAction(JobActionTypes.API_FETCH_CONFIG.FAILED)
-export const updateJobConfigSucceeded = createAction(JobActionTypes.API_UPDATE_CONFIG.SUCCEEDED)
-export const updateJobConfigFailed = createAction(JobActionTypes.API_UPDATE_CONFIG.FAILED)
+export const fetchJobSucceeded = createAction(JobActionTypes.API_FETCH.SUCCEEDED)
+export const fetchJobFailed = createAction(JobActionTypes.API_FETCH.FAILED)
+export const updateJobSucceeded = createAction(JobActionTypes.API_UPDATE.SUCCEEDED)
+export const updateJobFailed = createAction(JobActionTypes.API_UPDATE.FAILED)
 
 
 export const setReadonlySucceeded = createAction(JobActionTypes.API_SET_READONLY.SUCCEEDED)

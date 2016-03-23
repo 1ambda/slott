@@ -113,34 +113,34 @@ export function* fetchJobs() {
     .catch(handleError)
 }
 
-export function* fetchJobConfig(id) {
+export function* fetchJob(id) {
   return getJSON(`/api/jobs/${id}`)
     .then(({ response, }) => {
-      return { response: Converter.removeServerSpecificProps(response), }
+      return { response: Converter.convertServerJobToClientJob(response), }
     })
     .catch(handleError)
 }
 
-export function* updateJobConfig(id, config) {
-  return patchJSON(`/api/jobs/${id}`, Converter.refineClientPropsToUpdate(config))
-    .then(({ response, }) => { /** return job, instead of config, will be fixed (TODO) */
+export function* updateJob(id, job) {
+  return patchJSON(`/api/jobs/${id}`, Converter.refineClientPropsToUpdate(job))
+    .then(({ response, }) => {
       return { response: Converter.convertServerJobToClientJob(response), }
     })
     .catch(handleError)
 }
 
 export function* setReadonly(id) {
-  const { response, error, } = yield call(updateJobConfig, id, Converter.createPropToSetReadonly())
+  const { response, error, } = yield call(updateJob, id, Converter.createPropToSetReadonly())
   return { response, error, }
 }
 
 export function* unsetReadonly(id) {
-  const { response, error, } = yield call(updateJobConfig, id, Converter.createPropToUnsetReadonly())
+  const { response, error, } = yield call(updateJob, id, Converter.createPropToUnsetReadonly())
   return { response, error, }
 }
 
-export function* createJob(config) {
-  return postJSON('/api/jobs', Converter.refineClientPropsToCreate(config))
+export function* createJob(job) {
+  return postJSON('/api/jobs', Converter.refineClientPropsToCreate(job))
     .catch(handleError) /** ignore response, we will fetch all jobs again in watcher */
 }
 

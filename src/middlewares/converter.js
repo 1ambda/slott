@@ -17,7 +17,7 @@ export const IGNORED_CLIENT_PROPS = [
   JOB_PROPERTY.state,
 ]
 
-export const IGNORED_CLIENT_PROPS_FOR_UPDATING_CONFIG = [
+export const IGNORED_CLIENT_PROPS_FOR_UPDATING = [
   SERVER_JOB_PROPERTY.active,
   SERVER_JOB_PROPERTY._id,
   JOB_PROPERTY.id, /** do not allow to modify `id` field */
@@ -75,13 +75,14 @@ export function interpretClientJobState(clientJob) {
 
 /** responsible for converting server jobs to client jobs, used to fetch all jobs */
 export function convertServerJobToClientJob (job) {
+  const state = interpretServerJobState(job)
   const filtered = removeServerSpecificProps(job)
 
   return Object.assign({}, INITIAL_JOB_STATE, {
     [JOB_PROPERTY.id]: job[JOB_PROPERTY.id],
     [JOB_PROPERTY.tags]: job[JOB_PROPERTY.tags],
-    [JOB_PROPERTY.config]: filtered, // TODO remove
-    [JOB_PROPERTY.state]: interpretServerJobState(job),
+    [JOB_PROPERTY.state]: state,
+    ...filtered,
   })
 }
 
@@ -108,7 +109,11 @@ export function refineClientPropsToCreate(props) {
   })
 }
 
+export function refineClientPropsToRenderEditorDialog(props) {
+  return removeProps(props, IGNORED_CLIENT_PROPS)
+}
+
 export function refineClientPropsToUpdate(props) {
-  return removeProps(props, IGNORED_CLIENT_PROPS_FOR_UPDATING_CONFIG)
+  return removeProps(props, IGNORED_CLIENT_PROPS_FOR_UPDATING)
 }
 

@@ -28,8 +28,8 @@ export const handleJobItems = handleActions({
   [JobActionTypes.API_SET_READONLY.SUCCEEDED]: (state, { payload, }) =>
     Job.setReadonly(state, payload.id),
 
-  [JobActionTypes.API_UPDATE_CONFIG.SUCCEEDED]: (state, { payload, }) =>
-    Job.updateJob(state, payload.updatedJob),
+  [JobActionTypes.API_UPDATE.SUCCEEDED]: (state, { payload, }) =>
+    Job.updateJob(state, payload.job),
 
   [JobActionTypes.STOP]: (state, { payload, }) =>
     Job.stopJob(state, payload.id),
@@ -46,8 +46,8 @@ export const handleJobItems = handleActions({
   [JobActionTypes.START_ALL]: (state) =>
     Job.startAllJobs(state),
 
-  [JobActionTypes.API_FETCH_CONFIG.SUCCEEDED]: (state, { payload, }) =>
-    Job.updateConfig(state, payload.id, payload.config),
+  [JobActionTypes.API_FETCH.SUCCEEDED]: (state, { payload, }) =>
+    Job.updateJob(state, payload.job),
 
 }, INITIAL_JOBS)
 
@@ -82,19 +82,19 @@ export const handleJobSorter = handleActions({
 
 const INITIAL_EDITOR_DIALOG_STATE = {
   id: '',
-  config: {},
+  job: {},
   dialogMode:  EDITOR_DIALOG_MODE.CLOSE,
   readonly: true,
 }
 
 export const handleEditorDialog = handleActions({
   /** open editor dialog to edit */
-  [JobActionTypes.API_FETCH_CONFIG.SUCCEEDED]: (state, { payload, }) =>
+  [JobActionTypes.API_FETCH.SUCCEEDED]: (state, { payload, }) =>
     Object.assign({}, INITIAL_EDITOR_DIALOG_STATE, {
       id: payload.id,
       readonly: payload.readonly,
       dialogMode: EDITOR_DIALOG_MODE.EDIT,
-      config: payload.config,
+      job: payload.filteredJob,
     }),
 
   [JobActionTypes.API_CREATE.SUCCEEDED]: (state, { payload, }) =>
@@ -109,7 +109,7 @@ export const handleEditorDialog = handleActions({
     }),
 
   [JobActionTypes.CLOSE_EDITOR_DIALOG]: (state) =>
-    Object.assign({}, INITIAL_EDITOR_DIALOG_STATE /** reset config */, {
+    Object.assign({}, INITIAL_EDITOR_DIALOG_STATE /** reset job */, {
       dialogMode: EDITOR_DIALOG_MODE.CLOSE,
       readonly: false,
     }),
@@ -170,12 +170,12 @@ export const handleClosableSnackbar = handleActions({
   [JobActionTypes.API_REMOVE.FAILED]: (state, { type, payload, }) =>
     showErrorSnackbar(state, `${type} ${payload.id}`, payload.error.message),
 
-  /** fetch, update config related */
-  [JobActionTypes.API_FETCH_CONFIG.FAILED]: (state, { type, payload, }) =>
+  /** fetch, update related */
+  [JobActionTypes.API_FETCH.FAILED]: (state, { type, payload, }) =>
     showErrorSnackbar(state, `${type} ${payload.id}`, payload.error.message),
-  [JobActionTypes.API_UPDATE_CONFIG.SUCCEEDED]: (state, { payload, }) =>
+  [JobActionTypes.API_UPDATE.SUCCEEDED]: (state, { payload, }) =>
     showInfoSnackbar(state, `${payload.id} was updated`),
-  [JobActionTypes.API_UPDATE_CONFIG.FAILED]: (state, { type, payload, }) =>
+  [JobActionTypes.API_UPDATE.FAILED]: (state, { type, payload, }) =>
     showErrorSnackbar(state, `${type} ${payload.id}`, payload.error.message),
 
   /** set readonly, unset readonly */

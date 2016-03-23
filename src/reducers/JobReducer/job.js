@@ -13,11 +13,10 @@ export const JOB_PROPERTY = {
   switching: 'switching', /** boolean */
   id: 'id', /** string */
   tags: 'tags', /** array */
-  config: 'config', /** object */
 }
 
 export const INITIAL_JOB_STATE = {
-  id: '', tags: [], config: {}, state: JOB_STATE.WAITING, switching: false,
+  id: '', tags: [], state: JOB_STATE.WAITING, switching: false,
 }
 
 export const isRunning = (job) => job[JOB_PROPERTY.state] === JOB_STATE.RUNNING
@@ -55,11 +54,6 @@ export const startJob = (state, id) => {
 export const updateJob = (state, updatedJob) => {
   const filter = (job) => (updatedJob[JOB_PROPERTY.id] === job[JOB_PROPERTY.id])
   return replaceJobWithFilter(state, filter, updatedJob)
-}
-
-export const updateConfig = (state, id, config) => {
-  const filter = (job) => (id === job[JOB_PROPERTY.id])
-  return modifyJobWithFilter(state, filter, JOB_PROPERTY.config, config)
 }
 
 export const setReadonly = (state, id) => {

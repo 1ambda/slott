@@ -35,14 +35,14 @@ export function getAvailableEditorModes (readonly, dialogMode) {
       [JSON_EDITOR_MODES.TREE, JSON_EDITOR_MODES.CODE,]
 }
 
-export function isConfigChanged(initial, updated) {
+export function isEditorJSONChanged(initial, updated) {
   return !(JSON.stringify(initial) === JSON.stringify(updated))
 }
 
 export default class EditorDialog extends React.Component {
   static propTypes = {
     id: PropTypes.string.isRequired,
-    config: PropTypes.object.isRequired,
+    job: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
     readonly: PropTypes.bool.isRequired,
     dialogMode: PropTypes.string.isRequired, /** EDITOR_DIALOG_MODE */
@@ -52,22 +52,22 @@ export default class EditorDialog extends React.Component {
     super(props)
 
     /**
-     * to avoid re-drawing the whole page whenever `config` is updated,
+     * to avoid re-drawing the whole page whenever JSON is updated,
      * EditorDialog manages editor as it's state
      */
-    this.state = { editor: null, configChanged: false, }
+    this.state = { editor: null, isJSONChanged: false, }
   }
 
   /** component life-cycle */
   componentDidMount() {
-    const { config, readonly, dialogMode, } = this.props
-    const initialConfig = config
+    const { job, readonly, dialogMode, } = this.props
+    const initialJSON = job
 
     const defaultMode = getDefaultEditorMode(readonly, dialogMode)
     const availableModes = getAvailableEditorModes(readonly, dialogMode)
 
     const onChangeHandler = (EDITOR_DIALOG_MODE.EDIT === dialogMode) ?
-      this.handleConfigChanged.bind(this) : undefined
+      this.handleEditorJSONChanged.bind(this) : undefined
     const onErrorHandler = this.handleEditorError.bind(this)
 
     const options = {
@@ -79,7 +79,7 @@ export default class EditorDialog extends React.Component {
     }
 
     /** external library which does not be managed by React */
-    const editor = new JSONEditor(document.getElementById(ELEM_ID_EDITOR_DIALOG), options, initialConfig)
+    const editor = new JSONEditor(document.getElementById(ELEM_ID_EDITOR_DIALOG), options, initialJSON)
 
     if (defaultMode !== JSON_EDITOR_MODES.CODE) editor.expandAll()
 
@@ -88,24 +88,24 @@ export default class EditorDialog extends React.Component {
 
   /** component life-cycle */
   componentWillReceiveProps(nextProps) {
-    const { config: currentConfig, } = this.props
-    const { config: nextConfig, } = nextProps
+    const { job: currentJSON, } = this.props
+    const { job: nextJSON, } = nextProps
 
-    /** if config is not changed, then disable `UPDATE` button */
-    this.setState({ configChanged: isConfigChanged(currentConfig, nextConfig), })
+    /** if JSON is not changed, then disable `UPDATE` button */
+    this.setState({ isJSONChanged: isEditorJSONChanged(currentJSON, nextJSON), })
   }
 
-  getEditorConfigValue() {
+  getEditorJSONValue() {
     const { editor, } = this.state
     return editor.get()
   }
 
-  handleConfigChanged() {
-    const { config: prevConfig, } = this.props
+  handleEditorJSONChanged() {
+    const { job: prevJSON, } = this.props
 
-    const updatedConfig = this.getEditorConfigValue()
+    const updatedJSON = this.getEditorJSONValue()
 
-    this.setState({ configChanged: isConfigChanged(prevConfig, updatedConfig), })
+    this.setState({ isJSONChanged: isEditorJSONChanged(prevJSON, updatedJSON), })
   }
 
   handleEditorError(err) {
@@ -119,31 +119,28 @@ export default class EditorDialog extends React.Component {
 
   handleUpdate() {
     const { actions, id, } = this.props
-    const { configChanged, } = this.state
+    const { isJSONChanged, } = this.state
 
-    if (configChanged) {
-      const payload = { id, config: this.getEditorConfigValue(), }
-      actions.updateConfig(payload)
+    if (isJSONChanged) {
+      actions.updateJob({ id, job: this.getEditorJSONValue(), })
     }
   }
 
   handleCreate() {
     const { actions, } = this.props
-    const config = this.getEditorConfigValue()
+    const job = this.getEditorJSONValue()
 
-    const payload = { config, }
-
-    actions.createJob(payload)
+    actions.createJob({ job, }) /** payload for JobActionTypes.UPDATE */
   }
 
   render() {
     const { readonly, id, dialogMode, } = this.props
-    const { configChanged, } = this.state
+    const { isJSONChanged, } = this.state
 
     const submitButton = (EDITOR_DIALOG_MODE.EDIT === dialogMode) ?
       (<FlatButton labelStyle={dialogStyle.buttonLabel}
                     style={dialogStyle.button}
-                    primary disabled={readonly || !configChanged}
+                    primary disabled={readonly || !isJSONChanged}
                     key="update" label="Update"
                     onTouchTap={this.handleUpdate.bind(this)} />) :
       (<FlatButton labelStyle={dialogStyle.buttonLabel}
