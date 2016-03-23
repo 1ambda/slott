@@ -138,52 +138,22 @@ const INITIAL_SNACKBAR_STATE = {
   message: '',
 }
 
-export const showInfoSnackbar = (state, message) =>
-  Object.assign({}, state, {
-    snackbarMode: CLOSABLE_SNACKBAR_MODE.OPEN,
-    message: `[INFO] ${message}`,
-  })
-
-export const showErrorSnackbar = (state, message, error) =>
-  Object.assign({}, state, {
-    snackbarMode: CLOSABLE_SNACKBAR_MODE.OPEN,
-    message: `[ERROR] ${message} (${error})`,
-  })
-
 export const handleClosableSnackbar = handleActions({
   /** snackbar related */
   [JobActionTypes.CLOSE_SNACKBAR]: (state) =>
     Object.assign({}, state, { snackbarMode: CLOSABLE_SNACKBAR_MODE.CLOSE, }),
-  [JobActionTypes.OPEN_SNACKBAR]: (state, { payload, }) =>
-    Object.assign({}, state, { snackbarMode: CLOSABLE_SNACKBAR_MODE.OPEN, message: payload.message, }),
 
-  /** remove, created, update job */
-  [JobActionTypes.API_CREATE.SUCCEEDED]: (state, { payload, }) =>
-    showInfoSnackbar(state, `${payload.id} was created`),
-  [JobActionTypes.API_REMOVE.SUCCEEDED]: (state, { payload, }) =>
-    showInfoSnackbar(state, `${payload.id} was removed`),
-  [JobActionTypes.API_UPDATE.SUCCEEDED]: (state, { payload, }) =>
-    showInfoSnackbar(state, `${payload.id} was updated`),
+  [JobActionTypes.OPEN_ERROR_SNACKBAR]: (state, { payload, }) =>
+    Object.assign({}, state, {
+      snackbarMode: CLOSABLE_SNACKBAR_MODE.OPEN,
+      message: `[ERROR] ${payload.message} (${payload.error.message})`,
+    }),
 
-  /** failed */
-  [JobActionTypes.API_FETCH_ALL.FAILED]: (state, { type, payload, }) =>
-    showErrorSnackbar(state, `${type}`, payload.error.message),
-  [JobActionTypes.API_SET_READONLY.FAILED]: (state, { type, payload, }) =>
-    showErrorSnackbar(state, `${type} ${payload.id}`, payload.error.message),
-  [JobActionTypes.API_UNSET_READONLY.FAILED]: (state, { type, payload, }) =>
-    showErrorSnackbar(state, `${type} ${payload.id}`, payload.error.message),
-  [JobActionTypes.API_UPDATE.FAILED]: (state, { type, payload, }) =>
-    showErrorSnackbar(state, `${type} ${payload.id}`, payload.error.message),
-  [JobActionTypes.API_FETCH.FAILED]: (state, { type, payload, }) =>
-    showErrorSnackbar(state, `${type} ${payload.id}`, payload.error.message),
-  [JobActionTypes.API_REMOVE.FAILED]: (state, { type, payload, }) =>
-    showErrorSnackbar(state, `${type} ${payload.id}`, payload.error.message),
-  [JobActionTypes.API_CREATE.FAILED]: (state, { type, payload, }) =>
-    showErrorSnackbar(state, `${type}`, payload.error.message),
-  [JobActionTypes.API_START.FAILED]: (state, { type, payload, }) =>
-    showErrorSnackbar(state, `${type}`, payload.error.message),
-  [JobActionTypes.API_STOP.FAILED]: (state, { type, payload, }) =>
-    showErrorSnackbar(state, `${type}`, payload.error.message),
+  [JobActionTypes.OPEN_INFO_SNACKBAR]: (state, { payload, }) =>
+    Object.assign({}, state, {
+      snackbarMode: CLOSABLE_SNACKBAR_MODE.OPEN,
+      message: `[INFO] ${payload.message}`,
+    }),
 
 }, INITIAL_SNACKBAR_STATE)
 

@@ -23,16 +23,22 @@ function* fetchJobs() {
   }
 }
 
+
+function* putOpenErrorSnackbarAction(message, error) { yield put(JobActions.openErrorSnackbar({ message, error, })) }
+function* putOpenInfoSnackbarAction(message) { yield put(JobActions.openInfoSnackbar({ message, })) }
+
 function* watchOpenEditorDialogToEdit() {
   while (always) {
     const { payload, } = yield take(JobActionTypes.OPEN_EDITOR_DIALOG_TO_EDIT)
     const { id, readonly, } = payload
     const { response, error, } = yield call(API.fetchJob, id)
 
-    if (error) yield put(JobActions.fetchJobFailed({ error, }))
+    if (error) {
+      yield putOpenErrorSnackbarAction(`Failed to fetch job '${id}'`, error)
+    }
     else {
-      /** remove state, switching props */
-      const filtered = Converter.refineClientPropsToRenderEditorDialog(response)
+      const filtered = /** remove state, switching props */
+        Converter.refineClientPropsToRenderEditorDialog(response)
       yield put(JobActions.fetchJobSucceeded({ id, readonly, job: response, filteredJob: filtered, }))
     }
   }
@@ -44,8 +50,13 @@ function* watchUpdateJob() {
     const { id, job, } = payload
     const { response: updatedJob, error, } = yield call(API.updateJob, id, job)
 
-    if (error) yield put(JobActions.updateJobFailed({ id, error, }))
-    else yield put(JobActions.updateJobSucceeded({ id, job: updatedJob, }))
+    if (error) {
+      yield putOpenErrorSnackbarAction(`Failed to update job '${id}'`, error)
+    }
+    else {
+      yield putOpenInfoSnackbarAction(`${id} was updated`)
+      yield put(JobActions.updateJobSucceeded({ id, job: updatedJob, }))
+    }
   }
 }
 
@@ -55,9 +66,8 @@ function* watchCreateJob() {
     const { job, } = payload
 
     /** validate job */
-    if (job === void 0 || Object.keys(job).length === 0) {
-      /** if undefined or empty object */
-      yield put(JobActions.createJobFailed({error: new Error('Empty job'),}))
+    if (job === void 0 || Object.keys(job).length === 0) { /** if undefined or empty object */
+      yield putOpenErrorSnackbarAction(`Failed to create new job`, new Error('EMPTY JOB'))
       continue
     }
 
@@ -66,7 +76,7 @@ function* watchCreateJob() {
 
     /** validate id */
     if (id === void 0 || '' === id) {
-      yield put(JobActions.createJobFailed({error: new Error('Empty id'),}))
+      yield putOpenErrorSnackbarAction(`Failed to create new job`, new Error('EMPTY ID'))
       continue
     }
 
@@ -77,19 +87,21 @@ function* watchCreateJob() {
     }, false)
 
     if (alreadyExistingId) {
-      yield put(JobActions.createJobFailed({error: new Error(`Already exists: ${id}`),}))
+      yield putOpenErrorSnackbarAction(`Duplicated id '${id}'`, new Error('DUPLICATED ID'))
       continue
     }
 
     /** create */
     const { error, } = yield call(API.createJob, job)
 
-    if (error)
-      yield put(JobActions.createJobFailed({ error, }))
+    if (error) {
+      yield putOpenErrorSnackbarAction(`Failed to create new job '${id}'`, error)
+    }
     else {
       yield call(fetchJobs)
       /** fetch all job */
       yield put(JobActions.createJobSucceeded({ id, job, }))
+      yield putOpenInfoSnackbarAction(`${id} was created`)
     }
   }
 }
@@ -100,10 +112,13 @@ function* watchRemoveJob() {
     const { id, } = payload
     const { error, } = yield call(API.removeJob, id)
 
-    if (error) yield put(JobActions.removeJobFailed({ id, error, }))
+    if (error) {
+      yield putOpenErrorSnackbarAction(`Failed to remove job '${id}'`, error)
+    }
     else {
       yield call(fetchJobs) /** fetch all job */
       yield put(JobActions.removeJobSucceeded(payload))
+      yield putOpenInfoSnackbarAction(`${id} was removed`)
     }
   }
 }
@@ -114,7 +129,9 @@ function* watchSetReadonly() {
     const { id, } = payload
     const { response: updatedJob, error, } = yield call(API.setReadonly, id)
 
-    if (error) yield put(JobActions.setReadonlyFailed({ id, error, }))
+    if (error) {
+      yield putOpenErrorSnackbarAction(`Failed to set readonly '${id}'`, error)
+    }
     else {
       yield put(JobActions.setReadonlySucceeded({ id: updatedJob.id, }))
     }
@@ -127,7 +144,9 @@ function* watchUnsetReadonly() {
     const { id, } = payload
     const { response: updatedJob, error, } = yield call(API.unsetReadonly, id)
 
-    if (error) yield put(JobActions.unsetReadonlyFailed({ id, error, }))
+    if (error) {
+      yield putOpenErrorSnackbarAction(`Failed to unset readonly '${id}'`, error)
+    }
     else {
       yield put(JobActions.unsetReadonlySucceeded({ id: updatedJob.id, }))
     }
@@ -142,7 +161,9 @@ function* watchStartJob() {
     yield put(JobActions.startSwitching({ id, }))
     const { error, } = yield call(API.startJob, id)
 
-    if (error) yield put(JobActions.startJobFailed({ id, error, }))
+    if (error) {
+      yield putOpenErrorSnackbarAction(`Failed to start job '${id}'`, error)
+    }
     else {
       yield call(API.delay, JOB_TRANSITION_DELAY)
       yield put(JobActions.startJobSucceeded({ id, }))
@@ -160,7 +181,9 @@ function* watchStopJob() {
     yield put(JobActions.startSwitching({ id, }))
     const { error, } = yield call(API.stopJob, id)
 
-    if (error) yield put(JobActions.stopJobFailed({ id, error, }))
+    if (error) {
+      yield putOpenErrorSnackbarAction(`Failed to stop job '${id}'`, error)
+    }
     else {
       yield call(API.delay, JOB_TRANSITION_DELAY)
       yield put(JobActions.stopJobSucceeded({ id, }))

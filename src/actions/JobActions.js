@@ -27,7 +27,8 @@ export const openEditorDialogToCreate= createAction(JobActionTypes.OPEN_EDITOR_D
 export const closeEditorDialog = createAction(JobActionTypes.CLOSE_EDITOR_DIALOG)
 export const openConfirmDialogToRemove = createAction(JobActionTypes.OPEN_CONFIRM_DIALOG_TO_REMOVE)
 export const closeConfirmDialog = createAction(JobActionTypes.CLOSE_CONFIRM_DIALOG)
-export const openSnackbar = createAction(JobActionTypes.OPEN_SNACKBAR)
+export const openInfoSnackbar = createAction(JobActionTypes.OPEN_INFO_SNACKBAR)
+export const openErrorSnackbar = createAction(JobActionTypes.OPEN_ERROR_SNACKBAR)
 export const closeSnackbar = createAction(JobActionTypes.CLOSE_SNACKBAR)
 
 /** api calls for job item */
