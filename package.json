@@ -15,7 +15,7 @@
     "build:html": "babel-node tools/buildHtml.js",
     "prebuild": "npm run clean-dist && npm run build:html",
     "build": "npm run test && babel-node tools/build.js && npm run open:dist",
-    "test": "cross-env NODE_ENV=test jest --verbose --coverage",
+    "test": "cross-env NODE_ENV=test jest --bail --verbose --coverage",
     "test:watch": "jest --verbose --watch"
   },
   "author": "1ambda@gmail.com",
