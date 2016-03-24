@@ -38,47 +38,44 @@ export const replaceJobWithFilter = (state, filter, updatedJob) =>
     return (filter(job)) ? updatedJob : job
   })
 
-export const removeJobByFilter = (state, filter) =>
-  state.filter(job => !filter(job))
-
-export const stopJob = (state, id) => {
-  const filter = (job) => (id === job[JOB_PROPERTY.id] && isRunning(job))
+export const stopJob = (state, { payload, }) => {
+  const filter = (job) => (payload.id === job[JOB_PROPERTY.id] && isRunning(job))
   return modifyJobWithFilter(state, filter, JOB_PROPERTY.state, JOB_STATE.WAITING)
 }
 
-export const startJob = (state, id) => {
-  const filter = (job) => (id === job[JOB_PROPERTY.id] && isWaiting(job))
+export const startJob = (state, { payload, }) => {
+  const filter = (job) => (payload.id === job[JOB_PROPERTY.id] && isWaiting(job))
   return modifyJobWithFilter(state, filter, JOB_PROPERTY.state, JOB_STATE.RUNNING)
 }
 
-export const updateJob = (state, updatedJob) => {
+export const updateJob = (state, { payload, }) => {
+  const updatedJob = payload.job
   const filter = (job) => (updatedJob[JOB_PROPERTY.id] === job[JOB_PROPERTY.id])
   return replaceJobWithFilter(state, filter, updatedJob)
 }
 
-export const setReadonly = (state, id) => {
-  const filter = (job) => (id === job[JOB_PROPERTY.id] && isWaiting(job))
+export const setReadonly = (state, { payload, }) => {
+  const filter = (job) => (payload.id === job[JOB_PROPERTY.id] && isWaiting(job))
   return modifyJobWithFilter(state, filter, JOB_PROPERTY.state, JOB_STATE.STOPPED)
 }
 
-export const unsetReadonly = (state, id) => {
-  const filter = (job) => (id === job[JOB_PROPERTY.id] && isStopped(job))
+export const unsetReadonly = (state, { payload, }) => {
+  const filter = (job) => (payload.id === job[JOB_PROPERTY.id] && isStopped(job))
   return modifyJobWithFilter(state, filter, JOB_PROPERTY.state, JOB_STATE.WAITING)
 }
 
-export const startSwitching = (state, id) => {
-  const filter = (job) => (id === job[JOB_PROPERTY.id]) // TODO, more elaborate conditions
+export const startSwitching = (state, { payload, }) => {
+  const filter = (job) => (payload.id === job[JOB_PROPERTY.id])
   return modifyJobWithFilter(state, filter, JOB_PROPERTY.switching, true)
 }
 
-export const endSwitching = (state, id) => {
-  const filter = (job) => (id === job[JOB_PROPERTY.id]) // TODO, more elaborate conditions
+export const endSwitching = (state, { payload, }) => {
+  const filter = (job) => (payload.id === job[JOB_PROPERTY.id])
   return modifyJobWithFilter(state, filter, JOB_PROPERTY.switching, false)
 }
 
-export const removeJob = (state, id) => {
-  const filter = (job) => (id === job[JOB_PROPERTY.id] && !(isRunning(job) || isStopped(job)))
-  return removeJobByFilter(state, filter)
+export const updateAllJobs = (state, { payload, }) => {
+  return payload.jobs
 }
 
 export const stopAllJobs = (state) => {
@@ -123,10 +120,10 @@ export function sortByStopped(job1, job2) {
   else return 0
 }
 
-export function sortJob(state, strategy) {
+export function sortJob(state, { payload, }) {
   const jobs = state.slice() /** copy origin state */
 
-  switch(strategy) {
+  switch(payload.strategy) {
     case JobSortStrategies.RUNNING:
       return jobs.sort(sortByRunning)
     case JobSortStrategies.WAITING:

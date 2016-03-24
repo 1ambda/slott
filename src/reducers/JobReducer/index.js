@@ -12,43 +12,23 @@ import * as Job from './job'
 const INITIAL_JOBS = []
 
 /** client related actions. */
-  // TODOTODO refactor 일반 함수로 변경, payload 내부에서 추출해서 사용
 export const handleJobItems = handleActions({
-  [JobActionTypes.API_FETCH_ALL.SUCCEEDED]: (state, { payload, }) =>
-    payload.jobs,
+  [JobActionTypes.API_FETCH_ALL.SUCCEEDED]: Job.updateAllJobs,
+  [JobActionTypes.API_FETCH.SUCCEEDED]: Job.updateJob,
 
-  [JobActionTypes.START_SWITCHING]: (state, { payload, }) =>
-    Job.startSwitching(state, payload.id),
+  [JobActionTypes.START_SWITCHING]: Job.startSwitching,
+  [JobActionTypes.END_SWITCHING]: Job.endSwitching,
 
-  [JobActionTypes.END_SWITCHING]: (state, { payload, }) =>
-    Job.endSwitching(state, payload.id),
+  [JobActionTypes.API_UNSET_READONLY.SUCCEEDED]: Job.unsetReadonly,
+  [JobActionTypes.API_SET_READONLY.SUCCEEDED]: Job.setReadonly,
 
-  [JobActionTypes.API_UNSET_READONLY.SUCCEEDED]: (state, { payload, }) =>
-    Job.unsetReadonly(state, payload.id),
+  [JobActionTypes.API_UPDATE.SUCCEEDED]: Job.updateJob,
+  [JobActionTypes.API_STOP.SUCCEEDED]: Job.stopJob,
+  [JobActionTypes.API_START.SUCCEEDED]: Job.startJob,
 
-  [JobActionTypes.API_SET_READONLY.SUCCEEDED]: (state, { payload, }) =>
-    Job.setReadonly(state, payload.id),
-
-  [JobActionTypes.API_UPDATE.SUCCEEDED]: (state, { payload, }) =>
-    Job.updateJob(state, payload.job),
-
-  [JobActionTypes.API_STOP.SUCCEEDED]: (state, { payload, }) =>
-    Job.stopJob(state, payload.id),
-
-  [JobActionTypes.API_START.SUCCEEDED]: (state, { payload, }) =>
-    Job.startJob(state, payload.id),
-
-  [JobActionTypes.SORT]: (state, { payload, }) =>
-    Job.sortJob(state, payload.strategy),
-
-  [JobActionTypes.STOP_ALL]: (state) =>
-    Job.stopAllJobs(state),
-
-  [JobActionTypes.START_ALL]: (state) =>
-    Job.startAllJobs(state),
-
-  [JobActionTypes.API_FETCH.SUCCEEDED]: (state, { payload, }) =>
-    Job.updateJob(state, payload.job),
+  [JobActionTypes.SORT]: Job.sortJob,
+  [JobActionTypes.STOP_ALL]: Job.stopAllJobs,
+  [JobActionTypes.START_ALL]: Job.startAllJobs,
 
 }, INITIAL_JOBS)
 

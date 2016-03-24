@@ -18,8 +18,8 @@ function* fetchJobs() {
 
   if (error) yield put(JobActions.fetchJobsFailed({ error, }))
   else {
-    const sortedJobs = sortJob(response, JobSortStrategies.INITIAL)
-    yield put(JobActions.fetchJobsSucceeded({ jobs: sortedJobs, }))
+    yield put(JobActions.fetchJobsSucceeded({ jobs: response, }))
+    yield put(JobActions.sortJob({ strategy: JobSortStrategies.INITIAL, }))
   }
 }
 
