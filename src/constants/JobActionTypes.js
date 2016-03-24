@@ -47,9 +47,9 @@ export const API_REMOVE = {
   FAILED: 'JOB_API_REMOVE_FAILED',
 }
 
-export const API_FETCH = {
-  SUCCEEDED: 'JOB_API_FETCH_SUCCEEDED',
-  FAILED: 'JOB_API_FETCH_FAILED',
+export const API_FETCH_CONFIG = { /** fetch config only (no client specific props) */
+  SUCCEEDED: 'JOB_API_FETCH_CONFIG_SUCCEEDED',
+  FAILED: 'JOB_API_FETCH_CONFIG_FAILED',
 }
 
 export const API_UPDATE = {

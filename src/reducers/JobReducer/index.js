@@ -14,7 +14,6 @@ const INITIAL_JOBS = []
 /** client related actions. */
 export const handleJobItems = handleActions({
   [JobActionTypes.API_FETCH_ALL.SUCCEEDED]: Job.updateAllJobs,
-  [JobActionTypes.API_FETCH.SUCCEEDED]: Job.updateJob,
 
   [JobActionTypes.START_SWITCHING]: Job.startSwitching,
   [JobActionTypes.END_SWITCHING]: Job.endSwitching,
@@ -27,6 +26,7 @@ export const handleJobItems = handleActions({
   [JobActionTypes.API_START.SUCCEEDED]: Job.startJob,
 
   [JobActionTypes.SORT]: Job.sortJob,
+
   [JobActionTypes.STOP_ALL]: Job.stopAllJobs,
   [JobActionTypes.START_ALL]: Job.startAllJobs,
 
@@ -70,12 +70,12 @@ const INITIAL_EDITOR_DIALOG_STATE = {
 
 export const handleEditorDialog = handleActions({
   /** open editor dialog to edit */
-  [JobActionTypes.API_FETCH.SUCCEEDED]: (state, { payload, }) =>
+  [JobActionTypes.API_FETCH_CONFIG.SUCCEEDED]: (state, { payload, }) =>
     Object.assign({}, INITIAL_EDITOR_DIALOG_STATE, {
       id: payload.id,
       readonly: payload.readonly,
       dialogMode: EDITOR_DIALOG_MODE.EDIT,
-      job: payload.filteredJob,
+      job: payload.job,
     }),
 
   [JobActionTypes.API_CREATE.SUCCEEDED]: (state, { payload, }) =>

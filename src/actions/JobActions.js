@@ -40,8 +40,9 @@ export const removeJobFailed = createAction(JobActionTypes.API_REMOVE.FAILED)
 export const createJobSucceeded = createAction(JobActionTypes.API_CREATE.SUCCEEDED)
 export const createJobFailed = createAction(JobActionTypes.API_CREATE.FAILED)
 
-export const fetchJobSucceeded = createAction(JobActionTypes.API_FETCH.SUCCEEDED)
-export const fetchJobFailed = createAction(JobActionTypes.API_FETCH.FAILED)
+export const fetchJobConfigSucceeded = createAction(JobActionTypes.API_FETCH_CONFIG.SUCCEEDED)
+export const fetchJobConfigFailed = createAction(JobActionTypes.API_FETCH_CONFIG.FAILED)
+
 export const updateJobSucceeded = createAction(JobActionTypes.API_UPDATE.SUCCEEDED)
 export const updateJobFailed = createAction(JobActionTypes.API_UPDATE.FAILED)
 

@@ -6,8 +6,6 @@ import * as Converter from './converter'
 /**
  * common APIs
  *
- * return format: { response, }
- *
  * doesn't handle exceptions
  */
 
@@ -32,7 +30,6 @@ function handleJsonResponse(url, method, promise) {
         throw new Error(`${method} ${url}, status: ${response.status}`)
       else return response.json()
     })
-    .then(response => { return { response, } })
 }
 
 function getJSON(url) {
@@ -93,70 +90,77 @@ export function delay(millis) {
 /**
  * high level API (business related)
  *
- * return format: { response, error, }
- *
- * should handle exceptions
+ * exception will be caught in watcher functions
  */
-
-export function handleError(error) { console.error(error); return { error, } }
 
 export function* fetchJobs() {
   const url = '/api/jobs'
 
   return getJSON(url)
-    .then(({ response, }) => {
+    .then(response => {
       if (!Array.isArray(response))
         throw new Error(`GET ${url} didn't return an array, got ${response}`)
 
-      return { response: response.map(Converter.convertServerJobToClientJob), }
+      return response.map(Converter.convertServerJobToClientJob)
     })
-    .catch(handleError)
 }
 
 export function* fetchJob(id) {
-  return getJSON(`/api/jobs/${id}`)
-    .then(({ response, }) => {
-      return { response: Converter.convertServerJobToClientJob(response), }
-    })
-    .catch(handleError)
+  const url = `/api/jobs/${id}`
+
+  const serverJob = yield call(getJSON, url)
+  const clientJob = Converter.convertServerJobToClientJob(serverJob)
+
+  return clientJob
+}
+
+export function* fetchJobConfig(id) {
+  const job = yield call(fetchJob, id)
+
+  /** remove client specific props to render response in editor dialog */
+  return Converter.refineClientPropsToRenderEditorDialog(job)
 }
 
 export function* updateJob(id, job) {
-  return patchJSON(`/api/jobs/${id}`, Converter.refineClientPropsToUpdate(job))
-    .then(({ response, }) => {
-      return { response: Converter.convertServerJobToClientJob(response), }
-    })
-    .catch(handleError)
+  const url = `/api/jobs/${id}`
+
+  const serverJob = yield call(patchJSON, url, Converter.refineClientPropsToUpdate(job))
+  const clientJob = Converter.convertServerJobToClientJob(serverJob)
+
+  return clientJob
 }
 
 export function* setReadonly(id) {
-  const { response, error, } = yield call(updateJob, id, Converter.createPropToSetReadonly())
-  return { response, error, }
+  const updatedJob = yield call(updateJob, id, Converter.createPropToSetReadonly())
+  return updatedJob
 }
 
 export function* unsetReadonly(id) {
-  const { response, error, } = yield call(updateJob, id, Converter.createPropToUnsetReadonly())
-  return { response, error, }
+  const updatedJob = yield call(updateJob, id, Converter.createPropToUnsetReadonly())
+  return updatedJob
 }
 
 export function* createJob(job) {
-  return postJSON('/api/jobs', Converter.refineClientPropsToCreate(job))
-    .catch(handleError) /** ignore response, we will fetch all jobs again in watcher */
+  const url = '/api/jobs'
+  const result = yield call(postJSON, url, Converter.refineClientPropsToCreate(job))
+  return null /** TODO return updatedJob */
 }
 
 export function* startJob(id) {
-  return patchJSON(`api/jobs/${id}/state`, Converter.createPropsToStartJob())
-    .catch(handleError) /** ignore response, we will fetch the changed job again in watcher */
+  const url = `api/jobs/${id}/state`
+  const result = yield call(patchJSON, url, Converter.createPropsToStartJob())
+  return null /** TODO return updated state */
 }
 
 export function* stopJob(id) {
-  return patchJSON(`api/jobs/${id}/state`, Converter.createPropsToStopJob())
-    .catch(handleError) /** ignore response, we will fetch the changed job again in watcher */
+  const url = `api/jobs/${id}/state`
+  const result = yield call(patchJSON, url, Converter.createPropsToStopJob())
+  return null /** TODO return updated state */
 }
 
 export function* removeJob(id) {
-  return deleteJSON(`/api/jobs/${id}`)
-    .catch(handleError) /** ignore response, we will fetch all jobs again in watcher */
+  const url = `/api/jobs/${id}`
+  yield call(deleteJSON, url) /** return nothing */
 }
 
 
