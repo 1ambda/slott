@@ -31,30 +31,4 @@ export const openInfoSnackbar = createAction(JobActionTypes.OPEN_INFO_SNACKBAR)
 export const openErrorSnackbar = createAction(JobActionTypes.OPEN_ERROR_SNACKBAR)
 export const closeSnackbar = createAction(JobActionTypes.CLOSE_SNACKBAR)
 
-/** api calls for job item */
-export const fetchJobsSucceeded = createAction(JobActionTypes.API_FETCH_ALL.SUCCEEDED)
-export const fetchJobsFailed = createAction(JobActionTypes.API_FETCH_ALL.FAILED)
-
-export const removeJobSucceeded = createAction(JobActionTypes.API_REMOVE.SUCCEEDED)
-export const removeJobFailed = createAction(JobActionTypes.API_REMOVE.FAILED)
-export const createJobSucceeded = createAction(JobActionTypes.API_CREATE.SUCCEEDED)
-export const createJobFailed = createAction(JobActionTypes.API_CREATE.FAILED)
-
-export const fetchJobConfigSucceeded = createAction(JobActionTypes.API_FETCH_CONFIG.SUCCEEDED)
-export const fetchJobConfigFailed = createAction(JobActionTypes.API_FETCH_CONFIG.FAILED)
-
-export const updateJobSucceeded = createAction(JobActionTypes.API_UPDATE.SUCCEEDED)
-export const updateJobFailed = createAction(JobActionTypes.API_UPDATE.FAILED)
-
-export const setReadonlySucceeded = createAction(JobActionTypes.API_SET_READONLY.SUCCEEDED)
-export const setReadonlyFailed = createAction(JobActionTypes.API_SET_READONLY.FAILED)
-
-export const unsetReadonlySucceeded = createAction(JobActionTypes.API_UNSET_READONLY.SUCCEEDED)
-export const unsetReadonlyFailed = createAction(JobActionTypes.API_UNSET_READONLY.FAILED)
-
-export const startJobSucceeded = createAction(JobActionTypes.API_START.SUCCEEDED)
-export const startJobFailed = createAction(JobActionTypes.API_START.FAILED)
-
-export const stopJobSucceeded = createAction(JobActionTypes.API_STOP.SUCCEEDED)
-export const stopJobFailed = createAction(JobActionTypes.API_STOP.FAILED)
 

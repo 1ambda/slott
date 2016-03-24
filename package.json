@@ -29,7 +29,8 @@
     ],
     "testPathDirs": [
       "<rootDir>/src"
-    ]
+    ],
+    "automock": false
   },
   "dependencies": {
     "connect-history-api-fallback": "1.1.0",

@@ -13,17 +13,17 @@ const INITIAL_JOBS = []
 
 /** client related actions. */
 export const handleJobItems = handleActions({
-  [JobActionTypes.API_FETCH_ALL.SUCCEEDED]: Job.updateAllJobs,
+  [JobActionTypes.FETCH_JOBS.SUCCEEDED]: Job.updateAllJobs,
 
   [JobActionTypes.START_SWITCHING]: Job.startSwitching,
   [JobActionTypes.END_SWITCHING]: Job.endSwitching,
 
-  [JobActionTypes.API_UNSET_READONLY.SUCCEEDED]: Job.unsetReadonly,
-  [JobActionTypes.API_SET_READONLY.SUCCEEDED]: Job.setReadonly,
+  [JobActionTypes.UNSET_READONLY.SUCCEEDED]: Job.unsetReadonly,
+  [JobActionTypes.SET_READONLY.SUCCEEDED]: Job.setReadonly,
 
-  [JobActionTypes.API_UPDATE.SUCCEEDED]: Job.updateJob,
-  [JobActionTypes.API_STOP.SUCCEEDED]: Job.stopJob,
-  [JobActionTypes.API_START.SUCCEEDED]: Job.startJob,
+  [JobActionTypes.UPDATE.SUCCEEDED]: Job.updateJob,
+  [JobActionTypes.STOP.SUCCEEDED]: Job.stopJob,
+  [JobActionTypes.START.SUCCEEDED]: Job.startJob,
 
   [JobActionTypes.SORT]: Job.sortJob,
 
@@ -70,7 +70,7 @@ const INITIAL_EDITOR_DIALOG_STATE = {
 
 export const handleEditorDialog = handleActions({
   /** open editor dialog to edit */
-  [JobActionTypes.API_FETCH_CONFIG.SUCCEEDED]: (state, { payload, }) =>
+  [JobActionTypes.FETCH_CONFIG.SUCCEEDED]: (state, { payload, }) =>
     Object.assign({}, INITIAL_EDITOR_DIALOG_STATE, {
       id: payload.id,
       readonly: payload.readonly,
@@ -78,7 +78,7 @@ export const handleEditorDialog = handleActions({
       job: payload.job,
     }),
 
-  [JobActionTypes.API_CREATE.SUCCEEDED]: (state, { payload, }) =>
+  [JobActionTypes.CREATE.SUCCEEDED]: (state, { payload, }) =>
     Object.assign({}, state, {
       id: payload.id,
       dialogMode: EDITOR_DIALOG_MODE.CLOSE,

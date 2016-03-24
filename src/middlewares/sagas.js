@@ -2,6 +2,9 @@ import { take, put, call, fork, select, } from 'redux-saga/effects'
 
 import * as JobActions from '../actions/JobActions'
 import * as JobActionTypes from '../constants/JobActionTypes'
+import * as JobApiActions from '../actions/JobApiActions'
+import * as JobApiActionTypes from '../constants/JobApiActionTypes'
+
 import { sortJob, JOB_PROPERTY, } from '../reducers/JobReducer/job'
 import * as JobSortStrategies from '../constants/JobSortStrategies'
 import * as API from './api'
@@ -15,7 +18,7 @@ const always = true /** takeEvery does'n work. (redux-saga 0.9.5) */
 function* callFetchJobs() {
   const jobs = yield call(API.fetchJobs)
 
-  yield put(JobActions.fetchJobsSucceeded({ jobs, }))
+  yield put(JobApiActions.fetchJobsSucceeded({ jobs, }))
   yield put(JobActions.sortJob({ strategy: JobSortStrategies.INITIAL, }))
 }
 
@@ -35,7 +38,7 @@ function* watchOpenEditorDialogToEdit() {
 
     try {
       const job = yield call(API.fetchJobConfig, id)
-      yield put(JobActions.fetchJobConfigSucceeded({ id, readonly, job, }))
+      yield put(JobApiActions.fetchJobConfigSucceeded({ id, readonly, job, }))
     } catch (error) {
       yield putOpenErrorSnackbarAction(`Failed to fetch job '${id}'`, error)
     }
@@ -50,7 +53,7 @@ function* watchUpdateJob() {
     try {
       const updatedJob = yield call(API.updateJob, id, job)
       yield putOpenInfoSnackbarAction(`${id} was updated`)
-      yield put(JobActions.updateJobSucceeded({ id, job: updatedJob, }))
+      yield put(JobApiActions.updateJobSucceeded({ id, job: updatedJob, }))
     } catch (error) {
       yield putOpenErrorSnackbarAction(`Failed to update job '${id}'`, error)
     }
@@ -64,7 +67,7 @@ function* watchCreateJob() {
 
     /** validate job */
     if (job === void 0 || Object.keys(job).length === 0) { /** if undefined or empty object */
-      yield putOpenErrorSnackbarAction(`Failed to create new job`, new Error('EMPTY JOB'))
+      yield putOpenErrorSnackbarAction('Failed to create new job', new Error('EMPTY JOB'))
       continue
     }
 
@@ -73,7 +76,7 @@ function* watchCreateJob() {
 
     /** validate id */
     if (id === void 0 || '' === id) {
-      yield putOpenErrorSnackbarAction(`Failed to create new job`, new Error('EMPTY ID'))
+      yield putOpenErrorSnackbarAction('Failed to create new job', new Error('EMPTY ID'))
       continue
     }
 
@@ -91,7 +94,7 @@ function* watchCreateJob() {
     try {
       yield call(API.createJob, job)
       yield call(callFetchJobs) /** fetch all job */
-      yield put(JobActions.createJobSucceeded({ id, job, }))
+      yield put(JobApiActions.createJobSucceeded({ id, job, }))
       yield putOpenInfoSnackbarAction(`${id} was created`)
     } catch (error) {
       yield putOpenErrorSnackbarAction(`Failed to create new job '${id}'`, error)
@@ -107,7 +110,7 @@ function* watchRemoveJob() {
     try {
       yield call(API.removeJob, id)
       yield call(callFetchJobs) /** fetch all job */
-      yield put(JobActions.removeJobSucceeded(payload))
+      yield put(JobApiActions.removeJobSucceeded(payload))
       yield putOpenInfoSnackbarAction(`${id} was removed`)
     } catch(error) {
       yield putOpenErrorSnackbarAction(`Failed to remove job '${id}'`, error)
@@ -122,7 +125,7 @@ function* watchSetReadonly() {
 
     try {
       const updatedJob = yield call(API.setReadonly, id)
-      yield put(JobActions.setReadonlySucceeded({ id: updatedJob.id, }))
+      yield put(JobApiActions.setReadonlySucceeded({ id: updatedJob.id, }))
     } catch (error) {
       yield putOpenErrorSnackbarAction(`Failed to set readonly '${id}'`, error)
     }
@@ -136,7 +139,7 @@ function* watchUnsetReadonly() {
 
     try {
       const updatedJob = yield call(API.unsetReadonly, id)
-      yield put(JobActions.unsetReadonlySucceeded({ id: updatedJob.id, }))
+      yield put(JobApiActions.unsetReadonlySucceeded({ id: updatedJob.id, }))
     } catch (error) {
       yield putOpenErrorSnackbarAction(`Failed to unset readonly '${id}'`, error)
     }
@@ -153,7 +156,7 @@ function* watchStartJob() {
     try {
       yield call(API.startJob, id)
       yield call(API.delay, JOB_TRANSITION_DELAY)
-      yield put(JobActions.startJobSucceeded({ id, }))
+      yield put(JobApiActions.startJobSucceeded({ id, }))
     } catch (error) {
       yield putOpenErrorSnackbarAction(`Failed to start job '${id}'`, error)
     }
@@ -172,7 +175,7 @@ function* watchStopJob() {
     try {
       yield call(API.stopJob, id)
       yield call(API.delay, JOB_TRANSITION_DELAY)
-      yield put(JobActions.stopJobSucceeded({ id, }))
+      yield put(JobApiActions.stopJobSucceeded({ id, }))
     } catch (error) {
       yield putOpenErrorSnackbarAction(`Failed to stop job '${id}'`, error)
     }
