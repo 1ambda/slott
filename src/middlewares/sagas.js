@@ -10,28 +10,26 @@ import * as JobSortStrategies from '../constants/JobSortStrategies'
 import * as API from './api'
 import * as Selectors from '../reducers/JobReducer/selector'
 
-const JOB_TRANSITION_DELAY = 1000
-
-const always = true /** takeEvery does'n work. (redux-saga 0.9.5) */
+export const JOB_TRANSITION_DELAY = 1000
+export const always = true /** takeEvery does'n work. (redux-saga 0.9.5) */
 
 /** fetch all jobs, used to initialize  */
-function* callFetchJobs() {
+export function* callFetchJobs() {
   const jobs = yield call(API.fetchJobs)
 
   yield put(JobApiActions.fetchJobsSucceeded({ jobs, }))
   yield put(JobActions.sortJob({ strategy: JobSortStrategies.INITIAL, }))
 }
 
-function* putOpenErrorSnackbarAction(message, error) { yield put(JobActions.openErrorSnackbar({ message, error, })) }
-function* putOpenInfoSnackbarAction(message) { yield put(JobActions.openInfoSnackbar({ message, })) }
-
+export function* putOpenErrorSnackbarAction(message, error) { yield put(JobActions.openErrorSnackbar({ message, error, })) }
+export function* putOpenInfoSnackbarAction(message) { yield put(JobActions.openInfoSnackbar({ message, })) }
 
 /**
  * watcher functions
  *
  * every watcher should catch exceptions in while loop
  */
-function* watchOpenEditorDialogToEdit() {
+export function* watchOpenEditorDialogToEdit() {
   while (always) {
     const { payload, } = yield take(JobActionTypes.OPEN_EDITOR_DIALOG_TO_EDIT)
     const { id, readonly, } = payload
@@ -45,7 +43,7 @@ function* watchOpenEditorDialogToEdit() {
   }
 }
 
-function* watchUpdateJob() {
+export function* watchUpdateJob() {
   while(always) {
     const { payload, } = yield take(JobActionTypes.UPDATE)
     const { id, job, } = payload
@@ -60,7 +58,7 @@ function* watchUpdateJob() {
   }
 }
 
-function* watchCreateJob() {
+export function* watchCreateJob() {
   while (always) {
     const { payload, } = yield take(JobActionTypes.CREATE)
     const { job, } = payload
@@ -102,7 +100,7 @@ function* watchCreateJob() {
   }
 }
 
-function* watchRemoveJob() {
+export function* watchRemoveJob() {
   while(always) {
     const { payload, } = yield take(JobActionTypes.REMOVE)
     const { id, } = payload
@@ -118,7 +116,7 @@ function* watchRemoveJob() {
   }
 }
 
-function* watchSetReadonly() {
+export function* watchSetReadonly() {
   while(always) {
     const { payload, } = yield take(JobActionTypes.SET_READONLY)
     const { id, } = payload
@@ -132,7 +130,7 @@ function* watchSetReadonly() {
    }
 }
 
-function* watchUnsetReadonly() {
+export function* watchUnsetReadonly() {
   while(always) {
     const { payload, } = yield take(JobActionTypes.UNSET_READONLY)
     const { id, } = payload
@@ -146,7 +144,7 @@ function* watchUnsetReadonly() {
   }
 }
 
-function* watchStartJob() {
+export function* watchStartJob() {
   while(always) {
     const { payload, } = yield take(JobActionTypes.START)
     const { id, } = payload
@@ -165,7 +163,7 @@ function* watchStartJob() {
   }
 }
 
-function* watchStopJob() {
+export function* watchStopJob() {
   while(always) {
     const { payload, } = yield take(JobActionTypes.STOP)
     const { id, } = payload

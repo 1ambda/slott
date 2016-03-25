@@ -1,3 +1,5 @@
+import { expect, } from 'chai'
+
 import * as JobActions from '../JobActions'
 import * as JobActionTypes from '../../constants/JobActionTypes'
 
@@ -41,12 +43,8 @@ describe('JobActions', () => {
   EXPECTED_ACTIONS.map(({ name, type, }) => {
     it(`should provide ${name} which return ${type} type`, () => {
       const result = JobActions[name](payload)
-      expect(result).toEqual({
-        [PROP_NAME_TYPE]: type,
-        [PROP_NAME_PAYLOAD]: payload,
-      })
+      expect(result[PROP_NAME_PAYLOAD]).to.equal(payload)
+      expect(result[PROP_NAME_TYPE]).to.equal(type)
     })
   })
-
-
 })

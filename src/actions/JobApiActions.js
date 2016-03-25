@@ -1,7 +1,6 @@
 import * as JobApiActionTypes from '../constants/JobApiActionTypes'
 import { createAction, } from 'redux-actions'
 
-
 /**
  * api calls for job item
  *

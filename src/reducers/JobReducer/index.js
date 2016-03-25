@@ -2,6 +2,7 @@ import { combineReducers, } from 'redux'
 import { handleActions, } from 'redux-actions'
 
 import * as JobActionTypes from '../../constants/JobActionTypes'
+import * as JobApiActionTypes from '../../constants/JobApiActionTypes'
 import * as JobSortStrategies from '../../constants/JobSortStrategies'
 
 import { EDITOR_DIALOG_MODE, } from '../../components/Common/EditorDialog'
@@ -11,22 +12,21 @@ import * as Job from './job'
 
 const INITIAL_JOBS = []
 
-/** client related actions. */
 export const handleJobItems = handleActions({
-  [JobActionTypes.FETCH_JOBS.SUCCEEDED]: Job.updateAllJobs,
-
+  /** client only */
   [JobActionTypes.START_SWITCHING]: Job.startSwitching,
   [JobActionTypes.END_SWITCHING]: Job.endSwitching,
-
-  [JobActionTypes.UNSET_READONLY.SUCCEEDED]: Job.unsetReadonly,
-  [JobActionTypes.SET_READONLY.SUCCEEDED]: Job.setReadonly,
-
-  [JobActionTypes.UPDATE.SUCCEEDED]: Job.updateJob,
-  [JobActionTypes.STOP.SUCCEEDED]: Job.stopJob,
-  [JobActionTypes.START.SUCCEEDED]: Job.startJob,
-
   [JobActionTypes.SORT]: Job.sortJob,
 
+  /** api related */
+  [JobApiActionTypes.FETCH_JOBS.SUCCEEDED]: Job.updateAllJobs,
+  [JobApiActionTypes.UPDATE.SUCCEEDED]: Job.updateJob,
+  [JobApiActionTypes.STOP.SUCCEEDED]: Job.stopJob,
+  [JobApiActionTypes.START.SUCCEEDED]: Job.startJob,
+  [JobApiActionTypes.UNSET_READONLY.SUCCEEDED]: Job.unsetReadonly,
+  [JobApiActionTypes.SET_READONLY.SUCCEEDED]: Job.setReadonly,
+
+  // TODO
   [JobActionTypes.STOP_ALL]: Job.stopAllJobs,
   [JobActionTypes.START_ALL]: Job.startAllJobs,
 
@@ -70,7 +70,7 @@ const INITIAL_EDITOR_DIALOG_STATE = {
 
 export const handleEditorDialog = handleActions({
   /** open editor dialog to edit */
-  [JobActionTypes.FETCH_CONFIG.SUCCEEDED]: (state, { payload, }) =>
+  [JobApiActionTypes.FETCH_CONFIG.SUCCEEDED]: (state, { payload, }) =>
     Object.assign({}, INITIAL_EDITOR_DIALOG_STATE, {
       id: payload.id,
       readonly: payload.readonly,
@@ -78,18 +78,18 @@ export const handleEditorDialog = handleActions({
       job: payload.job,
     }),
 
-  [JobActionTypes.CREATE.SUCCEEDED]: (state, { payload, }) =>
+  [JobApiActionTypes.CREATE.SUCCEEDED]: (state, { payload, }) =>
     Object.assign({}, state, {
       id: payload.id,
       dialogMode: EDITOR_DIALOG_MODE.CLOSE,
     }),
 
-  [JobActionTypes.OPEN_EDITOR_DIALOG_TO_CREATE]: () =>
+  [JobApiActionTypes.OPEN_EDITOR_DIALOG_TO_CREATE]: () =>
     Object.assign({}, INITIAL_EDITOR_DIALOG_STATE, {
       dialogMode: EDITOR_DIALOG_MODE.CREATE,
     }),
 
-  [JobActionTypes.CLOSE_EDITOR_DIALOG]: (state) =>
+  [JobApiActionTypes.CLOSE_EDITOR_DIALOG]: (state) =>
     Object.assign({}, INITIAL_EDITOR_DIALOG_STATE /** reset job */, {
       dialogMode: EDITOR_DIALOG_MODE.CLOSE,
       readonly: false,
