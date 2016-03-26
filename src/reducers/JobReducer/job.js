@@ -135,3 +135,39 @@ export function sortJob(state, { payload, }) {
   return state
 }
 
+/** utils */
+
+export function validateId(id) {
+  /** validate id */
+  if (id === void 0 || '' === id) {
+    throw new Error('EMPTY ID')
+  }
+}
+
+export function validateJobId(job) {
+
+  /** if undefined or empty job*/
+  if (job === void 0 || Object.keys(job).length === 0) {
+    throw new Error('EMPTY JOB')
+  }
+
+  const id = job[JOB_PROPERTY.id] /** id might be undefined */
+
+  validateId(id)
+
+  return id
+}
+
+export function checkDuplicatedJob(id, existingJobs) {
+  /** check already exists in client jobs */
+  const alreadyExistingId = existingJobs.reduce((exist, job) => {
+    return exist || id === job[JOB_PROPERTY.id]
+  }, false)
+
+  if (alreadyExistingId) {
+    throw new Error(`DUPLICATED ID: ${id}`)
+  }
+}
+
+
+

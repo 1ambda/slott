@@ -142,25 +142,23 @@ export function* unsetReadonly(id) {
 
 export function* createJob(job) {
   const url = '/api/jobs'
-  const result = yield call(postJSON, url, Converter.refineClientPropsToCreate(job))
-  return null /** TODO return updatedJob */
-}
-
-export function* startJob(id) {
-  const url = `api/jobs/${id}/state`
-  const result = yield call(patchJSON, url, Converter.createPropsToStartJob())
-  return null /** TODO return updated state */
-}
-
-export function* stopJob(id) {
-  const url = `api/jobs/${id}/state`
-  const result = yield call(patchJSON, url, Converter.createPropsToStopJob())
-  return null /** TODO return updated state */
+  yield call(postJSON, url, Converter.refineClientPropsToCreate(job)) /** return nothing */
 }
 
 export function* removeJob(id) {
   const url = `/api/jobs/${id}`
   yield call(deleteJSON, url) /** return nothing */
 }
+
+export function* startJob(id) {
+  const url = `api/jobs/${id}/state`
+  yield call(patchJSON, url, Converter.createPropsToStartJob()) /** return nothing */
+}
+
+export function* stopJob(id) {
+  const url = `api/jobs/${id}/state`
+  yield call(patchJSON, url, Converter.createPropsToStopJob()) /** return nothing */
+}
+
 
 

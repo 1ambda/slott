@@ -5,13 +5,20 @@ import * as JobActionTypes from '../constants/JobActionTypes'
 import * as JobApiActions from '../actions/JobApiActions'
 import * as JobApiActionTypes from '../constants/JobApiActionTypes'
 
-import { sortJob, JOB_PROPERTY, } from '../reducers/JobReducer/job'
+import {
+  sortJob, JOB_PROPERTY, validateId, validateJobId, checkDuplicatedJob,
+} from '../reducers/JobReducer/job'
 import * as JobSortStrategies from '../constants/JobSortStrategies'
 import * as API from './api'
 import * as Selectors from '../reducers/JobReducer/selector'
 
 export const JOB_TRANSITION_DELAY = 1000
 export const always = true /** takeEvery does'n work. (redux-saga 0.9.5) */
+
+/**
+ * watcher utils
+ *
+ */
 
 /** fetch all jobs, used to initialize  */
 export function* callFetchJobs() {
@@ -20,9 +27,6 @@ export function* callFetchJobs() {
   yield put(JobApiActions.fetchJobsSucceeded({ jobs, }))
   yield put(JobActions.sortJob({ strategy: JobSortStrategies.INITIAL, }))
 }
-
-export function* putOpenErrorSnackbarAction(message, error) { yield put(JobActions.openErrorSnackbar({ message, error, })) }
-export function* putOpenInfoSnackbarAction(message) { yield put(JobActions.openInfoSnackbar({ message, })) }
 
 /**
  * watcher functions
@@ -38,7 +42,7 @@ export function* watchOpenEditorDialogToEdit() {
       const job = yield call(API.fetchJobConfig, id)
       yield put(JobApiActions.fetchJobConfigSucceeded({ id, readonly, job, }))
     } catch (error) {
-      yield putOpenErrorSnackbarAction(`Failed to fetch job '${id}'`, error)
+      yield put(JobActions.openErrorSnackbar({ message: `Failed to fetch job '${id}`, error, }))
     }
   }
 }
@@ -50,10 +54,10 @@ export function* watchUpdateJob() {
 
     try {
       const updatedJob = yield call(API.updateJob, id, job)
-      yield putOpenInfoSnackbarAction(`${id} was updated`)
       yield put(JobApiActions.updateJobSucceeded({ id, job: updatedJob, }))
+      yield put(JobActions.openInfoSnackbar({ message: `${id} was updated`, }))
     } catch (error) {
-      yield putOpenErrorSnackbarAction(`Failed to update job '${id}'`, error)
+      yield put(JobActions.openErrorSnackbar({ message: `Failed to update job '${id}`, error, }))
     }
   }
 }
@@ -63,39 +67,19 @@ export function* watchCreateJob() {
     const { payload, } = yield take(JobActionTypes.CREATE)
     const { job, } = payload
 
-    /** validate job */
-    if (job === void 0 || Object.keys(job).length === 0) { /** if undefined or empty object */
-      yield putOpenErrorSnackbarAction('Failed to create new job', new Error('EMPTY JOB'))
-      continue
-    }
-
-    const id = job[JOB_PROPERTY.id]
-    /** id might be undefined */
-
-    /** validate id */
-    if (id === void 0 || '' === id) {
-      yield putOpenErrorSnackbarAction('Failed to create new job', new Error('EMPTY ID'))
-      continue
-    }
-
-    /** check already exists in client jobs */
-    const jobItems = yield select(Selectors.getJobItems)
-    const alreadyExistingId = jobItems.reduce((exist, job) => {
-      return exist || id === job[JOB_PROPERTY.id]
-    }, false)
-
-    if (alreadyExistingId) {
-      yield putOpenErrorSnackbarAction(`Duplicated id '${id}'`, new Error('DUPLICATED ID'))
-      continue
-    }
-
     try {
-      yield call(API.createJob, job)
-      yield call(callFetchJobs) /** fetch all job */
-      yield put(JobApiActions.createJobSucceeded({ id, job, }))
-      yield putOpenInfoSnackbarAction(`${id} was created`)
+      /** validate */
+      const id = validateJobId(job)
+      const existingJobs = yield select(Selectors.getJobItems)
+      checkDuplicatedJob(job, existingJobs)
+
+      yield call(API.createJob, job) /** create job */
+      yield call(callFetchJobs)      /** fetch all jobs again */
+      yield put(JobActions.closeEditorDialog())
+      yield put(JobActions.openInfoSnackbar({ message: `${id} was created`, }))
     } catch (error) {
-      yield putOpenErrorSnackbarAction(`Failed to create new job '${id}'`, error)
+      yield put(JobActions.openErrorSnackbar(
+        { message: `Failed to create job`, error, }))
     }
   }
 }
@@ -106,12 +90,13 @@ export function* watchRemoveJob() {
     const { id, } = payload
 
     try {
+      validateId(id)
       yield call(API.removeJob, id)
-      yield call(callFetchJobs) /** fetch all job */
-      yield put(JobApiActions.removeJobSucceeded(payload))
-      yield putOpenInfoSnackbarAction(`${id} was removed`)
+      yield call(callFetchJobs) /** fetch all job again */
+      yield put(JobActions.openInfoSnackbar({ message: `${id} was removed`, }))
     } catch(error) {
-      yield putOpenErrorSnackbarAction(`Failed to remove job '${id}'`, error)
+      yield put(JobActions.openErrorSnackbar(
+        { message: `Failed to remove job '${id}'`, error, }))
     }
   }
 }
@@ -122,10 +107,12 @@ export function* watchSetReadonly() {
     const { id, } = payload
 
     try {
-      const updatedJob = yield call(API.setReadonly, id)
-      yield put(JobApiActions.setReadonlySucceeded({ id: updatedJob.id, }))
+      validateId(id)
+      yield call(API.setReadonly, id)
+      yield put(JobApiActions.setReadonlySucceeded({ id, }))
     } catch (error) {
-      yield putOpenErrorSnackbarAction(`Failed to set readonly '${id}'`, error)
+      yield put(JobActions.openErrorSnackbar(
+        { message: `Failed to set readonly '${id}'`, error, }))
     }
    }
 }
@@ -136,10 +123,12 @@ export function* watchUnsetReadonly() {
     const { id, } = payload
 
     try {
-      const updatedJob = yield call(API.unsetReadonly, id)
-      yield put(JobApiActions.unsetReadonlySucceeded({ id: updatedJob.id, }))
+      validateId(id)
+      yield call(API.unsetReadonly, id)
+      yield put(JobApiActions.unsetReadonlySucceeded({ id, }))
     } catch (error) {
-      yield putOpenErrorSnackbarAction(`Failed to unset readonly '${id}'`, error)
+      yield put(JobActions.openErrorSnackbar(
+        { message: `Failed to unset readonly '${id}'`, error, }))
     }
   }
 }
@@ -152,11 +141,13 @@ export function* watchStartJob() {
     yield put(JobActions.startSwitching({ id, }))
 
     try {
+      validateId(id)
       yield call(API.startJob, id)
       yield call(API.delay, JOB_TRANSITION_DELAY)
       yield put(JobApiActions.startJobSucceeded({ id, }))
     } catch (error) {
-      yield putOpenErrorSnackbarAction(`Failed to start job '${id}'`, error)
+      yield put(JobActions.openErrorSnackbar(
+        { message: `Failed to start job '${id}'`, error, }))
     }
 
     yield put(JobActions.endSwitching({ id, }))
@@ -171,11 +162,13 @@ export function* watchStopJob() {
     yield put(JobActions.startSwitching({ id, }))
 
     try {
+      validateId(id)
       yield call(API.stopJob, id)
       yield call(API.delay, JOB_TRANSITION_DELAY)
       yield put(JobApiActions.stopJobSucceeded({ id, }))
     } catch (error) {
-      yield putOpenErrorSnackbarAction(`Failed to stop job '${id}'`, error)
+      yield put(JobActions.openErrorSnackbar(
+        { message: `Failed to stop job '${id}'`, error, }))
     }
 
     yield put(JobActions.endSwitching(payload))

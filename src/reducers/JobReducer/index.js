@@ -27,8 +27,17 @@ export const handleJobItems = handleActions({
   [JobApiActionTypes.SET_READONLY.SUCCEEDED]: Job.setReadonly,
 
   // TODO
-  [JobActionTypes.STOP_ALL]: Job.stopAllJobs,
-  [JobActionTypes.START_ALL]: Job.startAllJobs,
+  [JobActionTypes.STOP_ALL]: (state) => {
+    console.error(`TODO ${JobActionTypes.STOP_ALL} in JobReducer`)
+    // Job.stopAllJobs,
+    return state
+  },
+
+  [JobActionTypes.START_ALL]: (state) => {
+    console.error(`TODO ${JobActionTypes.START_ALL} in JobReducer`)
+    // Job.startAllJobs,
+    return state
+  },
 
 }, INITIAL_JOBS)
 
@@ -78,13 +87,7 @@ export const handleEditorDialog = handleActions({
       job: payload.job,
     }),
 
-  [JobApiActionTypes.CREATE.SUCCEEDED]: (state, { payload, }) =>
-    Object.assign({}, state, {
-      id: payload.id,
-      dialogMode: EDITOR_DIALOG_MODE.CLOSE,
-    }),
-
-  [JobApiActionTypes.OPEN_EDITOR_DIALOG_TO_CREATE]: () =>
+  [JobApiActionTypes.OPEN_EDITOR_DIALOG_TO_CREATE]: (state) =>
     Object.assign({}, INITIAL_EDITOR_DIALOG_STATE, {
       dialogMode: EDITOR_DIALOG_MODE.CREATE,
     }),
