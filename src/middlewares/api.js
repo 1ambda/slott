@@ -80,7 +80,6 @@ function deleteJSON(url) {
   }))
 }
 
-
 /** job related functions */
 
 export function delay(millis) {
@@ -105,44 +104,9 @@ export function* fetchJobs() {
     })
 }
 
-export function* fetchJob(id) {
-  const url = `/api/jobs/${id}`
-
-  const serverJob = yield call(getJSON, url)
-  const clientJob = Converter.convertServerJobToClientJob(serverJob)
-
-  return clientJob
-}
-
-export function* fetchJobConfig(id) {
-  const job = yield call(fetchJob, id)
-
-  /** remove client specific props to render response in editor dialog */
-  return Converter.refineClientPropsToRenderEditorDialog(job)
-}
-
-export function* updateJob(id, job) {
-  const url = `/api/jobs/${id}`
-
-  const serverJob = yield call(patchJSON, url, Converter.refineClientPropsToUpdate(job))
-  const clientJob = Converter.convertServerJobToClientJob(serverJob)
-
-  return clientJob
-}
-
-export function* setReadonly(id) {
-  const updatedJob = yield call(updateJob, id, Converter.createPropToSetReadonly())
-  return updatedJob
-}
-
-export function* unsetReadonly(id) {
-  const updatedJob = yield call(updateJob, id, Converter.createPropToUnsetReadonly())
-  return updatedJob
-}
-
 export function* createJob(job) {
   const url = '/api/jobs'
-  yield call(postJSON, url, Converter.refineClientPropsToCreate(job)) /** return nothing */
+  yield call(postJSON, url, Converter.removeClientProps(job)) /** return nothing */
 }
 
 export function* removeJob(id) {
@@ -150,14 +114,69 @@ export function* removeJob(id) {
   yield call(deleteJSON, url) /** return nothing */
 }
 
+/**
+ * Job has 2 sub-properties
+ *
+ * merged job can be accessed using `api/jobs/:id`
+ *
+ * 1. state: indicates whether job is running or not
+ *
+ *  `/api/jobs/:id/state`
+ *
+ *    { active: boolean }
+ *
+ *
+ * 2. config:
+ *
+ *  `/api/jobs/:id/config`
+ *
+ *    {
+ *      id: string,
+ *      tags: Array<string>,
+ *      enabled: boolean,
+ *      ...
+ *    }
+ */
+
+export function* fetchJobConfig(id) {
+  const url = `/api/jobs/${id}/config`
+
+  const serverJob = yield call(getJSON, url)
+
+  /** remove state fields */
+  return Converter.removeStateProps(serverJob)
+}
+
+export function* updateJobConfig(id, property) {
+  const url = `/api/jobs/${id}/config`
+
+  const serverJob = yield call(patchJSON, url, Converter.removeStateProps(property))
+  const clientJob = Converter.convertServerJobToClientJob(serverJob)
+
+  return clientJob
+}
+
+export function* setReadonly(id) {
+  const updatedJob = yield call(updateJobConfig, id, Converter.createConfigToSetReadonly())
+  return updatedJob
+}
+
+export function* unsetReadonly(id) {
+  const updatedJob = yield call(updateJobConfig, id, Converter.createConfigToUnsetReadonly())
+  return updatedJob
+}
+
+export function* updateJobState(id, state) {
+  const url = `/api/jobs/${id}/state`
+  yield call (patchJSON, url, state)
+}
+
 export function* startJob(id) {
-  const url = `api/jobs/${id}/state`
-  yield call(patchJSON, url, Converter.createPropsToStartJob()) /** return nothing */
+  yield call(updateJobState, id, Converter.createStateToStartJob()) /** return nothing */
 }
 
 export function* stopJob(id) {
-  const url = `api/jobs/${id}/state`
-  yield call(patchJSON, url, Converter.createPropsToStopJob()) /** return nothing */
+  yield call(updateJobState, id, Converter.createStateToStopJob()) /** return nothing */
 }
 
 

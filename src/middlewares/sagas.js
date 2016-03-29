@@ -53,7 +53,7 @@ export function* watchUpdateJob() {
     const { id, job, } = payload
 
     try {
-      const updatedJob = yield call(API.updateJob, id, job)
+      const updatedJob = yield call(API.updateJobConfig, id, job)
       yield put(JobApiActions.updateJobSucceeded({ id, job: updatedJob, }))
       yield put(JobActions.openInfoSnackbar({ message: `${id} was updated`, }))
     } catch (error) {
@@ -79,7 +79,7 @@ export function* watchCreateJob() {
       yield put(JobActions.openInfoSnackbar({ message: `${id} was created`, }))
     } catch (error) {
       yield put(JobActions.openErrorSnackbar(
-        { message: `Failed to create job`, error, }))
+        { message: 'Failed to create job', error, }))
     }
   }
 }

@@ -1,26 +1,18 @@
 import { INITIAL_JOB_STATE, JOB_PROPERTY, JOB_STATE, } from '../reducers/JobReducer/job'
 
 export const SERVER_JOB_PROPERTY = {
-  _id: '_id',
-  enabled: 'enabled',
   active: 'active',
+  enabled: 'enabled',
 }
 
-export const IGNORED_SERVER_PROPS = [
-  SERVER_JOB_PROPERTY._id,
+export const IGNORED_SERVER_JOB_PROPS = [
   SERVER_JOB_PROPERTY.enabled,
   SERVER_JOB_PROPERTY.active,
 ]
 
-export const IGNORED_CLIENT_PROPS = [
+export const IGNORED_CLIENT_JOB_PROPS = [
   JOB_PROPERTY.switching,
   JOB_PROPERTY.state,
-]
-
-export const IGNORED_CLIENT_PROPS_FOR_UPDATING = [
-  SERVER_JOB_PROPERTY.active,
-  SERVER_JOB_PROPERTY._id,
-  JOB_PROPERTY.id, /** do not allow to modify `id` field */
 ]
 
 /**
@@ -38,7 +30,7 @@ export function removeProps(props, propsToIgnore) {
 }
 
 export function removeServerSpecificProps(props) {
-  return removeProps(props, IGNORED_SERVER_PROPS)
+  return removeProps(props, IGNORED_SERVER_JOB_PROPS)
 }
 
 
@@ -51,26 +43,26 @@ export function removeServerSpecificProps(props) {
  */
 
 export function interpretServerJobState(serverJob) {
-  const { active, enabled, } = serverJob
-  if (active === void 0 || enabled === void 0) /** if one of prop is undefined */
-    throw new Error(`Fetched job ${serverJob[JOB_PROPERTY.id]} has no ${SERVER_JOB_PROPERTY.enabled} property`)
+  let { active, enabled, } = serverJob
+
+  if (enabled === void 0) {
+    /*eslint-disable no-console */
+    console.error(`${serverJob[JOB_PROPERTY.id]} has no '${SERVER_JOB_PROPERTY.enabled}' prop`)
+    /*eslint-enable no-console */
+    enabled = false
+  }
+
+  if (active === void 0) {
+    /*eslint-disable no-console */
+    console.error(`${serverJob[JOB_PROPERTY.id]} has no '${SERVER_JOB_PROPERTY.active}' prop`)
+    /*eslint-enable no-console */
+    active = false
+  }
 
   if (active) return JOB_STATE.RUNNING
   else if (!active && enabled) return JOB_STATE.WAITING
   else if (!active && !enabled) return JOB_STATE.STOPPED
   else throw new Error(`Invalid server job: ${JSON.stringify(serverJob)}`)
-}
-
-export function interpretClientJobState(clientJob) {
-  const { state, } = clientJob
-
-  if (state === void 0)
-    throw new Error(`client job state is void, ${JSON.stringify(clientJob)}`)
-
-  if (JOB_STATE.RUNNING === state) return { active: true, enabled: true, }
-  else if (JOB_STATE.WAITING === state) return { active: false, enabled: true, }
-  else if (JOB_STATE.STOPPED === state) return { active: false, enabled: false, }
-  else throw new Error(`Can't interpret invalid client job state, ${JSON.stringify(clientJob)}`)
 }
 
 /** responsible for converting server jobs to client jobs, used to fetch all jobs */
@@ -86,28 +78,19 @@ export function convertServerJobToClientJob (job) {
   })
 }
 
-export function createEnabledProp(readonly) { return { [SERVER_JOB_PROPERTY.enabled]: !readonly, } }
-export function createPropToSetReadonly() { return createEnabledProp(true) }
-export function createPropToUnsetReadonly() { return createEnabledProp(false) }
+export function createEnabledConfig(readonly) { return { [SERVER_JOB_PROPERTY.enabled]: !readonly, } }
+export function createConfigToSetReadonly() { return createEnabledConfig(true) }
+export function createConfigToUnsetReadonly() { return createEnabledConfig(false) }
 
-export function createActiveProp(active) { return { [SERVER_JOB_PROPERTY.active]: active, } }
-export function createPropsToStartJob() { return createActiveProp(true) }
-export function createPropsToStopJob() { return createActiveProp(false) }
+export function createActiveState(active) { return { [SERVER_JOB_PROPERTY.active]: active, } }
+export function createStateToStartJob() { return createActiveState(true) }
+export function createStateToStopJob() { return createActiveState(false) }
 
-export function refineClientPropsToCreate(props) {
-  const filtered = removeProps(props, IGNORED_CLIENT_PROPS)
-
-  return Object.assign({}, filtered, {
-    [SERVER_JOB_PROPERTY.enabled]: true,
-    [SERVER_JOB_PROPERTY.active]: false, // TODO remove
-  })
+export function removeClientProps(props) {
+  return removeProps(props, IGNORED_CLIENT_JOB_PROPS)
 }
 
-export function refineClientPropsToRenderEditorDialog(props) {
-  return removeProps(props, IGNORED_CLIENT_PROPS)
-}
-
-export function refineClientPropsToUpdate(props) {
-  return removeProps(props, IGNORED_CLIENT_PROPS_FOR_UPDATING)
+export function removeStateProps(props) {
+  return removeProps(props, [SERVER_JOB_PROPERTY.active, ])
 }
 

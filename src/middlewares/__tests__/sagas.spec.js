@@ -111,7 +111,7 @@ describe('sagas', () => {
 
       it(`should
         - take ${startingAction}
-        - call updateJob with (id, job)
+        - call updateJobConfig with (id, job)
         - put updatedJobSucceeded with { id, job: updatedJob }
         `, () => {
 
@@ -127,7 +127,7 @@ describe('sagas', () => {
         )
 
         expect(saga.next({payload,}).value).to.deep.equal(
-          call(API.updateJob, id, job) /** call api */
+          call(API.updateJobConfig, id, job) /** call api */
         )
 
         expect(saga.next(updatedJob).value).to.deep.equal(
@@ -143,7 +143,7 @@ describe('sagas', () => {
 
       it(`should
         - take ${startingAction}
-        - call updateJob with (id, job)
+        - call updateJobConfig with (id, job)
         - if exception is occurred,
           put openErrorSnackbar with { message, error, }
         `, () => {
@@ -159,7 +159,7 @@ describe('sagas', () => {
         )
 
         expect(saga.next({ payload, }).value).to.deep.equal(
-          call(API.updateJob, id, job) /** call api */
+          call(API.updateJobConfig, id, job) /** call api */
         )
 
         const error = new Error('error01')

@@ -1,4 +1,5 @@
 {
   "/api/": "/",
-  "/:resource/:id/state": "/:resource/:id"
+  "/:resource/:id/state": "/:resource/:id",
+  "/:resource/:id/config": "/:resource/:id"
 }

@@ -73,7 +73,7 @@ export const handleJobSorter = handleActions({
 const INITIAL_EDITOR_DIALOG_STATE = {
   id: '',
   job: {},
-  dialogMode:  EDITOR_DIALOG_MODE.CLOSE,
+  dialogMode: EDITOR_DIALOG_MODE.CLOSE,
   readonly: true,
 }
 
@@ -87,12 +87,12 @@ export const handleEditorDialog = handleActions({
       job: payload.job,
     }),
 
-  [JobApiActionTypes.OPEN_EDITOR_DIALOG_TO_CREATE]: (state) =>
+  [JobActionTypes.OPEN_EDITOR_DIALOG_TO_CREATE]: (state) =>
     Object.assign({}, INITIAL_EDITOR_DIALOG_STATE, {
       dialogMode: EDITOR_DIALOG_MODE.CREATE,
     }),
 
-  [JobApiActionTypes.CLOSE_EDITOR_DIALOG]: (state) =>
+  [JobActionTypes.CLOSE_EDITOR_DIALOG]: (state) =>
     Object.assign({}, INITIAL_EDITOR_DIALOG_STATE /** reset job */, {
       dialogMode: EDITOR_DIALOG_MODE.CLOSE,
       readonly: false,
