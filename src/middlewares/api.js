@@ -187,10 +187,16 @@ export function* updateJobState(id, state) {
 
 export function* startJob(id) {
   yield call(updateJobState, id, Converter.createStateToStartJob()) /** return nothing */
+
+  /** since `patch` METHOD doesn't return all job props (state + config), we need to fetch job */
+  return yield call(fetchJob, id)
 }
 
 export function* stopJob(id) {
   yield call(updateJobState, id, Converter.createStateToStopJob()) /** return nothing */
+
+  /** since `patch` METHOD doesn't return all job props (state + config), we need to fetch job */
+  return yield call(fetchJob, id)
 }
 
 

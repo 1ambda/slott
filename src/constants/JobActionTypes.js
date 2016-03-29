@@ -5,9 +5,7 @@ export const STOP_ALL = 'JOB_STOP_ALL'
 export const START_ALL = 'JOB_START_ALL'
 export const SET_READONLY = 'JOB_READONLY'
 export const UNSET_READONLY  = 'UNSET_READONLY'
-
 export const CREATE = 'JOB_CREATE'
-
 export const REMOVE = 'JOB_REMOVE'
 export const UPDATE = 'JOB_UPDATE'
 

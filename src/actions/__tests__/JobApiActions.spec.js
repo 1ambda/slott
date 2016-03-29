@@ -14,10 +14,6 @@ describe('JobActions', () => {
     { name: 'createJobSucceeded', type: JobApiActionTypes.CREATE.SUCCEEDED, },
     { name: 'fetchJobConfigSucceeded', type: JobApiActionTypes.FETCH_CONFIG.SUCCEEDED, },
     { name: 'updateJobSucceeded', type: JobApiActionTypes.UPDATE.SUCCEEDED, },
-    { name: 'setReadonlySucceeded', type: JobApiActionTypes.SET_READONLY.SUCCEEDED, },
-    { name: 'unsetReadonlySucceeded', type: JobApiActionTypes.UNSET_READONLY.SUCCEEDED, },
-    { name: 'startJobSucceeded', type: JobApiActionTypes.START.SUCCEEDED, },
-    { name: 'stopJobSucceeded', type: JobApiActionTypes.STOP.SUCCEEDED, },
   ]
 
   EXPECTED_ACTIONS.map(({ name, type, }) => {

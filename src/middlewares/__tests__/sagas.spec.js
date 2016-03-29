@@ -7,6 +7,7 @@ import * as JobApiActions from '../../actions/JobApiActions'
 import * as JobApiActionTypes from '../../constants/JobApiActionTypes'
 import * as JobSortStrategies from '../../constants/JobSortStrategies'
 import { JOB_PROPERTY, } from '../../reducers/JobReducer/job'
+import { SERVER_JOB_PROPERTY, } from '../../middlewares/converter'
 import * as Selectors from '../../reducers/JobReducer/selector'
 
 import * as API from '../api'
@@ -357,13 +358,13 @@ describe('sagas', () => {
 
       it(`should
         - take ${startingAction}
-        - call API.setReadonly with (id)
-        - put setReadonlySucceeded with { id }
-        - put openInfoSnackbar
+        - call setReadonly with (id)
+        - put updatedJobSucceeded with { id, job }
         `, () => {
 
         const id = 'job01'
         const payload = { [JOB_PROPERTY.id]: id, }
+        const updatedJob = { [JOB_PROPERTY.id]: id, [SERVER_JOB_PROPERTY.enabled]: false, }
 
         const saga = watcher()
 
@@ -375,8 +376,8 @@ describe('sagas', () => {
           call(API.setReadonly, id) /** call API */
         )
 
-        expect(saga.next().value).to.deep.equal(
-          put(JobApiActions.setReadonlySucceeded({ [JOB_PROPERTY.id]: id, }))
+        expect(saga.next(updatedJob).value).to.deep.equal(
+          put(JobApiActions.updateJobSucceeded({ [JOB_PROPERTY.id]: id, job: updatedJob, }))
         )
 
         expect(saga.next().done).to.deep.equal(false)
@@ -419,13 +420,13 @@ describe('sagas', () => {
 
       it(`should
         - take ${startingAction}
-        - call API.unsetReadonly with (id)
-        - put unsetReadonlySucceeded with { id }
-        - put openInfoSnackbar
+        - call unsetReadonly with (id)
+        - put updateJobSucceeded with { id, job }
         `, () => {
 
         const id = 'job01'
         const payload = { [JOB_PROPERTY.id]: id, }
+        const updatedJob = { [JOB_PROPERTY.id]: id, [SERVER_JOB_PROPERTY.enabled]: true, }
 
         const saga = watcher()
 
@@ -437,8 +438,8 @@ describe('sagas', () => {
           call(API.unsetReadonly, id) /** call API */
         )
 
-        expect(saga.next().value).to.deep.equal(
-          put(JobApiActions.unsetReadonlySucceeded({ [JOB_PROPERTY.id]: id, }))
+        expect(saga.next(updatedJob).value).to.deep.equal(
+          put(JobApiActions.updateJobSucceeded({ [JOB_PROPERTY.id]: id, job: updatedJob, }))
         )
 
         expect(saga.next().done).to.deep.equal(false)
@@ -446,7 +447,7 @@ describe('sagas', () => {
 
       it(`should
         - take ${startingAction}
-        - call unsetReadonly with (id)
+        - call API.unsetReadonly with (id)
         - if exception is occurred while calling api,
           put openErrorSnackbar
         `, () => {
@@ -481,13 +482,13 @@ describe('sagas', () => {
 
       it(`should
         - take ${startingAction}
-        - call API.startJob with (id)
-        - put startJobSucceeded with { id }
-        - put openInfoSnackbar
+        - call startJob with (id)
+        - put updateJobSucceeded with { id, job }
         `, () => {
 
         const id = 'job01'
         const payload = { [JOB_PROPERTY.id]: id, }
+        const updatedJob = { [JOB_PROPERTY.id]: id, [SERVER_JOB_PROPERTY.active]: true, }
 
         const saga = watcher()
 
@@ -503,12 +504,12 @@ describe('sagas', () => {
           call(API.startJob, id) /** call API */
         )
 
-        expect(saga.next().value).to.deep.equal(
+        expect(saga.next(updatedJob).value).to.deep.equal(
           call(API.delay, sagas.JOB_TRANSITION_DELAY) /** wait */
         )
 
         expect(saga.next().value).to.deep.equal(
-          put(JobApiActions.startJobSucceeded({ [JOB_PROPERTY.id]: id, }))
+          put(JobApiActions.updateJobSucceeded({ [JOB_PROPERTY.id]: id, job: updatedJob, }))
         )
 
         expect(saga.next().value).to.deep.equal(
@@ -559,13 +560,13 @@ describe('sagas', () => {
 
       it(`should
         - take ${startingAction}
-        - call API.stopJob with (id)
-        - put stopJobSucceeded with { id }
-        - put openInfoSnackbar
+        - call stopJob with (id)
+        - put updateJobSucceeded with { id, job }
         `, () => {
 
         const id = 'job01'
         const payload = { [JOB_PROPERTY.id]: id, }
+        const updatedJob = { [JOB_PROPERTY.id]: id, [SERVER_JOB_PROPERTY.active]: false, }
 
         const saga = watcher()
 
@@ -581,12 +582,12 @@ describe('sagas', () => {
           call(API.stopJob, id) /** call API */
         )
 
-        expect(saga.next().value).to.deep.equal(
+        expect(saga.next(updatedJob).value).to.deep.equal(
           call(API.delay, sagas.JOB_TRANSITION_DELAY) /** wait */
         )
 
         expect(saga.next().value).to.deep.equal(
-          put(JobApiActions.stopJobSucceeded({ [JOB_PROPERTY.id]: id, }))
+          put(JobApiActions.updateJobSucceeded({ [JOB_PROPERTY.id]: id, job: updatedJob, }))
         )
 
         expect(saga.next().value).to.deep.equal(

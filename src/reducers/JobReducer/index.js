@@ -21,10 +21,6 @@ export const handleJobItems = handleActions({
   /** api related */
   [JobApiActionTypes.FETCH_JOBS.SUCCEEDED]: Job.updateAllJobs,
   [JobApiActionTypes.UPDATE.SUCCEEDED]: Job.updateJob,
-  [JobApiActionTypes.STOP.SUCCEEDED]: Job.stopJob,
-  [JobApiActionTypes.START.SUCCEEDED]: Job.startJob,
-  [JobApiActionTypes.UNSET_READONLY.SUCCEEDED]: Job.unsetReadonly,
-  [JobApiActionTypes.SET_READONLY.SUCCEEDED]: Job.setReadonly,
 
   // TODO
   [JobActionTypes.STOP_ALL]: (state) => {

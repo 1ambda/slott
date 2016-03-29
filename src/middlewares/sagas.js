@@ -108,8 +108,8 @@ export function* watchSetReadonly() {
 
     try {
       validateId(id)
-      yield call(API.setReadonly, id)
-      yield put(JobApiActions.setReadonlySucceeded({ id, }))
+      const updatedJob = yield call(API.setReadonly, id)
+      yield put(JobApiActions.updateJobSucceeded({ id, job: updatedJob, }))
     } catch (error) {
       yield put(JobActions.openErrorSnackbar(
         { message: `Failed to set readonly '${id}'`, error, }))
@@ -124,8 +124,8 @@ export function* watchUnsetReadonly() {
 
     try {
       validateId(id)
-      yield call(API.unsetReadonly, id)
-      yield put(JobApiActions.unsetReadonlySucceeded({ id, }))
+      const updatedJob = yield call(API.unsetReadonly, id)
+      yield put(JobApiActions.updateJobSucceeded({ id, job: updatedJob, }))
     } catch (error) {
       yield put(JobActions.openErrorSnackbar(
         { message: `Failed to unset readonly '${id}'`, error, }))
@@ -142,9 +142,9 @@ export function* watchStartJob() {
 
     try {
       validateId(id)
-      yield call(API.startJob, id)
+      const updatedJob = yield call(API.startJob, id)
       yield call(API.delay, JOB_TRANSITION_DELAY)
-      yield put(JobApiActions.startJobSucceeded({ id, }))
+      yield put(JobApiActions.updateJobSucceeded({ id, job: updatedJob, }))
     } catch (error) {
       yield put(JobActions.openErrorSnackbar(
         { message: `Failed to start job '${id}'`, error, }))
@@ -163,9 +163,9 @@ export function* watchStopJob() {
 
     try {
       validateId(id)
-      yield call(API.stopJob, id)
+      const updatedJob = yield call(API.stopJob, id)
       yield call(API.delay, JOB_TRANSITION_DELAY)
-      yield put(JobApiActions.stopJobSucceeded({ id, }))
+      yield put(JobApiActions.updateJobSucceeded({ id, job: updatedJob, }))
     } catch (error) {
       yield put(JobActions.openErrorSnackbar(
         { message: `Failed to stop job '${id}'`, error, }))
