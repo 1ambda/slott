@@ -12,7 +12,6 @@ browserSync.init({
   files: [ 'src/*.html', ],
 
   middleware: [
-    proxyMiddleware,
     historyApiFallback(),
   ],
 })

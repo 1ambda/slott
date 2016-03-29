@@ -2,6 +2,7 @@ import fetch from 'isomorphic-fetch'
 import { take, put, call, fork, select, } from 'redux-saga/effects'
 
 import * as Converter from './converter'
+import * as URL from '../constants/url'
 
 /**
  * common APIs
@@ -37,6 +38,7 @@ function getJSON(url) {
 
   return handleJsonResponse(url, method, fetch(url, {
     method,
+    credentials: 'include',
     headers: HTTP_HEADERS_JSON,
   }))
 }
@@ -46,6 +48,7 @@ function postJSON(url, body) {
 
   return handleJsonResponse(url, method, fetch(url, {
     method,
+    credentials: 'include',
     headers: HTTP_HEADERS_JSON,
     body: JSON.stringify(body),
   }))
@@ -56,6 +59,7 @@ function patchJSON(url, body) {
 
   return handleJsonResponse(url, method, fetch(url, {
     method,
+    credentials: 'include',
     headers: HTTP_HEADERS_JSON,
     body: JSON.stringify(body),
   }))
@@ -66,6 +70,7 @@ function putJSON(url, body) {
 
   return handleJsonResponse(url, method, fetch(url, {
     method,
+    credentials: 'include',
     headers: HTTP_HEADERS_JSON,
     body: JSON.stringify(body),
   }))
@@ -76,6 +81,7 @@ function deleteJSON(url) {
 
   return handleJsonResponse(url, method, fetch(url, {
     method,
+    credentials: 'include',
     headers: HTTP_HEADERS_JSON,
   }))
 }
@@ -93,7 +99,7 @@ export function delay(millis) {
  */
 
 export function* fetchJobs() {
-  const url = '/api/jobs'
+  const url = URL.buildJobUrl()
 
   return getJSON(url)
     .then(response => {
@@ -104,13 +110,22 @@ export function* fetchJobs() {
     })
 }
 
+export function* fetchJob(id) {
+  const url = URL.buildJobUrl(id)
+
+  return getJSON(url)
+    .then(response => {
+      return Converter.convertServerJobToClientJob(response)
+    })
+}
+
 export function* createJob(job) {
-  const url = '/api/jobs'
+  const url = URL.buildJobUrl()
   yield call(postJSON, url, Converter.removeClientProps(job)) /** return nothing */
 }
 
 export function* removeJob(id) {
-  const url = `/api/jobs/${id}`
+  const url = URL.buildJobUrl(id)
   yield call(deleteJSON, url) /** return nothing */
 }
 
@@ -139,7 +154,7 @@ export function* removeJob(id) {
  */
 
 export function* fetchJobConfig(id) {
-  const url = `/api/jobs/${id}/config`
+  const url = URL.buildJobConfigUrl(id)
 
   const serverJob = yield call(getJSON, url)
 
@@ -148,26 +163,25 @@ export function* fetchJobConfig(id) {
 }
 
 export function* updateJobConfig(id, property) {
-  const url = `/api/jobs/${id}/config`
+  const url = URL.buildJobConfigUrl(id)
 
-  const serverJob = yield call(patchJSON, url, Converter.removeStateProps(property))
-  const clientJob = Converter.convertServerJobToClientJob(serverJob)
+  yield call(patchJSON, url, Converter.removeStateProps(property))
 
-  return clientJob
+  /** since `patch` doesn't return job state, we need to fetch job */
+  return yield call(fetchJob, id)
 }
 
 export function* setReadonly(id) {
-  const updatedJob = yield call(updateJobConfig, id, Converter.createConfigToSetReadonly())
-  return updatedJob
+  return yield call(updateJobConfig, id, Converter.createConfigToSetReadonly())
 }
 
 export function* unsetReadonly(id) {
-  const updatedJob = yield call(updateJobConfig, id, Converter.createConfigToUnsetReadonly())
-  return updatedJob
+  return yield call(updateJobConfig, id, Converter.createConfigToUnsetReadonly())
 }
 
 export function* updateJobState(id, state) {
-  const url = `/api/jobs/${id}/state`
+  const url = URL.buildJobStateUrl(id)
+
   yield call (patchJSON, url, state)
 }
 

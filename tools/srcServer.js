@@ -6,8 +6,6 @@ import webpackDevMiddleware from 'webpack-dev-middleware'
 import webpackHotMiddleware from 'webpack-hot-middleware'
 import webpackConfigBuilder from '../webpack.config'
 
-import proxyMiddleware from './proxy'
-
 const webpackConfig = webpackConfigBuilder('development')
 const bundler = webpack(webpackConfig)
 
@@ -16,7 +14,6 @@ browserSync.init({
     baseDir: ['src',],
 
     middleware: [
-      proxyMiddleware,
       webpackDevMiddleware(bundler, {
         publicPath: webpackConfig.output.publicPath,
         stats: { colors: true, },

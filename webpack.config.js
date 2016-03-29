@@ -2,13 +2,17 @@ import webpack from 'webpack'
 import path from 'path'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
 
+import { CONTAINER_ADDRESS, } from './tools/url'
+
 const developmentEnvironment = 'development'
 const productionEnvironment = 'production'
 const testEnvironment = 'test'
 
 const getPlugins = function (env) {
+
   const GLOBALS = {
     'process.env.NODE_ENV': JSON.stringify(env),
+    'process.env.CONTAINER_ADDRESS': JSON.stringify(CONTAINER_ADDRESS),
     __DEV__: env === developmentEnvironment,
   }
 
