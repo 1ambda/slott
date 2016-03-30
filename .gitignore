@@ -1,6 +1,9 @@
 # resource
 resource/db.json
 
+# Bower
+lib/bower_components/
+
 # Logs
 logs
 *.log

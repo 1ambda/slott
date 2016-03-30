@@ -11,5 +11,7 @@ JSON Configured Stream-like Job Controller
 
 ```
 $ npm test
-$ npm start
+$ npm start              # run with mock-server
 ```
+
+See, [package.json](https://github.com/1ambda/slott/blob/master/package.json)

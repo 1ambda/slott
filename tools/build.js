@@ -3,19 +3,21 @@ import webpackConfigBuilder from '../webpack.config'
 import colors from 'colors'
 import { argv as args, } from 'yargs'
 
-process.env.NODE_ENV = 'production'
+import { ENV_PROD, } from './env'
 
-const webpackConfig = webpackConfigBuilder(process.env.NODE_ENV)
+const webpackConfig = webpackConfigBuilder(ENV_PROD)
 
 webpack(webpackConfig).run((err, stats) => {
   const inSilentMode = args.s
 
   if (!inSilentMode) {
+    /* eslint-disable no-console */
     console.log('Generating minified bundle for production use via Webpack...'.bold.blue)
+    /* eslint-enable no-console */
   }
 
   if (err) {
-    console.log(err.bold.red)
+    console.log(err.bold.red) // eslint-disable-line no-console
     return 1
   }
 
@@ -26,15 +28,17 @@ webpack(webpackConfig).run((err, stats) => {
   }
 
   if (jsonStats.hasWarnings && !inSilentMode) {
-    console.log('Webpack generated the following warnings: '.bold.yellow)
+    console.log('Webpack generated the following warnings: '.bold.yellow) // eslint-disable-line no-console
     jsonStats.warnings.map(warning => console.log(warning.yellow))
   }
 
   if (!inSilentMode) {
-    console.log(`Webpack stats: ${stats}`)
+    console.log(`Webpack stats: ${stats}`) // eslint-disable-line no-console
   }
 
+  /* eslint-disable no-console */
   console.log('Your app has been compiled in production mode and written to /dist. It\'s ready to roll!'.green.bold)
+  /* eslint-enable no-console */
 
   return 0
 })

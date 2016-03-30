@@ -11,7 +11,7 @@ const bundler = webpack(webpackConfig)
 
 browserSync.init({
   server: {
-    baseDir: ['src',],
+    baseDir: ['src', 'lib', ],
 
     middleware: [
       webpackDevMiddleware(bundler, {

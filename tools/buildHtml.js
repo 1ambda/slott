@@ -1,30 +1,24 @@
-import fs from 'fs'
+import fs from 'fs-extra'
 import colors from 'colors'
 import cheerio from 'cheerio'
 
-const useTrackJs = true
-const trackJsToken = ''
+//import mainBowerFiles from 'main-bower-files'
+//const files = mainBowerFiles()
+//console.log(files)
 
-fs.readFile('src/index.html', 'utf8', (err, markup) => {
-  if (err) return console.log(err)
+const ENCODING = 'utf8'
 
-  const $ = cheerio.load(markup)
+/** copy bower_component dir to dist dir */
+const bowerDir = JSON.parse(fs.readFileSync('./.bowerrc', ENCODING)).directory
+const bowerDirName = bowerDir.substring(bowerDir.lastIndexOf("/") + 1, bowerDir.length);
+console.log(`copying ${bowerDir} to ${bowerDirName}`.green) // eslint-disable-line no-console
+fs.copySync(bowerDir, `dist/${bowerDirName}`)
 
-  $('head').prepend('<link rel="stylesheet" href="styles.css">')
+/** write index.html */
+const html = fs.readFileSync('src/index.html', ENCODING)
+const $ = cheerio.load(html)
+$('head').prepend('<link rel="stylesheet" href="styles.css">')
 
-  if (useTrackJs) {
-    if (trackJsToken) {
-      const trackJsCode = `<!-- BEGIN TRACKJS Note: This should be the first <script> on the page per https://my.trackjs.com/install --><script>window._trackJs = { token: '${trackJsToken}' }</script><script src=https://d2zah9y47r7bi2.cloudfront.net/releases/current/tracker.js></script><!-- END TRACKJS -->`
-      $('head').prepend(trackJsCode)
-    } else {
-      console.log('To track JavaScript errors, sign up for a free trial at TrackJS.com and enter your token in /tools/build.html on line 10.'.yellow)
-    }
-  }
+fs.writeFileSync('dist/index.html', $.html(), ENCODING)
 
-  fs.writeFile('dist/index.html', $.html(), 'utf8', function (err) {
-    if (err) return console.log(err)
-  })
-
-  console.log('index.html written to /dist'.green)
-})
-
+console.log('index.html written to /dist'.green) // eslint-disable-line no-console
