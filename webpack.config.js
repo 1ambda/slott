@@ -3,17 +3,14 @@ import path from 'path'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
 
 import { CONTAINER_ADDRESS, } from './tools/url'
-
-const developmentEnvironment = 'development'
-const productionEnvironment = 'production'
-const testEnvironment = 'test'
+import { ENV_DEV, ENV_PROD, ENV_TEST, } from './tools/env'
 
 const getPlugins = function (env) {
 
   const GLOBALS = {
     'process.env.NODE_ENV': JSON.stringify(env),
     'process.env.CONTAINER_ADDRESS': JSON.stringify(CONTAINER_ADDRESS),
-    __DEV__: env === developmentEnvironment,
+    __DEV__: env === ENV_DEV,
   }
 
   const plugins = [
@@ -22,13 +19,13 @@ const getPlugins = function (env) {
   ]
 
   switch (env) {
-    case productionEnvironment:
+    case ENV_PROD:
       plugins.push(new ExtractTextPlugin('styles.css'))
       plugins.push(new webpack.optimize.DedupePlugin())
       plugins.push(new webpack.optimize.UglifyJsPlugin())
       break
 
-    case developmentEnvironment:
+    case ENV_DEV:
       plugins.push(new webpack.HotModuleReplacementPlugin())
       plugins.push(new webpack.NoErrorsPlugin())
       break
@@ -40,7 +37,7 @@ const getPlugins = function (env) {
 const getEntry = function (env) {
   const entry = []
 
-  if (env === developmentEnvironment ) entry.push('webpack-hot-middleware/client')
+  if (env === ENV_DEV) entry.push('webpack-hot-middleware/client')
 
   entry.push('./src/index')
 
@@ -104,7 +101,7 @@ const getLoaders = function (env) {
     },
   ]
 
-  if (env === productionEnvironment ) {
+  if (env === ENV_PROD) {
     loaders.push({
         test: /(\.css)$/,
         include: path.join(__dirname, 'src'),
@@ -126,9 +123,9 @@ const getLoaders = function (env) {
 function getConfig(env) {
   return {
     debug: true,
-    devtool: env === productionEnvironment  ? 'source-map' : 'cheap-module-eval-source-map', // more info:https://webpack.github.io/docs/build-performance.html#sourcemaps and https://webpack.github.io/docs/configuration.html#devtool
+    devtool: env === ENV_PROD? 'source-map' : 'cheap-module-eval-source-map', // more info:https://webpack.github.io/docs/build-performance.html#sourcemaps and https://webpack.github.io/docs/configuration.html#devtool
     entry: getEntry(env),
-    target: env === testEnvironment ? 'node' : 'web',
+    target: env === ENV_TEST? 'node' : 'web',
     output: {
       path: __dirname + '/dist',
       publicPath: '',

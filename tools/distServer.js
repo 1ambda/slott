@@ -1,6 +1,5 @@
 import browserSync from 'browser-sync'
 import historyApiFallback from 'connect-history-api-fallback'
-import proxyMiddleware from './proxy'
 
 browserSync.init({
   port: 3000,

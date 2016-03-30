@@ -7,7 +7,7 @@
     "start:mock-server": "babel-node tools/resource.js && json-server resource/db.json --routes resource/routes.json --port 3002",
     "start:client": "npm-run-all --parallel lint:tools test:watch open:src",
     "start:client-cors": "cross-env CONTAINER_ADDRESS=\"http://localhost:8080\" npm-run-all --parallel lint:tools test:watch open:src",
-    "start": "npm-run-all --parallel start:mock-server start:client",
+    "start": "cross-env NODE_ENV=development npm-run-all --parallel start:mock-server start:client",
     "open:src": "babel-node tools/srcServer.js",
     "open:dist": "babel-node tools/distServer.js",
     "lint:tools": "eslint webpack tools",
