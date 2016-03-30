@@ -5,6 +5,7 @@ import Divider from 'material-ui/lib/divider'
 import Checkbox from 'material-ui/lib/checkbox'
 import Toggle from 'material-ui/lib/toggle'
 import FontIcon from 'material-ui/lib/font-icon'
+import Delete from 'material-ui/lib/svg-icons/action/delete'
 
 import * as style from './style'
 import { JobItemColors, } from '../../../constants/theme'
@@ -46,13 +47,11 @@ export default class JobItem extends React.Component {
 
     /**
      * since updating inline-style does't update DOM element,
-     * we have to create <FontIcon /> every time to update remove icon color
+     * we have to create <Delete /> every time to update remove icon color
      */
     const removeIcon = (readonly) ?
-      (<FontIcon style={{color: JobItemColors.inactiveRemoveIcon, }}
-                 className="material-icons">delete</FontIcon>) :
-      (<FontIcon style={{color: JobItemColors.activeRemoveIcon, }}
-                 className="material-icons">delete</FontIcon>)
+      (<Delete color={JobItemColors.inactiveRemoveIcon} />) :
+      (<Delete color={JobItemColors.activeRemoveIcon} />)
 
     const commandColor = JobItem.getJobCommandColor(readonly)
 

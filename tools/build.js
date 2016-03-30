@@ -30,8 +30,10 @@ webpack(webpackConfig).run((err, stats) => {
   }
 
   if (jsonStats.hasWarnings && !inSilentMode) {
-    console.log('Webpack generated the following warnings: '.bold.yellow) // eslint-disable-line no-console
+    /* eslint-disable no-console */
+    console.log('Webpack generated the following warnings: '.bold.yellow)
     jsonStats.warnings.map(warning => console.log(warning.yellow))
+    /* eslint-enable no-console */
   }
 
   if (!inSilentMode) {
