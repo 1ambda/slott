@@ -1,7 +1,8 @@
 import { expect, } from 'chai'
-import { fork, take, } from 'redux-saga/effects'
+import { fork, take, call, put, } from 'redux-saga/effects'
 import { takeEvery, } from 'redux-saga'
 
+import * as JobActions from '../../actions/JobActions'
 import * as JobActionTypes from '../../constants/JobActionTypes'
 import * as JobApiActionTypes from '../../constants/JobApiActionTypes'
 
@@ -77,6 +78,33 @@ describe('sagas', () => {
     })
   })
 
+  describe('initialize', () => {
+    it(`should callFetchJobs`, () => {
+      const gen = Sagas.initialize()
+
+      expect(gen.next().value).to.deep.equal(
+        call(Handler.callFetchJobs)
+      )
+
+      expect(gen.next().done).to.deep.equal(true)
+    })
+
+    it(`should callFetchJobs
+        - if exception is occurred,
+          put(JobActions.openErrorSnackbar with { message, error }`, () => {
+      const gen = Sagas.initialize()
+
+      expect(gen.next().value).to.deep.equal(
+        call(Handler.callFetchJobs)
+      )
+
+      const error = new Error('error')
+      expect(gen.throw(error).value).to.deep.equal(
+        put(JobActions.openErrorSnackbar({ message: 'Failed to fetch jobs', error, }))
+      )
+    })
+  })
+
   describe('RootSaga', () => {
     it(`should
         - fork callFetchJobs to initialize
@@ -87,7 +115,7 @@ describe('sagas', () => {
 
       /** initialize */
       expect(gen.next().value).to.deep.equal( [
-          fork(Handler.callFetchJobs),
+          fork(Sagas.initialize),
           fork(Sagas.watchOpenEditorDialogToEdit),
           fork(Sagas.watchUpdateJob),
           fork(Sagas.watchRemoveJob),

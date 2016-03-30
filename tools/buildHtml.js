@@ -10,7 +10,7 @@ const ENCODING = 'utf8'
 
 /** copy bower_component dir to dist dir */
 const bowerDir = JSON.parse(fs.readFileSync('./.bowerrc', ENCODING)).directory
-const bowerDirName = bowerDir.substring(bowerDir.lastIndexOf("/") + 1, bowerDir.length);
+const bowerDirName = bowerDir.substring(bowerDir.lastIndexOf('/') + 1, bowerDir.length)
 console.log(`copying ${bowerDir} to ${bowerDirName}`.green) // eslint-disable-line no-console
 fs.copySync(bowerDir, `dist/${bowerDirName}`)
 

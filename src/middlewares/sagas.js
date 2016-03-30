@@ -1,6 +1,7 @@
-import { fork, } from 'redux-saga/effects'
+import { fork, call, put, } from 'redux-saga/effects'
 import { takeEvery, } from 'redux-saga'
 
+import * as JobActions from '../actions/JobActions'
 import * as JobActionTypes from '../constants/JobActionTypes'
 import * as JobApiActionTypes from '../constants/JobApiActionTypes'
 import * as Handler from './handler'
@@ -8,6 +9,14 @@ import * as Handler from './handler'
 /**
  * watcher functions
  */
+
+export function* initialize() {
+  try {
+    yield call(Handler.callFetchJobs)
+  } catch (error) {
+    yield put(JobActions.openErrorSnackbar({ message: 'Failed to fetch jobs', error, }))
+  }
+}
 
 export function* watchOpenEditorDialogToEdit() {
   yield* takeEvery(
@@ -46,7 +55,7 @@ export function* watchStopJob() {
 
 export default function* root() {
   yield [
-    fork(Handler.callFetchJobs),
+    fork(initialize),
     fork(watchOpenEditorDialogToEdit),
     fork(watchUpdateJob),
     fork(watchRemoveJob),

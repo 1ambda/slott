@@ -24,7 +24,9 @@ webpack(webpackConfig).run((err, stats) => {
   const jsonStats = stats.toJson()
 
   if (jsonStats.hasErrors) {
+    /* eslint-disable no-console */
     return jsonStats.errors.map(error => console.log(error.red))
+    /* eslint-enable no-console */
   }
 
   if (jsonStats.hasWarnings && !inSilentMode) {
