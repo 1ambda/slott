@@ -31,7 +31,7 @@ export function getDefaultEditorMode (readonly, dialogMode) {
 
 export function getAvailableEditorModes (readonly, dialogMode) {
   return (EDITOR_DIALOG_MODE.CREATE === dialogMode) ? [JSON_EDITOR_MODES.CODE, JSON_EDITOR_MODES.TREE,] :
-    (readonly) ? [JSON_EDITOR_MODES.VIEW,] :
+    (readonly) ? [JSON_EDITOR_MODES.VIEW, JSON_EDITOR_MODES.CODE, ] :
       [JSON_EDITOR_MODES.TREE, JSON_EDITOR_MODES.CODE,]
 }
 

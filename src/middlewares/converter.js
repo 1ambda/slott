@@ -35,11 +35,10 @@ export function removeServerSpecificProps(props) {
 
 
 /**
- * jobs returned from server contains
+ * jobs returned from server contain
  *
  * - `active`, indicates job is running
  * - `enabled`, indicates job is enabled (= not readonly)
- * - `_id`, indicates mongodb id
  */
 
 export function interpretServerJobState(serverJob) {
