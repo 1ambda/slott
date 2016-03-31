@@ -11,7 +11,7 @@ import ConfirmDialog, { CONFIRM_DIALOG_MODE, } from '../../components/Common/Con
 import ClosableSnackbar, { CLOSABLE_SNACKBAR_MODE, } from '../../components/Common/ClosableSnackbar'
 
 
-import { JOB_PROPERTY, } from '../../reducers/JobReducer/job'
+import { JOB_PROPERTY, } from '../../reducers/JobReducer/JobItemState'
 import { JOB_STATE_PROPERTY, } from '../../reducers/JobReducer'
 
 import * as JobActions from '../../actions/JobActions'

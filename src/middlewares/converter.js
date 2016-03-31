@@ -1,4 +1,6 @@
-import { INITIAL_JOB_STATE, JOB_PROPERTY, JOB_STATE, } from '../reducers/JobReducer/job'
+import {
+  INITIAL_JOB_STATE, JOB_PROPERTY, JOB_STATE,
+} from '../reducers/JobReducer/JobItemState'
 
 export const SERVER_JOB_PROPERTY = {
   active: 'active',

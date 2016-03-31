@@ -11,7 +11,7 @@ import * as style from './style'
 
 import JobSortingStrategies from '../../../constants/JobSortStrategies'
 import * as JobActions from '../../../actions/JobActions'
-import { JOB_PROPERTY, isRunning, } from '../../../reducers/JobReducer/job'
+import { JOB_PROPERTY, isRunning, } from '../../../reducers/JobReducer/JobItemState'
 
 export default class JobHeader extends React.Component {
   static propTypes = {

@@ -11,7 +11,9 @@ import * as style from './style'
 import { JobItemColors, } from '../../../constants/theme'
 import * as JobActions from '../../../actions/JobActions'
 
-import { JOB_PROPERTY, isRunning, isStopped, isWaiting, isSwitching, } from '../../../reducers/JobReducer/job'
+import {
+  JOB_PROPERTY, isRunning, isStopped, isWaiting, isSwitching,
+} from '../../../reducers/JobReducer/JobItemState'
 
 /** extract getInactiveState functions for testability */
 export function isReadonly(job) {

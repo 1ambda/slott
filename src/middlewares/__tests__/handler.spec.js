@@ -6,7 +6,7 @@ import * as JobActionTypes from '../../constants/JobActionTypes'
 import * as JobApiActions from '../../actions/JobApiActions'
 import * as JobApiActionTypes from '../../constants/JobApiActionTypes'
 import * as JobSortStrategies from '../../constants/JobSortStrategies'
-import { JOB_PROPERTY, } from '../../reducers/JobReducer/job'
+import { JOB_PROPERTY, } from '../../reducers/JobReducer/JobItemState'
 import { SERVER_JOB_PROPERTY, } from '../../middlewares/converter'
 import * as Selectors from '../../reducers/JobReducer/selector'
 

@@ -7,7 +7,7 @@ import * as JobApiActionTypes from '../constants/JobApiActionTypes'
 
 import {
   sortJob, JOB_PROPERTY, validateId, validateJobId, checkDuplicatedJob,
-} from '../reducers/JobReducer/job'
+} from '../reducers/JobReducer/JobItemState'
 import * as JobSortStrategies from '../constants/JobSortStrategies'
 import * as API from './api'
 import * as Selectors from '../reducers/JobReducer/selector'
