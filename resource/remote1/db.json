@@ -1,0 +1,56 @@
+{
+  "jobs": [
+    {
+      "id": "akka-cluster1-01",
+      "tags": [
+        "server1"
+      ],
+      "active": true,
+      "enabled": true,
+      "kafka": {
+        "topic": "akka-1",
+        "consumer-group": "cluster-consumer-1"
+      },
+      "hdfs": "/data/akka/cluster1"
+    },
+    {
+      "id": "akka-cluster1-02",
+      "tags": [
+        "server1"
+      ],
+      "active": true,
+      "enabled": true,
+      "kafka": {
+        "topic": "akka-1",
+        "consumer-group": "cluster-consumer-1"
+      },
+      "hdfs": "/data/akka/cluster1"
+    },
+    {
+      "id": "akka-cluster1-03",
+      "tags": [
+        "server1"
+      ],
+      "active": false,
+      "enabled": true,
+      "kafka": {
+        "topic": "akka-1",
+        "consumer-group": "cluster-consumer-1"
+      },
+      "hdfs": "/data/akka/cluster1"
+    },
+    {
+      "id": "akka-cluster2-01",
+      "tags": [
+        "server1"
+      ],
+      "active": false,
+      "enabled": false,
+      "kafka": {
+        "topic": "akka-2",
+        "consumer-group": "cluster-consumer-1"
+      },
+      "hdfs": "/data/akka/cluster2"
+    }
+  ]
+}

@@ -2,10 +2,10 @@ import fetch from 'isomorphic-fetch'
 import { take, put, call, fork, select, } from 'redux-saga/effects'
 
 import * as Converter from './converter'
-import * as URL from '../constants/url'
+import URL from '../constants/url'
 
 /**
- * common APIs
+ * low-level APIs
  *
  * doesn't handle exceptions
  */
@@ -31,6 +31,17 @@ function handleJsonResponse(url, method, promise) {
         throw new Error(`${method} ${url}, status: ${response.status}`)
       else return response.json()
     })
+}
+
+function getJSONs(urls) {
+  const promises = urls.map(url => {
+    return getJSON(url)
+      .catch(error => {
+        console.error(`Failed to fetch ${url}. ${error.message}`)
+        return [] /** returning an empty array */
+      })
+  })
+  return Promise.all(promises)
 }
 
 function getJSON(url) {
@@ -98,25 +109,48 @@ export function delay(millis) {
  * exception will be caught in watcher functions
  */
 
+export function* fetchAllContainerJobs(containerNames) {
+  const urls = containerNames.map(containerName => {
+    return URL.getContainerJobUrl(containerName)
+  })
+
+  const allJobsFromMultipleContainers = yield call(getJSONs, urls)
+
+  /** returned result format is, [[], [], ...] */
+  const flattened = allJobsFromMultipleContainers.reduce((acc, jobs) => {
+    return acc.concat(jobs)
+  }, [])
+
+  return flattened.map(Converter.convertServerJobToClientJob)
+}
+
+export function* fetchContainerJobs(containerName) {
+  const url = URL.getContainerJobUrl(containerName)
+
+  const containerServerJobs = yield call(getJSON, url)
+
+  if (!Array.isArray(containerServerJobs))
+    throw new Error(`GET ${url} didn't return an array, got ${containerServerJobs}`)
+
+  return containerServerJobs.map(Converter.convertServerJobToClientJob)
+}
+
 export function* fetchJobs() {
   const url = URL.buildJobUrl()
 
-  return getJSON(url)
-    .then(response => {
-      if (!Array.isArray(response))
-        throw new Error(`GET ${url} didn't return an array, got ${response}`)
+  const serverJobs = yield call(getJSON, url)
 
-      return response.map(Converter.convertServerJobToClientJob)
-    })
+  if (!Array.isArray(serverJobs))
+    throw new Error(`GET ${url} didn't return an array, got ${serverJobs}`)
+
+  return serverJobs.map(Converter.convertServerJobToClientJob)
 }
 
 export function* fetchJob(id) {
   const url = URL.buildJobUrl(id)
 
-  return getJSON(url)
-    .then(response => {
-      return Converter.convertServerJobToClientJob(response)
-    })
+  const serverJob = yield call(getJSON, url)
+  return Converter.convertServerJobToClientJob(serverJob)
 }
 
 export function* createJob(job) {

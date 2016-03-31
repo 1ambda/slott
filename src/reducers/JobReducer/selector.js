@@ -6,3 +6,7 @@ export function getJobItems(state) {
   return state.job[JOB_STATE_PROPERTY.JOB_ITEMS]
 }
 
+export function getSelectedContainer(state) {
+  return state.job[JOB_STATE_PROPERTY.CONTAINER_SELECTOR].selectedContainer
+}
+

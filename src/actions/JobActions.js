@@ -16,10 +16,11 @@ export const updateJob = createAction(JobActionTypes.UPDATE)
 export const stopAllJobs = createAction(JobActionTypes.STOP_ALL)
 export const startAllJobs = createAction(JobActionTypes.START_ALL)
 
-/** sorter, filter, paginator */
+/** sorter, containerSelector, filter, paginator */
 export const sortJob = createAction(JobActionTypes.SORT)
 export const filterJob = createAction(JobActionTypes.FILTER)
 export const changePageOffset = createAction(JobActionTypes.CHANGE_PAGE_OFFSET)
+export const changeContainer = createAction(JobActionTypes.CHANGE_CONTAINER)
 
 /** for dialogs, snackbar */
 export const openEditorDialogToEdit= createAction(JobActionTypes.OPEN_EDITOR_DIALOG_TO_EDIT)

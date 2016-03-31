@@ -13,10 +13,11 @@ export const UPDATE = 'JOB_UPDATE'
 export const START_SWITCHING = 'JOB_START_SWITCHING'
 export const END_SWITCHING = 'JOB_END_SWITCHING'
 
-/** for sorter, filter, paginator */
+/** for sorter, containerSelector, filter, paginator */
 export const SORT = 'JOB_SORT'
 export const FILTER = 'JOB_FILTER'
 export const CHANGE_PAGE_OFFSET = 'JOB_CHANGE_PAGE_OFFSET'
+export const CHANGE_CONTAINER = 'JOB_CHANGE_CONTAINER'
 
 /** for dialogs, snackbar */
 export const OPEN_EDITOR_DIALOG_TO_EDIT = 'JOB_OPEN_EDITOR_DIALOG_TO_EDIT'

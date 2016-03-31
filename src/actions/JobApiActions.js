@@ -11,3 +11,4 @@ export const removeJobSucceeded = createAction(JobApiActionTypes.REMOVE.SUCCEEDE
 export const createJobSucceeded = createAction(JobApiActionTypes.CREATE.SUCCEEDED)
 export const fetchJobConfigSucceeded = createAction(JobApiActionTypes.FETCH_CONFIG.SUCCEEDED)
 export const updateJobSucceeded = createAction(JobApiActionTypes.UPDATE.SUCCEEDED)
+export const fetchContainerJobsSucceeded = createAction(JobApiActionTypes.FETCH_CONTAINER_JOBS.SUCCEEDED)

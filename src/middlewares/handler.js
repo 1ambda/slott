@@ -17,9 +17,17 @@ export const JOB_TRANSITION_DELAY = 1000
 /** utils */
 
 export function* callFetchJobs() { /** fetch all jobs, used to initialize  */
-const jobs = yield call(API.fetchJobs)
+  const jobs = yield call(API.fetchJobs)
 
   yield put(JobApiActions.fetchJobsSucceeded({ jobs, }))
+  yield put(JobActions.sortJob({ strategy: JobSortStrategies.INITIAL, }))
+}
+
+export function* callFetchContainerJobs() {
+  const container = yield select(Selectors.getSelectedContainer)
+
+  const jobs = yield call(API.fetchContainerJobs, container)
+  yield put(JobApiActions.fetchContainerJobsSucceeded({ container, jobs, }))
   yield put(JobActions.sortJob({ strategy: JobSortStrategies.INITIAL, }))
 }
 
@@ -153,6 +161,22 @@ export function* handleStopJob(action) {
   }
 
   yield put(JobActions.endSwitching(payload))
+}
+
+export function* handleChangeContainerSelector(action) {
+  const { payload, } = action
+  let container = null
+
+  try {
+    container = payload.container
+
+    const jobs = yield call(API.fetchContainerJobs, container)
+    yield put(JobApiActions.fetchContainerJobsSucceeded({ container, jobs, }))
+    yield put(JobActions.sortJob({ strategy: JobSortStrategies.INITIAL, }))
+  } catch (error) {
+    yield put(JobActions.openErrorSnackbar(
+      { message: `Failed to fetch job in container '${container}'`, error, }))
+  }
 }
 
 

@@ -10,7 +10,6 @@ import EditorDialog, { EDITOR_DIALOG_MODE, } from '../../components/Common/Edito
 import ConfirmDialog, { CONFIRM_DIALOG_MODE, } from '../../components/Common/ConfirmDialog'
 import ClosableSnackbar, { CLOSABLE_SNACKBAR_MODE, } from '../../components/Common/ClosableSnackbar'
 
-
 import { JOB_PROPERTY, } from '../../reducers/JobReducer/JobItemState'
 import { JOB_STATE_PROPERTY, } from '../../reducers/JobReducer'
 
@@ -27,6 +26,7 @@ class JobPage extends React.Component {
     editorDialog: PropTypes.object.isRequired,
     confirmDialog: PropTypes.object.isRequired,
     snackbar: PropTypes.object.isRequired,
+    containerSelector: PropTypes.object.isRequired,
   }
 
   handlePageOffsetChange(newPageOffset) {
@@ -36,7 +36,9 @@ class JobPage extends React.Component {
   }
 
   render() {
-    const { actions, jobs, paginator, filterKeyword, sortingStrategy,
+    const {
+      actions, jobs, paginator, filterKeyword,
+      sortingStrategy, containerSelector,
       editorDialog, confirmDialog, snackbar, } = this.props
 
     const { itemCountPerPage, currentPageOffset, currentItemOffset, } = paginator
@@ -62,7 +64,10 @@ class JobPage extends React.Component {
 
     return (
       <div>
-        <JobHeader sortingStrategy={sortingStrategy} jobs={jobs} actions={actions} />
+        <JobHeader sortingStrategy={sortingStrategy}
+                   containerSelector={containerSelector}
+                   jobs={jobs}
+                   actions={actions} />
         <JobList filterKeyword={filterKeyword} jobs={sliced} actions={actions} />
         <div className="center" style={style.paginator}>
           <Paginator itemCountPerPage={itemCountPerPage}
@@ -88,6 +93,7 @@ function mapStateToProps(state) {
     editorDialog: state.job[JOB_STATE_PROPERTY.EDITOR_DIALOG],
     confirmDialog: state.job[JOB_STATE_PROPERTY.CONFIRM_DIALOG],
     snackbar: state.job[JOB_STATE_PROPERTY.SNACKBAR],
+    containerSelector: state.job[JOB_STATE_PROPERTY.CONTAINER_SELECTOR],
   }
 }
 

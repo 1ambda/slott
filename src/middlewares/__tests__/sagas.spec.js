@@ -1,10 +1,13 @@
 import { expect, } from 'chai'
-import { fork, take, call, put, } from 'redux-saga/effects'
+import { fork, take, call, put, select, } from 'redux-saga/effects'
 import { takeEvery, } from 'redux-saga'
 
 import * as JobActions from '../../actions/JobActions'
+import * as JobApiActions from '../../actions/JobApiActions'
 import * as JobActionTypes from '../../constants/JobActionTypes'
 import * as JobApiActionTypes from '../../constants/JobApiActionTypes'
+import * as Selector from '../../reducers/JobReducer/selector'
+import * as JobSortStrategies from '../../constants/JobSortStrategies'
 
 import * as API from '../api'
 import * as Handler from '../handler'
@@ -81,9 +84,25 @@ describe('sagas', () => {
   describe('initialize', () => {
     it(`should callFetchJobs`, () => {
       const gen = Sagas.initialize()
+      //const container = 'container01'
+      //const jobs = []
+      //
+      //expect(gen.next().value).to.deep.equal(
+      //  select(Selector.getSelectedContainer)
+      //)
+      //
+      //
+      //expect(gen.next(jobs).value).to.deep.equal(
+      //  put(JobApiActions.fetchContainerJobsSucceeded({ container, jobs}))
+      //)
+      //
+      //expect(gen.next(jobs).value).to.deep.equal(
+      //  put(JobActions.sortJob({ strategy: JobSortStrategies.INITIAL, }))
+      //)
+
 
       expect(gen.next().value).to.deep.equal(
-        call(Handler.callFetchJobs)
+        call(Handler.callFetchContainerJobs)
       )
 
       expect(gen.next().done).to.deep.equal(true)
@@ -95,7 +114,7 @@ describe('sagas', () => {
       const gen = Sagas.initialize()
 
       expect(gen.next().value).to.deep.equal(
-        call(Handler.callFetchJobs)
+        call(Handler.callFetchContainerJobs)
       )
 
       const error = new Error('error')
@@ -124,6 +143,7 @@ describe('sagas', () => {
           fork(Sagas.watchUnsetReadonly),
           fork(Sagas.watchStartJob),
           fork(Sagas.watchStopJob),
+          fork(Sagas.watchChangeContainer),
         ]
       )
     })

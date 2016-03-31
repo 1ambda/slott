@@ -181,7 +181,7 @@ export const handler = handleActions({
   [JobActionTypes.SORT]: sortJob,
 
   /** api related */
-  [JobApiActionTypes.FETCH_JOBS.SUCCEEDED]: updateAllJobs,
+  [JobApiActionTypes.FETCH_CONTAINER_JOBS.SUCCEEDED]: updateAllJobs,
   [JobApiActionTypes.UPDATE.SUCCEEDED]: updateJob,
 
   // TODO

@@ -12,7 +12,7 @@ import * as Handler from './handler'
 
 export function* initialize() {
   try {
-    yield call(Handler.callFetchJobs)
+    yield call(Handler.callFetchContainerJobs)
   } catch (error) {
     yield put(JobActions.openErrorSnackbar({ message: 'Failed to fetch jobs', error, }))
   }
@@ -52,6 +52,10 @@ export function* watchStopJob() {
   yield* takeEvery(JobActionTypes.STOP, Handler.handleStopJob)
 }
 
+export function* watchChangeContainer() {
+  yield* takeEvery(JobActionTypes.CHANGE_CONTAINER, Handler.handleChangeContainerSelector)
+}
+
 
 export default function* root() {
   yield [
@@ -64,5 +68,6 @@ export default function* root() {
     fork(watchUnsetReadonly),
     fork(watchStartJob),
     fork(watchStopJob),
+    fork(watchChangeContainer),
   ]
 }

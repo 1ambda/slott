@@ -22,10 +22,11 @@ describe('JobActions', () => {
     { name: 'startAllJobs', type: JobActionTypes.START_ALL, },
     { name: 'stopAllJobs', type: JobActionTypes.STOP_ALL, },
 
-    /** sorter, filter, paginator */
+    /** sorter, containerSelector, filter, paginator */
     { name: 'sortJob', type: JobActionTypes.SORT, },
     { name: 'filterJob', type: JobActionTypes.FILTER, },
     { name: 'changePageOffset', type: JobActionTypes.CHANGE_PAGE_OFFSET, },
+    { name: 'changeContainer', type: JobActionTypes.CHANGE_CONTAINER, },
 
     /** dialog, snackbar */
     { name: 'openEditorDialogToEdit', type: JobActionTypes.OPEN_EDITOR_DIALOG_TO_EDIT, },

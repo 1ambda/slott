@@ -11,6 +11,7 @@ import * as SorterState from './SorterState'
 import * as EditorDialogState from './EditorDialogState'
 import * as ConfirmDialogState from './ConfirmDialogState'
 import * as ClosableSnackbarState from './ClosableSnackbarState'
+import * as JobContainerState from './JobContainerState'
 
 export const JOB_STATE_PROPERTY = {
   JOB_ITEMS: 'items',
@@ -20,9 +21,11 @@ export const JOB_STATE_PROPERTY = {
   CONFIRM_DIALOG: 'confirmDialog',
   SORTER: 'sortingStrategy',
   SNACKBAR: 'snackbar',
+  CONTAINER_SELECTOR: 'containerSelector',
 }
 
 export default combineReducers({
+  [JOB_STATE_PROPERTY.CONTAINER_SELECTOR]: JobContainerState.handler,
   [JOB_STATE_PROPERTY.JOB_ITEMS]: JobItemState.handler,
   [JOB_STATE_PROPERTY.PAGINATOR]: PaginatorState.handler,
   [JOB_STATE_PROPERTY.FILTER]: FilterState.handler,

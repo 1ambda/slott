@@ -10,12 +10,15 @@ import Selector from '../../Common/Selector'
 import * as style from './style'
 
 import JobSortingStrategies from '../../../constants/JobSortStrategies'
+import { JobContainerSelectorModes, } from '../../../reducers/JobReducer/JobContainerState'
 import * as JobActions from '../../../actions/JobActions'
 import { JOB_PROPERTY, isRunning, } from '../../../reducers/JobReducer/JobItemState'
+import * as URL from '../../../constants/url'
 
 export default class JobHeader extends React.Component {
   static propTypes = {
     sortingStrategy: PropTypes.string.isRequired,
+    containerSelector: PropTypes.object.isRequired,
     jobs: PropTypes.array.isRequired,
     actions: PropTypes.object.isRequired,
   }
@@ -79,14 +82,14 @@ export default class JobHeader extends React.Component {
     const { actions, } = this.props
     this.setState({ open: false, })
 
-    actions.startAllJobs()
+    actions.startAllJobs() // TODO
   }
 
   handleStopAllJobs() {
     const { actions, } = this.props
     this.setState({ open: false, })
 
-    actions.stopAllJobs()
+    actions.stopAllJobs() // TODO
   }
 
   handleCreateJob() {
@@ -109,8 +112,15 @@ export default class JobHeader extends React.Component {
     actions.sortJob(payload)
   }
 
+  handleContainerSelectorChange(container) {
+    const payload = { container, }
+    const { actions, } = this.props
+
+     actions.changeContainer(payload)
+  }
+
   render() {
-    const { sortingStrategy, jobs, } = this.props
+    const { sortingStrategy, containerSelector, jobs, } = this.props
     const { open, anchorEl, } = this.state
 
 
@@ -152,6 +162,13 @@ export default class JobHeader extends React.Component {
           <Filter handler={this.handleFilterChange.bind(this)}
                   floatingLabel="Insert Filter"
                   style={style.filterInput} />
+          <Selector handler={this.handleContainerSelectorChange.bind(this)}
+                    style={style.containerSelector}
+                    labelStyle={style.containerSelectorLabel}
+                    floatingLabel="Container"
+                    floatingLabelStyle={style.selectorFloatingLabel}
+                    strategies={containerSelector.availableContainers}
+                    currentStrategy={containerSelector.selectedContainer} />
           <Selector handler={this.handleSorterChange.bind(this)}
                   style={style.selector}
                   labelStyle={style.selectorLabel}

@@ -37,16 +37,24 @@ export const selector = {
   marginRight: 15,
 }
 
+export const selectorLabel = {
+  fontWeight: 300,
+  fontSize: 15,
+}
+
+export const containerSelector = Object.assign({}, selector, {
+  width: 150,
+})
+
+export const containerSelectorLabel = Object.assign({}, selectorLabel, {
+  fontSize: 13,
+})
+
 export const dropdown = {
   float: 'right',
   marginTop: 20,
   paddingTop: 30,
   width: 130,
-}
-
-export const selectorLabel = {
-  fontWeight: 300,
-  fontSize: 15,
 }
 
 export const filterInput= {
