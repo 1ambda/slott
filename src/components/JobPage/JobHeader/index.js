@@ -2,9 +2,11 @@ import React, { PropTypes, } from 'react'
 import RaisedButton from 'material-ui/lib/raised-button'
 import Popover from 'material-ui/lib/popover/popover'
 import PopoverAnimationFromTop from 'material-ui/lib/popover/popover-animation-from-top'
+import DropDownMenu from 'material-ui/lib/DropDownMenu'
+import MenuItem from 'material-ui/lib/menus/menu-item'
 
 import Filter from '../../Common/Filter'
-import Sorter from '../../Common/Sorter'
+import Selector from '../../Common/Selector'
 import * as style from './style'
 
 import JobSortingStrategies from '../../../constants/JobSortStrategies'
@@ -150,11 +152,11 @@ export default class JobHeader extends React.Component {
           <Filter handler={this.handleFilterChange.bind(this)}
                   floatingLabel="Insert Filter"
                   style={style.filterInput} />
-          <Sorter handler={this.handleSorterChange.bind(this)}
-                  style={style.sorter}
-                  labelStyle={style.sorterLabel}
+          <Selector handler={this.handleSorterChange.bind(this)}
+                  style={style.selector}
+                  labelStyle={style.selectorLabel}
                   floatingLabel="Sort by"
-                  floatingLabelStyle={style.sorterFloatingLabel}
+                  floatingLabelStyle={style.selectorFloatingLabel}
                   strategies={JobSortingStrategies}
                   currentStrategy={sortingStrategy} />
         </div>

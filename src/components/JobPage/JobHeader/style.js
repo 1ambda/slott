@@ -31,12 +31,20 @@ export const popover = {
   backgroundColor: JobPageColors.popoverBackground,
 }
 
-export const sorter = {
+export const selector = {
   float: 'right',
   width: 100,
+  marginRight: 15,
 }
 
-export const sorterLabel = {
+export const dropdown = {
+  float: 'right',
+  marginTop: 20,
+  paddingTop: 30,
+  width: 130,
+}
+
+export const selectorLabel = {
   fontWeight: 300,
   fontSize: 15,
 }
@@ -46,6 +54,6 @@ export const filterInput= {
   fontSize: 15,
 }
 
-export const sorterFloatingLabel= {
+export const selectorFloatingLabel= {
   color: 'red',
 }
