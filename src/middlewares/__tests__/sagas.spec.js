@@ -82,25 +82,8 @@ describe('sagas', () => {
   })
 
   describe('initialize', () => {
-    it(`should callFetchJobs`, () => {
+    it(`should callFetchContainerJobs`, () => {
       const gen = Sagas.initialize()
-      //const container = 'container01'
-      //const jobs = []
-      //
-      //expect(gen.next().value).to.deep.equal(
-      //  select(Selector.getSelectedContainer)
-      //)
-      //
-      //
-      //expect(gen.next(jobs).value).to.deep.equal(
-      //  put(JobApiActions.fetchContainerJobsSucceeded({ container, jobs}))
-      //)
-      //
-      //expect(gen.next(jobs).value).to.deep.equal(
-      //  put(JobActions.sortJob({ strategy: JobSortStrategies.INITIAL, }))
-      //)
-
-
       expect(gen.next().value).to.deep.equal(
         call(Handler.callFetchContainerJobs)
       )

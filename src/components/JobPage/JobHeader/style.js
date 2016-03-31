@@ -39,15 +39,15 @@ export const selector = {
 
 export const selectorLabel = {
   fontWeight: 300,
-  fontSize: 15,
+  fontSize: 14,
 }
 
 export const containerSelector = Object.assign({}, selector, {
-  width: 150,
+  width: 120,
 })
 
 export const containerSelectorLabel = Object.assign({}, selectorLabel, {
-  fontSize: 13,
+  fontSize: 14,
 })
 
 export const dropdown = {
@@ -59,7 +59,7 @@ export const dropdown = {
 
 export const filterInput= {
   fontWeight: 300,
-  fontSize: 15,
+  fontSize: 14,
 }
 
 export const selectorFloatingLabel= {

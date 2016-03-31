@@ -16,19 +16,13 @@ export const JOB_TRANSITION_DELAY = 1000
 
 /** utils */
 
-export function* callFetchJobs() { /** fetch all jobs, used to initialize  */
-  const jobs = yield call(API.fetchJobs)
-
-  yield put(JobApiActions.fetchJobsSucceeded({ jobs, }))
-  yield put(JobActions.sortJob({ strategy: JobSortStrategies.INITIAL, }))
-}
-
 export function* callFetchContainerJobs() {
   const container = yield select(Selectors.getSelectedContainer)
+  const currentSortStrategy = yield select(Selectors.getCurrentSortStrategy)
 
   const jobs = yield call(API.fetchContainerJobs, container)
   yield put(JobApiActions.fetchContainerJobsSucceeded({ container, jobs, }))
-  yield put(JobActions.sortJob({ strategy: JobSortStrategies.INITIAL, }))
+  yield put(JobActions.sortJob({ strategy: currentSortStrategy, })) // TODO select
 }
 
 /**
@@ -73,7 +67,7 @@ export function* handleCreateJob(action) {
     checkDuplicatedJob(job, existingJobs)
 
     yield call(API.createJob, job) /** create job */
-    yield call(callFetchJobs)      /** fetch all jobs again */
+    yield call(callFetchContainerJobs)      /** fetch all jobs again */
     yield put(JobActions.closeEditorDialog())
     yield put(JobActions.openInfoSnackbar({ message: `${id} was created`, }))
   } catch (error) {
@@ -89,7 +83,7 @@ export function* handleRemoveJob(action) {
   try {
     validateId(id)
     yield call(API.removeJob, id)
-    yield call(callFetchJobs) /** fetch all job again */
+    yield call(callFetchContainerJobs) /** fetch all job again */
     yield put(JobActions.openInfoSnackbar({ message: `${id} was removed`, }))
   } catch(error) {
     yield put(JobActions.openErrorSnackbar(

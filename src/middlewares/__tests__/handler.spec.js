@@ -8,7 +8,7 @@ import * as JobApiActionTypes from '../../constants/JobApiActionTypes'
 import * as JobSortStrategies from '../../constants/JobSortStrategies'
 import { JOB_PROPERTY, } from '../../reducers/JobReducer/JobItemState'
 import { SERVER_JOB_PROPERTY, } from '../../middlewares/converter'
-import * as Selectors from '../../reducers/JobReducer/selector'
+import * as Selector from '../../reducers/JobReducer/selector'
 
 import * as API from '../api'
 import * as Handler from '../handler'
@@ -17,30 +17,45 @@ describe('handler', () => {
 
   describe('utils', () => {
 
-    describe('callFetchJobs', () => {
+    describe('callFetchContainerJobs', () => {
+
       it(`should
-        - get jobs from server
-        - put fetchJobsSucceeded with { jobs }
-        - put sortJob with { strategy }
-        `, () => {
-        const jobs = [ { [JOB_PROPERTY.id]: 'job1', }, { [JOB_PROPERTY.id]: 'job2', }]
-        const gen = Handler.callFetchJobs()
+          - select selected container
+          - select sort starategy
+          - call fetchContainerJobs with { container, }
+          - put fetchContainerJobSucceeded with { container, jobs }
+          - put sortJob { strategy, }
+        `)
 
-        expect(gen.next().value).to.deep.equal(
-          call(API.fetchJobs)
-        )
+      const container = 'container01'
+      const sortStrategy = 'strategy'
+      const jobs = []
 
-        expect(gen.next(jobs).value).to.deep.equal(
-          put(JobApiActions.fetchJobsSucceeded({ jobs, }))
-        )
+      const gen = Handler.callFetchContainerJobs()
 
-        expect(gen.next().value).to.deep.equal(
-          put(JobActions.sortJob({ strategy: JobSortStrategies.INITIAL, }))
-        )
+      expect(gen.next().value).to.deep.equal(
+        select(Selector.getSelectedContainer)
+      )
 
-        expect(gen.next().done).to.equal(true)
-      })
+      expect(gen.next(container).value).to.deep.equal(
+        select(Selector.getCurrentSortStrategy)
+      )
+
+      expect(gen.next(sortStrategy).value).to.deep.equal(
+        call(API.fetchContainerJobs, container)
+      )
+
+      expect(gen.next(jobs).value).to.deep.equal(
+        put(JobApiActions.fetchContainerJobsSucceeded({ container, jobs }))
+      )
+
+      expect(gen.next().value).to.deep.equal(
+        put(JobActions.sortJob({ strategy: sortStrategy, }))
+      )
+
+      expect(gen.next().done).to.equal(true)
     })
+
   })
 
   describe('handlers', () => {
@@ -153,7 +168,7 @@ describe('handler', () => {
 
       it(`should
         - call createJob with (job)
-        - call callFetchJobs
+        - call callFetchContainerJobs
         - put closeEditorDialog
         - put openInfoSnackbar
         `, () => {
@@ -167,7 +182,7 @@ describe('handler', () => {
         const gen = handler(action)
 
         expect(gen.next().value).to.deep.equal(
-          select(Selectors.getJobItems) /** select exisintg jobs */
+          select(Selector.getJobItems) /** select exisintg jobs */
         )
 
         expect(gen.next(existingJobs).value).to.deep.equal(
@@ -175,7 +190,7 @@ describe('handler', () => {
         )
 
         expect(gen.next().value).to.deep.equal(
-          call(Handler.callFetchJobs) /** fetch all jobs */
+          call(Handler.callFetchContainerJobs) /** fetch all jobs */
         )
 
         expect(gen.next().value).to.deep.equal(
@@ -201,7 +216,7 @@ describe('handler', () => {
         const gen = handler(action)
 
         expect(gen.next().value).to.deep.equal(
-          select(Selectors.getJobItems) /** select exisintg jobs */
+          select(Selector.getJobItems) /** select exisintg jobs */
         )
 
         const error = new Error('VALIDATION FAILED')
@@ -226,7 +241,7 @@ describe('handler', () => {
         const gen = handler(action)
 
         expect(gen.next().value).to.deep.equal(
-          select(Selectors.getJobItems) /** select exisintg jobs */
+          select(Selector.getJobItems) /** select exisintg jobs */
         )
 
         const error = new Error('VALIDATION FAILED')
@@ -247,7 +262,7 @@ describe('handler', () => {
 
       it(`should
         - call removeJob with (id)
-        - call callFetchJobs
+        - call callFetchContainerJobs
         - put openInfoSnackbar
         `, () => {
 
@@ -262,7 +277,7 @@ describe('handler', () => {
         )
 
         expect(gen.next().value).to.deep.equal(
-          call(Handler.callFetchJobs) /** fetch all jobs */
+          call(Handler.callFetchContainerJobs) /** fetch all jobs */
         )
 
         expect(gen.next().value).to.deep.equal(
