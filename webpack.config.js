@@ -9,7 +9,6 @@ const getPlugins = function (env) {
 
   const GLOBALS = {
     'process.env.NODE_ENV': JSON.stringify(env),
-    'process.env.CONTAINER_ADDRESS': JSON.stringify(CONTAINER_ADDRESS),
     'process.env.CONTAINERS': JSON.stringify(CONTAINERS),
     __DEV__: env === ENV_DEV,
   }

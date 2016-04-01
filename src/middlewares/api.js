@@ -2,7 +2,7 @@ import fetch from 'isomorphic-fetch'
 import { take, put, call, fork, select, } from 'redux-saga/effects'
 
 import * as Converter from './converter'
-import URL from '../constants/url'
+import URL from './url'
 
 /**
  * low-level APIs

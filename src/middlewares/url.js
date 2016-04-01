@@ -1,6 +1,4 @@
 /** injected by webpack, see also `tools/url.js` */
-export const HOST_JOB_CONTAINER = process.env.CONTAINER_ADDRESS
-
 export const URL_JOB_BASE = 'api/jobs'
 export const URL_JOB_PROPERTY_STATE = 'state'
 export const URL_JOB_PROPERTY_CONFIG = 'config'

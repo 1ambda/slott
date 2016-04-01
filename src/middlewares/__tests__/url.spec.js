@@ -4,7 +4,7 @@ import * as EnvTool from '../../../tools/env'
 import * as UrlTool from '../../../tools/url'
 import * as URL from '../url'
 
-describe('constants/url', () => {
+describe('middlewares/url', () => {
   it('should tested on `TEST` env', () => {
     expect(process.env.NODE_ENV).to.deep.equal(EnvTool.ENV_TEST)
   })

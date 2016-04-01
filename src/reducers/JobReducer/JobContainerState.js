@@ -1,7 +1,7 @@
 import { handleActions, } from 'redux-actions'
 
 import * as JobApiActionTypes from '../../constants/JobApiActionTypes'
-import * as URL from '../../constants/url'
+import * as URL from '../../middlewares/url'
 
 export const SELECTOR_MODE = {
   ALL: 'ALL',
