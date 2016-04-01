@@ -2,9 +2,9 @@ import { expect, } from 'chai'
 import { fork, take, call, put, select, } from 'redux-saga/effects'
 import { takeEvery, } from 'redux-saga'
 
-import * as JobActions from '../../actions/JobActions'
-import * as JobApiActions from '../../actions/JobApiActions'
-import * as JobApiActionTypes from '../../constants/JobApiActionTypes'
+import * as ClosableSnackBarState from '../../reducers/JobReducer/ClosableSnackbarState'
+import * as SagaAction from '../SagaAction'
+
 import * as Selector from '../../reducers/JobReducer/selector'
 
 import * as API from '../api'
@@ -15,42 +15,42 @@ describe('sagas', () => {
 
   const takeEveryWatcherProps = [
     {
-      actionType: JobApiActionTypes.OPEN_EDITOR_DIALOG_TO_EDIT.REQUESTED,
+      actionType: SagaAction.ActionType.OPEN_EDITOR_DIALOG_TO_EDIT,
       watcher: Sagas.watchOpenEditorDialogToEdit,
       handler: Handler.handleOpenEditorDialogToEdit,
     },
     {
-      actionType: JobApiActionTypes.UPDATE.REQUESTED,
+      actionType: SagaAction.ActionType.UPDATE,
       watcher: Sagas.watchUpdateJob,
       handler: Handler.handleUpdateJob,
     },
     {
-      actionType: JobApiActionTypes.CREATE.REQUESTED,
+      actionType: SagaAction.ActionType.CREATE,
       watcher: Sagas.watchCreateJob,
       handler: Handler.handleCreateJob,
     },
     {
-      actionType: JobApiActionTypes.REMOVE.REQUESTED,
+      actionType: SagaAction.ActionType.REMOVE,
       watcher: Sagas.watchRemoveJob,
       handler: Handler.handleRemoveJob,
     },
     {
-      actionType: JobApiActionTypes.SET_READONLY.REQUESTED,
+      actionType: SagaAction.ActionType.SET_READONLY,
       watcher: Sagas.watchSetReadonly,
       handler: Handler.handleSetReadonly,
     },
     {
-      actionType: JobApiActionTypes.UNSET_READONLY.REQUESTED,
+      actionType: SagaAction.ActionType.UNSET_READONLY,
       watcher: Sagas.watchUnsetReadonly,
       handler: Handler.handleUnsetReadonly,
     },
     {
-      actionType: JobApiActionTypes.START.REQUESTED,
+      actionType: SagaAction.ActionType.START,
       watcher: Sagas.watchStartJob,
       handler: Handler.handleStartJob,
     },
     {
-      actionType: JobApiActionTypes.STOP.REQUESTED,
+      actionType: SagaAction.ActionType.STOP,
       watcher: Sagas.watchStopJob,
       handler: Handler.handleStopJob,
     },
@@ -91,7 +91,7 @@ describe('sagas', () => {
 
     it(`should callFetchJobs
         - if exception is occurred,
-          put(JobActions.openErrorSnackbar with { message, error }`, () => {
+          put(openErrorSnackbar with { message, error }`, () => {
       const gen = Sagas.initialize()
 
       expect(gen.next().value).to.deep.equal(
@@ -100,7 +100,7 @@ describe('sagas', () => {
 
       const error = new Error('error')
       expect(gen.throw(error).value).to.deep.equal(
-        put(JobActions.openErrorSnackbar({ message: 'Failed to fetch jobs', error, }))
+        put(ClosableSnackBarState.Action.openErrorSnackbar({ message: 'Failed to fetch jobs', error, }))
       )
     })
   })

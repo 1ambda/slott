@@ -1,8 +1,15 @@
 import { take, put, call, select, } from 'redux-saga/effects'
 
-import * as JobActions from '../actions/JobActions'
-import * as JobApiActions from '../actions/JobApiActions'
-import * as JobApiActionTypes from '../constants/JobApiActionTypes'
+import * as FilterState from '../reducers/JobReducer/FilterState'
+import * as SorterState from '../reducers/JobReducer/SorterState'
+import * as PaginatorState from '../reducers/JobReducer/PaginatorState'
+import * as JobItemState from '../reducers/JobReducer/JobItemState'
+import * as ContainerSelectorState from '../reducers/JobReducer/ContainerSelectorState'
+import * as EditorDialogState from '../reducers/JobReducer/EditorDialogState'
+import * as ConfirmDialogState from '../reducers/JobReducer/ConfirmDialogState'
+import * as SnackBarState from '../reducers/JobReducer/ClosableSnackbarState'
+
+import * as SagaAction from '../middlewares/SagaAction'
 
 import {
   sortJob, JOB_PROPERTY, validateId, validateJobId, checkDuplicatedJob,
@@ -20,8 +27,9 @@ export function* callFetchContainerJobs() {
   const currentSortStrategy = yield select(Selector.currentSortStrategy)
 
   const jobs = yield call(API.fetchJobs, container)
-  yield put(JobApiActions.fetchContainerJobsSucceeded({ container, jobs, }))
-  yield put(JobActions.sortJob({ strategy: currentSortStrategy, }))
+  yield put(JobItemState.Action.updateAllJobs({ jobs, }))
+  yield put(SorterState.Action.sortJob({ strategy: currentSortStrategy, }))
+  yield put(ContainerSelectorState.Action.selectContainer({ container, }))
 }
 
 /**
@@ -37,9 +45,9 @@ export function* handleOpenEditorDialogToEdit(action) {
 
   try {
     const job = yield call(API.fetchJobConfig, container, id)
-    yield put(JobApiActions.fetchJobConfigSucceeded({ id, readonly, job, }))
+    yield put(EditorDialogState.Action.updateEditorDialogConfig({ id, readonly, job, }))
   } catch (error) {
-    yield put(JobActions.openErrorSnackbar(
+    yield put(SnackBarState.Action.openErrorSnackbar(
       { message: `Failed to fetch job '${container}/${id}`, error, })
     )
   }
@@ -52,10 +60,18 @@ export function* handleUpdateJob(action) {
 
   try {
     const updatedJob = yield call(API.updateJobConfig, container, id, job)
-    yield put(JobApiActions.updateJobSucceeded({ id, job: updatedJob, }))
-    yield put(JobActions.openInfoSnackbar({ message: `${container}/${id} was updated`, }))
+    yield put(JobItemState.Action.updateJob({ id, job: updatedJob, }))
+    yield put(
+      SnackBarState.Action.openInfoSnackbar(
+        { message: `${container}/${id} was updated`, }
+      )
+    )
   } catch (error) {
-    yield put(JobActions.openErrorSnackbar({ message: `Failed to update job '${container}/${id}`, error, }))
+    yield put(
+      SnackBarState.Action.openErrorSnackbar(
+        { message: `Failed to update job '${container}/${id}`, error, }
+      )
+    )
   }
 }
 
@@ -72,11 +88,18 @@ export function* handleCreateJob(action) {
 
     yield call(API.createJob, container, job) /** create job */
     yield call(callFetchContainerJobs)      /** fetch all jobs again */
-    yield put(JobActions.closeEditorDialog())
-    yield put(JobActions.openInfoSnackbar({ message: `${container}/${id} was created`, }))
+    yield put(EditorDialogState.Action.closeEditorDialog())
+    yield put(
+      SnackBarState.Action.openInfoSnackbar(
+        { message: `${container}/${id} was created`, }
+      )
+    )
   } catch (error) {
-    yield put(JobActions.openErrorSnackbar(
-      { message: 'Failed to create job', error, }))
+    yield put(
+      SnackBarState.Action.openErrorSnackbar(
+      { message: 'Failed to create job', error, }
+      )
+    )
   }
 }
 
@@ -89,10 +112,17 @@ export function* handleRemoveJob(action) {
     validateId(id)
     yield call(API.removeJob, container, id)
     yield call(callFetchContainerJobs) /** fetch all job again */
-    yield put(JobActions.openInfoSnackbar({ message: `${container}/${id} was removed`, }))
+    yield put(
+      SnackBarState.Action.openInfoSnackbar(
+        { message: `${container}/${id} was removed`, }
+      )
+    )
   } catch(error) {
-    yield put(JobActions.openErrorSnackbar(
-      { message: `Failed to remove job '${container}/${id}'`, error, }))
+    yield put(
+      SnackBarState.Action.openErrorSnackbar(
+      { message: `Failed to remove job '${container}/${id}'`, error, }
+      )
+    )
   }
 }
 
@@ -104,10 +134,13 @@ export function* handleSetReadonly(action) {
   try {
     validateId(id)
     const updatedJob = yield call(API.setReadonly, container, id)
-    yield put(JobApiActions.updateJobSucceeded({ id, job: updatedJob, }))
+    yield put(JobItemState.Action.updateJob({ id, job: updatedJob, }))
   } catch (error) {
-    yield put(JobActions.openErrorSnackbar(
-      { message: `Failed to set readonly '${container}/${id}'`, error, }))
+    yield put(
+      SnackBarState.Action.openErrorSnackbar(
+        { message: `Failed to set readonly '${container}/${id}'`, error, }
+      )
+    )
   }
 }
 
@@ -119,10 +152,13 @@ export function* handleUnsetReadonly(action) {
   try {
     validateId(id)
     const updatedJob = yield call(API.unsetReadonly, container, id)
-    yield put(JobApiActions.updateJobSucceeded({ id, job: updatedJob, }))
+    yield put(JobItemState.Action.updateJob({ id, job: updatedJob, }))
   } catch (error) {
-    yield put(JobActions.openErrorSnackbar(
-      { message: `Failed to unset readonly '${container}/${id}'`, error, }))
+    yield put(
+      SnackBarState.Action.openErrorSnackbar(
+        { message: `Failed to unset readonly '${container}/${id}'`, error, }
+      )
+    )
   }
 }
 
@@ -131,19 +167,22 @@ export function* handleStartJob(action) {
   const { id, } = payload
   const container = yield select(Selector.selectedContainer)
 
-  yield put(JobActions.startSwitching({ id, }))
+  yield put(JobItemState.Action.startSwitching({ id, }))
 
   try {
     validateId(id)
     const updatedJob = yield call(API.startJob, container, id)
     yield call(API.delay, JOB_TRANSITION_DELAY)
-    yield put(JobApiActions.updateJobSucceeded({ id, job: updatedJob, }))
+    yield put(JobItemState.Action.updateJob({ id, job: updatedJob, }))
   } catch (error) {
-    yield put(JobActions.openErrorSnackbar(
-      { message: `Failed to start job '${container}/${id}'`, error, }))
+    yield put(
+      SnackBarState.Action.openErrorSnackbar(
+        { message: `Failed to start job '${container}/${id}'`, error, }
+      )
+    )
   }
 
-  yield put(JobActions.endSwitching({ id, }))
+  yield put(JobItemState.Action.endSwitching({ id, }))
 }
 
 export function* handleStopJob(action) {
@@ -151,19 +190,22 @@ export function* handleStopJob(action) {
   const { id, } = payload
   const container = yield select(Selector.selectedContainer)
 
-  yield put(JobActions.startSwitching({ id, }))
+  yield put(JobItemState.Action.startSwitching({ id, }))
 
   try {
     validateId(id)
     const updatedJob = yield call(API.stopJob, container, id)
     yield call(API.delay, JOB_TRANSITION_DELAY)
-    yield put(JobApiActions.updateJobSucceeded({ id, job: updatedJob, }))
+    yield put(JobItemState.Action.updateJob({ id, job: updatedJob, }))
   } catch (error) {
-    yield put(JobActions.openErrorSnackbar(
-      { message: `Failed to stop job '${container}/${id}'`, error, }))
+    yield put(
+      SnackBarState.Action.openErrorSnackbar(
+        { message: `Failed to stop job '${container}/${id}'`, error, }
+      )
+    )
   }
 
-  yield put(JobActions.endSwitching(payload))
+  yield put(JobItemState.Action.endSwitching(payload))
 }
 
 export function* handleChangeContainerSelector(action) {
@@ -176,11 +218,15 @@ export function* handleChangeContainerSelector(action) {
     container = payload.container /** payload might be undefined */
 
     const jobs = yield call(API.fetchJobs, container)
-    yield put(JobApiActions.fetchContainerJobsSucceeded({ container, jobs, }))
-    yield put(JobActions.sortJob({ strategy: currentSortStrategy, }))
+    yield put(JobItemState.Action.updateAllJobs({ jobs, }))
+    yield put(SorterState.Action.sortJob({ strategy: currentSortStrategy, }))
+    yield put(ContainerSelectorState.Action.selectContainer({ container, }))
   } catch (error) {
-    yield put(JobActions.openErrorSnackbar(
-      { message: `Failed to fetch jobs from '${container}'`, error, }))
+    yield put(
+      SnackBarState.Action.openErrorSnackbar(
+        { message: `Failed to fetch jobs from '${container}'`, error, }
+      )
+    )
   }
 }
 

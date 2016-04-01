@@ -1,6 +1,5 @@
 import { createAction, handleActions, } from 'redux-actions'
 
-import * as JobApiActionTypes from '../../constants/JobApiActionTypes'
 import * as SorterState from './SorterState'
 import * as FilterState from './FilterState'
 
@@ -174,11 +173,19 @@ export function checkDuplicatedJob(id, existingJobs) {
 export const ActionType = {
   START_SWITCHING: 'JOB_START_SWITCHING',
   END_SWITCHING: 'JOB_END_SWITCHING',
+  UPDATE_ALL_JOBS: 'JOB_UPDATE_ALL_JOBS',
+  UPDATE_JOB: 'JOB_UPDATE_JOB',
+  START_ALL: 'JOB_START_ALL',
+  STOP_ALL: 'JOB_STOP_ALL',
 }
 
 export const Action = {
   startSwitching: createAction(ActionType.START_SWITCHING),
   endSwitching: createAction(ActionType.END_SWITCHING),
+  updateAllJobs: createAction(ActionType.UPDATE_ALL_JOBS),
+  updateJob: createAction(ActionType.UPDATE_JOB),
+  startAllJobs: createAction(ActionType.START_ALL),
+  stopAllJobs: createAction(ActionType.STOP_ALL),
 }
 
 const INITIAL_JOBS = []
@@ -187,19 +194,20 @@ export const handler = handleActions({
   /** client only */
   [ActionType.START_SWITCHING]: startSwitching,
   [ActionType.END_SWITCHING]: endSwitching,
+
   [SorterState.ActionType.SORT]: sortJob,
 
   /** api related */
-  [JobApiActionTypes.FETCH_JOBS.SUCCEEDED]: updateAllJobs,
-  [JobApiActionTypes.UPDATE.SUCCEEDED]: updateJob,
+  [ActionType.UPDATE_ALL_JOBS]: updateAllJobs,
+  [ActionType.UPDATE_JOB]: updateJob,
 
-  [JobApiActionTypes.STOP_ALL]: (state) => { // TODO
-    console.error(`TODO ${JobApiActionTypes.STOP_ALL} in JobReducer`)
+  [ActionType.STOP_ALL]: (state) => { // TODO
+    console.error(`TODO ${ActionType.STOP_ALL} in JobReducer`)
     return state
   },
 
-  [JobApiActionTypes.START_ALL]: (state) => { // TODO
-    console.error(`TODO ${JobApiActionTypes.START_ALL} in JobReducer`)
+  [ActionType.START_ALL]: (state) => { // TODO
+    console.error(`TODO ${ActionType.START_ALL} in JobReducer`)
     return state
   },
 

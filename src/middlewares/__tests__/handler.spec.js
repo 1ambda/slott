@@ -1,9 +1,17 @@
 import { expect, } from 'chai'
 import { take, put, call, fork, select, } from 'redux-saga/effects'
 
-import * as JobActions from '../../actions/JobActions'
-import * as JobApiActions from '../../actions/JobApiActions'
-import * as JobApiActionTypes from '../../constants/JobApiActionTypes'
+import * as FilterState from '../../reducers/JobReducer/FilterState'
+import * as SorterState from '../../reducers/JobReducer/SorterState'
+import * as PaginatorState from '../../reducers/JobReducer/PaginatorState'
+import * as JobItemState from '../../reducers/JobReducer/JobItemState'
+import * as ContainerSelectorState from '../../reducers/JobReducer/ContainerSelectorState'
+import * as EditorDialogState from '../../reducers/JobReducer/EditorDialogState'
+import * as ConfirmDialogState from '../../reducers/JobReducer/ConfirmDialogState'
+import * as ClosableSnackBarState from '../../reducers/JobReducer/ClosableSnackbarState'
+
+import * as SagaAction from '../SagaAction'
+
 import { JOB_PROPERTY, } from '../../reducers/JobReducer/JobItemState'
 import { SERVER_JOB_PROPERTY, } from '../../middlewares/converter'
 import * as Selector from '../../reducers/JobReducer/selector'
@@ -21,8 +29,9 @@ describe('handler', () => {
           - select Selector.getSelectedContainer
           - select Selector.getCurrentStarategy
           - call fetchContainerJobs with { container, }
-          - put fetchContainerJobSucceeded with { container, jobs }
+          - put fetchContainerJobSucceeded with { jobs }
           - put sortJob { strategy, }
+          - put selectContainer { container, }
         `)
 
       const container = 'container01'
@@ -44,14 +53,16 @@ describe('handler', () => {
       )
 
       expect(gen.next(jobs).value).to.deep.equal(
-        put(JobApiActions.fetchContainerJobsSucceeded({ container, jobs }))
+        put(JobItemState.Action.updateAllJobs({ jobs }))
       )
 
       expect(gen.next().value).to.deep.equal(
-        put(JobActions.sortJob({ strategy: sortStrategy, }))
+        put(SorterState.Action.sortJob({ strategy: sortStrategy, }))
       )
 
-      expect(gen.next().done).to.equal(true)
+      expect(gen.next().value).to.deep.equal(
+        put(ContainerSelectorState.Action.selectContainer({ container, }))
+      )
     })
 
   })
@@ -85,7 +96,10 @@ describe('handler', () => {
         )
 
         expect(gen.next(updatedJob).value).to.deep.equal(
-          put(JobApiActions.fetchJobConfigSucceeded({ [JOB_PROPERTY.id]: id, readonly, job: updatedJob, }))
+          put(EditorDialogState.Action.updateEditorDialogConfig(
+              { [JOB_PROPERTY.id]: id, readonly, job: updatedJob, }
+            )
+          )
         )
       })
 
@@ -113,8 +127,9 @@ describe('handler', () => {
 
         const error = new Error('error01')
         expect(gen.throw(error).value).to.deep.equal(
-          put(JobActions.openErrorSnackbar(
-            { message: `Failed to fetch job '${container}/${id}`, error, })
+          put(
+            ClosableSnackBarState.Action.openErrorSnackbar(
+              { message: `Failed to fetch job '${container}/${id}`, error, })
           )
         )
       })
@@ -148,11 +163,15 @@ describe('handler', () => {
         )
 
         expect(gen.next(updatedJob).value).to.deep.equal(
-          put(JobApiActions.updateJobSucceeded({[JOB_PROPERTY.id]: id, job: updatedJob,}))
+          put(JobItemState.Action.updateJob({[JOB_PROPERTY.id]: id, job: updatedJob,}))
         )
 
         expect(gen.next().value).to.deep.equal(
-          put(JobActions.openInfoSnackbar({ message: `${container}/${id} was updated`, }))
+          put(
+            ClosableSnackBarState.Action.openInfoSnackbar(
+              { message: `${container}/${id} was updated`, }
+            )
+          )
         )
       })
 
@@ -181,7 +200,11 @@ describe('handler', () => {
 
         const error = new Error('error01')
         expect(gen.throw(error).value).to.deep.equal(
-          put(JobActions.openErrorSnackbar({ message: `Failed to update job '${container}/${id}`, error, }))
+          put(
+            ClosableSnackBarState.Action.openErrorSnackbar(
+              { message: `Failed to update job '${container}/${id}`, error, }
+            )
+          )
         )
       })
 
@@ -225,11 +248,15 @@ describe('handler', () => {
         )
 
         expect(gen.next().value).to.deep.equal(
-          put(JobActions.closeEditorDialog())
+          put(EditorDialogState.Action.closeEditorDialog())
         )
 
         expect(gen.next().value).to.deep.equal(
-          put(JobActions.openInfoSnackbar({ message: `${container}/${id} was created`, }))
+          put(
+            ClosableSnackBarState.Action.openInfoSnackbar(
+              { message: `${container}/${id} was created`, }
+            )
+          )
         )
       })
 
@@ -259,7 +286,11 @@ describe('handler', () => {
         const error = new Error('VALIDATION FAILED')
 
         expect(gen.throw(error).value).to.deep.equal(
-          put(JobActions.openErrorSnackbar({ message: 'Failed to create job' , error, }))
+          put(
+            ClosableSnackBarState.Action.openErrorSnackbar(
+              { message: 'Failed to create job' , error, }
+            )
+          )
         )
       })
 
@@ -295,7 +326,11 @@ describe('handler', () => {
         )
 
         expect(gen.throw(error).value).to.deep.equal(
-          put(JobActions.openErrorSnackbar({ message: 'Failed to create job' , error, }))
+          put(
+            ClosableSnackBarState.Action.openErrorSnackbar(
+              { message: 'Failed to create job' , error, }
+            )
+          )
         )
       })
 
@@ -331,7 +366,11 @@ describe('handler', () => {
         )
 
         expect(gen.next().value).to.deep.equal(
-          put(JobActions.openInfoSnackbar({ message: `${container}/${id} was removed`, }))
+          put(
+            ClosableSnackBarState.Action.openInfoSnackbar(
+              { message: `${container}/${id} was removed`, }
+            )
+          )
         )
       })
 
@@ -360,7 +399,10 @@ describe('handler', () => {
         const error = new Error('REMOVE JOB FAILED')
 
         expect(gen.throw(error).value).to.deep.equal(
-          put(JobActions.openErrorSnackbar({ message: `Failed to remove job '${container}/${id}'` , error, }))
+          put(ClosableSnackBarState.Action.openErrorSnackbar(
+              { message: `Failed to remove job '${container}/${id}'` , error, }
+            )
+          )
         )
       })
 
@@ -392,7 +434,7 @@ describe('handler', () => {
         )
 
         expect(gen.next(updatedJob).value).to.deep.equal(
-          put(JobApiActions.updateJobSucceeded({ [JOB_PROPERTY.id]: id, job: updatedJob, }))
+          put(JobItemState.Action.updateJob({ [JOB_PROPERTY.id]: id, job: updatedJob, }))
         )
       })
 
@@ -421,7 +463,11 @@ describe('handler', () => {
         const error = new Error('SET READONLY FAILED')
 
         expect(gen.throw(error).value).to.deep.equal(
-          put(JobActions.openErrorSnackbar({ message: `Failed to set readonly '${container}/${id}'` , error, }))
+          put(
+            ClosableSnackBarState.Action.openErrorSnackbar(
+              { message: `Failed to set readonly '${container}/${id}'` , error, }
+            )
+          )
         )
       })
 
@@ -453,7 +499,7 @@ describe('handler', () => {
         )
 
         expect(gen.next(updatedJob).value).to.deep.equal(
-          put(JobApiActions.updateJobSucceeded({ [JOB_PROPERTY.id]: id, job: updatedJob, }))
+          put(JobItemState.Action.updateJob({ [JOB_PROPERTY.id]: id, job: updatedJob, }))
         )
       })
 
@@ -482,7 +528,11 @@ describe('handler', () => {
         const error = new Error('UNSET READONLY FAILED')
 
         expect(gen.throw(error).value).to.deep.equal(
-          put(JobActions.openErrorSnackbar({ message: `Failed to unset readonly '${container}/${id}'` , error, }))
+          put(
+            ClosableSnackBarState.Action.openErrorSnackbar(
+              { message: `Failed to unset readonly '${container}/${id}'` , error, }
+            )
+          )
         )
       })
 
@@ -510,7 +560,7 @@ describe('handler', () => {
         )
 
         expect(gen.next(container).value).to.deep.equal(
-          put(JobActions.startSwitching({ id, }))
+          put(JobItemState.Action.startSwitching({ id, }))
         )
 
         expect(gen.next().value).to.deep.equal(
@@ -522,11 +572,11 @@ describe('handler', () => {
         )
 
         expect(gen.next().value).to.deep.equal(
-          put(JobApiActions.updateJobSucceeded({ [JOB_PROPERTY.id]: id, job: updatedJob, }))
+          put(JobItemState.Action.updateJob({ [JOB_PROPERTY.id]: id, job: updatedJob, }))
         )
 
         expect(gen.next().value).to.deep.equal(
-          put(JobActions.endSwitching({ id, }))
+          put(JobItemState.Action.endSwitching({ id, }))
         )
       })
 
@@ -551,7 +601,7 @@ describe('handler', () => {
         )
 
         expect(gen.next(container).value).to.deep.equal(
-          put(JobActions.startSwitching({ id, }))
+          put(JobItemState.Action.startSwitching({ id, }))
         )
 
         expect(gen.next().value).to.deep.equal(
@@ -561,11 +611,15 @@ describe('handler', () => {
         const error = new Error('START FAILED')
 
         expect(gen.throw(error).value).to.deep.equal(
-          put(JobActions.openErrorSnackbar({ message: `Failed to start job '${container}/${id}'` , error, }))
+          put(
+            ClosableSnackBarState.Action.openErrorSnackbar(
+              { message: `Failed to start job '${container}/${id}'` , error, }
+            )
+          )
         )
 
         expect(gen.next().value).to.deep.equal(
-          put(JobActions.endSwitching({ id, }))
+          put(JobItemState.Action.endSwitching({ id, }))
         )
       })
 
@@ -595,7 +649,7 @@ describe('handler', () => {
         )
 
         expect(gen.next(container).value).to.deep.equal(
-          put(JobActions.startSwitching({ id, }))
+          put(JobItemState.Action.startSwitching({ id, }))
         )
 
         expect(gen.next().value).to.deep.equal(
@@ -607,11 +661,11 @@ describe('handler', () => {
         )
 
         expect(gen.next().value).to.deep.equal(
-          put(JobApiActions.updateJobSucceeded({ [JOB_PROPERTY.id]: id, job: updatedJob, }))
+          put(JobItemState.Action.updateJob({ [JOB_PROPERTY.id]: id, job: updatedJob, }))
         )
 
         expect(gen.next().value).to.deep.equal(
-          put(JobActions.endSwitching({ id, }))
+          put(JobItemState.Action.endSwitching({ id, }))
         )
       })
 
@@ -636,7 +690,7 @@ describe('handler', () => {
         )
 
         expect(gen.next(container).value).to.deep.equal(
-          put(JobActions.startSwitching({ id, }))
+          put(JobItemState.Action.startSwitching({ id, }))
         )
 
         expect(gen.next().value).to.deep.equal(
@@ -646,11 +700,15 @@ describe('handler', () => {
         const error = new Error('STOP FAILED')
 
         expect(gen.throw(error).value).to.deep.equal(
-          put(JobActions.openErrorSnackbar({ message: `Failed to stop job '${container}/${id}'` , error, }))
+          put(
+            ClosableSnackBarState.Action.openErrorSnackbar(
+              { message: `Failed to stop job '${container}/${id}'` , error, }
+            )
+          )
         )
 
         expect(gen.next().value).to.deep.equal(
-          put(JobActions.endSwitching({ id, }))
+          put(JobItemState.Action.endSwitching({ id, }))
         )
       })
 
@@ -663,8 +721,9 @@ describe('handler', () => {
       it(`should
         - select currentSortStrategy
         - call fetchJobs with (id)
-        - put fetchJobsSucceeded with { container, job }
+        - put fetchJobsSucceeded with { job }
         - put sortJob with { strategy, }
+        - put selectContainer with { container, }
         `, () => {
 
         const id = 'job01'
@@ -685,11 +744,15 @@ describe('handler', () => {
         )
 
         expect(gen.next(jobs).value).to.deep.equal(
-          put(JobApiActions.fetchContainerJobsSucceeded({ container, jobs, }))
+          put(JobItemState.Action.updateAllJobs({ jobs, }))
         )
 
         expect(gen.next().value).to.deep.equal(
-          put(JobActions.sortJob({ strategy, }))
+          put(SorterState.Action.sortJob({ strategy, }))
+        )
+
+        expect(gen.next().value).to.deep.equal(
+          put(ContainerSelectorState.Action.selectContainer({ container, }))
         )
       })
 
@@ -719,7 +782,11 @@ describe('handler', () => {
         const error = new Error('FETCH JOBS FAILED')
 
         expect(gen.throw(error).value).to.deep.equal(
-          put(JobActions.openErrorSnackbar({ message: `Failed to fetch jobs from '${container}'` , error, }))
+          put(
+            ClosableSnackBarState.Action.openErrorSnackbar(
+              { message: `Failed to fetch jobs from '${container}'`, error, }
+            )
+          )
         )
       })
 

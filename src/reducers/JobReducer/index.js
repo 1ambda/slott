@@ -1,8 +1,6 @@
 import { combineReducers, } from 'redux'
 import { handleActions, } from 'redux-actions'
 
-import * as JobApiActionTypes from '../../constants/JobApiActionTypes'
-
 import * as JobItemState from './JobItemState'
 import * as PaginatorState from './PaginatorState'
 import * as FilterState from './FilterState'
@@ -10,7 +8,7 @@ import * as SorterState from './SorterState'
 import * as EditorDialogState from './EditorDialogState'
 import * as ConfirmDialogState from './ConfirmDialogState'
 import * as ClosableSnackbarState from './ClosableSnackbarState'
-import * as JobContainerState from './JobContainerState'
+import * as ContainerSelectorState from './ContainerSelectorState'
 
 export const JOB_STATE_PROPERTY = {
   JOB_ITEMS: 'items',
@@ -24,7 +22,7 @@ export const JOB_STATE_PROPERTY = {
 }
 
 export default combineReducers({
-  [JOB_STATE_PROPERTY.CONTAINER_SELECTOR]: JobContainerState.handler,
+  [JOB_STATE_PROPERTY.CONTAINER_SELECTOR]: ContainerSelectorState.handler,
   [JOB_STATE_PROPERTY.JOB_ITEMS]: JobItemState.handler,
   [JOB_STATE_PROPERTY.PAGINATOR]: PaginatorState.handler,
   [JOB_STATE_PROPERTY.FILTER]: FilterState.handler,

@@ -1,31 +1,57 @@
 import { createAction, } from 'redux-actions'
 
-import * as JobApiActionTypes from '../constants/JobApiActionTypes'
-
+import * as EditorDialogState from '../reducers/JobReducer/EditorDialogState'
 import * as FilterState from '../reducers/JobReducer/FilterState'
 import * as SorterState from '../reducers/JobReducer/SorterState'
 import * as PaginatorState from '../reducers/JobReducer/PaginatorState'
 import * as JobItemState from '../reducers/JobReducer/JobItemState'
-import * as EditorDialogState from '../reducers/JobReducer/EditorDialogState'
 import * as ConfirmDialogState from '../reducers/JobReducer/ConfirmDialogState'
 import * as ClosableSnackBarState from '../reducers/JobReducer/ClosableSnackbarState'
 
-/** job item */
-export const startSwitching = JobItemState.Action.startSwitching
-export const endSwitching = JobItemState.Action.endSwitching
+import * as SagaAction from '../middlewares/SagaAction'
 
-/** sorter, containerSelector, filter, paginator */
-export const filterJob = FilterState.Action.filterJob
-export const initializeFilter = FilterState.Action.initializeFilter
-export const sortJob = SorterState.Action.sortJob
-export const changePageOffset = PaginatorState.Action.changePageOffset
+/**
+ * for documentation, enumerate all actions
+ */
+export default Object.assign({},
+  { /** Component Actions */
 
-/** for dialogs, snackbar */
-export const openEditorDialogToCreate = EditorDialogState.Action.openEditorDialogToCreate
-export const closeEditorDialog = EditorDialogState.Action.closeEditorDialog
-export const openConfirmDialogToRemove = ConfirmDialogState.Action.openConfirmDialogToRemove
-export const closeConfirmDialog = ConfirmDialogState.Action.closeConfirmDialog
+    /** job items */
+    startSwitching: JobItemState.Action.startSwitching,
+    endSwitching: JobItemState.Action.endSwitching,
 
-export const openInfoSnackbar = ClosableSnackBarState.Action.openInfoSnackbar
-export const openErrorSnackbar = ClosableSnackBarState.Action.openErrorSnackbar
-export const closeSnackbar = ClosableSnackBarState.Action.closeSnackbar
+    /** sorter, containerSelector, filter, paginator */
+    filterJob: FilterState.Action.filterJob,
+    initializeFilter: FilterState.Action.initializeFilter,
+    sortJob: SorterState.Action.sortJob,
+    changePageOffset: PaginatorState.Action.changePageOffset,
+
+    /** for dialogs, snackbar */
+    openEditorDialogToCreate: EditorDialogState.Action.openEditorDialogToCreate,
+    updateEditorDialogConfig: EditorDialogState.Action.updateEditorDialogConfig,
+    closeEditorDialog: EditorDialogState.Action.closeEditorDialog,
+    openConfirmDialogToRemove: ConfirmDialogState.Action.openConfirmDialogToRemove,
+    closeConfirmDialog: ConfirmDialogState.Action.closeConfirmDialog,
+
+    openInfoSnackbar: ClosableSnackBarState.Action.openInfoSnackbar,
+    openErrorSnackbar: ClosableSnackBarState.Action.openErrorSnackbar,
+    closeSnackbar: ClosableSnackBarState.Action.closeSnackbar,
+  },
+
+  { /** API Actions */
+    unsetReadonly: SagaAction.Action.unsetReadonly,
+    setReadonly: SagaAction.Action.setReadonly,
+    startJob: SagaAction.Action.startJob,
+    stopJob: SagaAction.Action.stopJob,
+
+    createJob: SagaAction.Action.createJob,
+    removeJob: SagaAction.Action.removeJob,
+    updateJob: SagaAction.Action.updateJob,
+
+    changeContainer: SagaAction.Action.changeContainer,
+    openEditorDialogToEdit: SagaAction.Action.openEditorDialogToEdit,
+
+    stopAllJobs: SagaAction.Action.stopAllJobs,
+    startAllJobs: SagaAction.Action.startAllJobs,
+  }
+)

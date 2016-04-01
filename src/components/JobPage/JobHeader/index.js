@@ -10,7 +10,6 @@ import Selector from '../../Common/Selector'
 import * as style from './style'
 
 import * as JobSortingStrategies from '../../../reducers/JobReducer/SorterState'
-import { JobContainerSelectorModes, } from '../../../reducers/JobReducer/JobContainerState'
 import * as JobActions from '../../../actions/JobActions'
 import { JOB_PROPERTY, isRunning, } from '../../../reducers/JobReducer/JobItemState'
 import * as URL from '../../../middlewares/url'

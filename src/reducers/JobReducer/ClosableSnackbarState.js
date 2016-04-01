@@ -2,10 +2,9 @@ import { createAction, handleActions, } from 'redux-actions'
 
 import { CLOSABLE_SNACKBAR_MODE, } from '../../components/Common/ClosableSnackbar'
 
-
 export const ActionType = {
-  OPEN_ERROR_SNACKBAR: 'JOB_OPEN_ERROR_SNACKBAR',
   OPEN_INFO_SNACKBAR: 'JOB_OPEN_INFO_SNACKBAR',
+  OPEN_ERROR_SNACKBAR: 'JOB_OPEN_ERROR_SNACKBAR',
   CLOSE_SNACKBAR: 'JOB_CLOSE_SNACKBAR',
 }
 
@@ -15,7 +14,7 @@ export const Action = {
   closeSnackbar: createAction(ActionType.CLOSE_SNACKBAR),
 }
 
-const INITIAL_SNACKBAR_STATE = {
+export const INITIAL_SNACKBAR_STATE = {
   snackbarMode: CLOSABLE_SNACKBAR_MODE.CLOSE,
   message: '',
 }

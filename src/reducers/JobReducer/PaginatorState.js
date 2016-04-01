@@ -14,7 +14,7 @@ export const ActionType = {
 }
 
 export const Action = {
-  changePageOffset: createAction(ActionType.CHANGE_PAGE_OFFSET)
+  changePageOffset: createAction(ActionType.CHANGE_PAGE_OFFSET),
 }
 
 export const handler = handleActions({

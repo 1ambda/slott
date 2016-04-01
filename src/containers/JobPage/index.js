@@ -13,7 +13,7 @@ import ClosableSnackbar, { CLOSABLE_SNACKBAR_MODE, } from '../../components/Comm
 import { JOB_PROPERTY, } from '../../reducers/JobReducer/JobItemState'
 import { JOB_STATE_PROPERTY, } from '../../reducers/JobReducer'
 
-import Actions, { ACTION_CONTAINER, } from '../../actions'
+import Actions, { ACTION_SELECTOR, } from '../../actions'
 import * as style from './style'
 
 class JobPage extends React.Component {
@@ -99,7 +99,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(Actions[ACTION_CONTAINER.job], dispatch),
+    actions: bindActionCreators(Actions[ACTION_SELECTOR.job], dispatch),
   }
 }
 

@@ -1,20 +1,20 @@
 import { createAction, handleActions, } from 'redux-actions'
 
-import * as JobApiActionTypes from '../../constants/JobApiActionTypes'
-
 import { EDITOR_DIALOG_MODE, } from '../../components/Common/EditorDialog'
 
 export const ActionType = {
   OPEN_EDITOR_DIALOG_TO_CREATE: 'JOB_OPEN_EDITOR_DIALOG_TO_CREATE',
+  UPDATE_EDITOR_DIALOG_CONFIG: 'JOB_UPDATE_EDITOR_DIALOG_CONFIG',
   CLOSE_EDITOR_DIALOG: 'JOB_CLOSE_EDITOR_DIALOG',
 }
 
 export const Action = {
   openEditorDialogToCreate: createAction(ActionType.OPEN_EDITOR_DIALOG_TO_CREATE),
+  updateEditorDialogConfig: createAction(ActionType.UPDATE_EDITOR_DIALOG_CONFIG),
   closeEditorDialog: createAction(ActionType.CLOSE_EDITOR_DIALOG),
 }
 
-const INITIAL_EDITOR_DIALOG_STATE = {
+export const INITIAL_EDITOR_DIALOG_STATE = {
   id: '',
   job: {},
   dialogMode: EDITOR_DIALOG_MODE.CLOSE,
@@ -23,7 +23,7 @@ const INITIAL_EDITOR_DIALOG_STATE = {
 
 export const handler = handleActions({
   /** open editor dialog to edit */
-  [JobApiActionTypes.FETCH_CONFIG.SUCCEEDED]: (state, { payload, }) =>
+  [ActionType.UPDATE_EDITOR_DIALOG_CONFIG]: (state, { payload, }) =>
     Object.assign({}, INITIAL_EDITOR_DIALOG_STATE, {
       id: payload.id,
       readonly: payload.readonly,

@@ -1,12 +1,11 @@
 
-import * as JobActions from './JobActions'
-import * as JobApiActions from './JobApiActions'
+import JobActions from './JobActions'
 
-export const ACTION_CONTAINER = {
+export const ACTION_SELECTOR = {
   job: 'job',
 }
 
 export default {
-  [ACTION_CONTAINER.job]: Object.assign({}, JobActions, JobApiActions),
+  [ACTION_SELECTOR.job]: JobActions,
 }
 

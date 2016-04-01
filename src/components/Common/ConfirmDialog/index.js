@@ -4,7 +4,6 @@ import FlatButton from 'material-ui/lib/flat-button'
 import Dialog from 'material-ui/lib/dialog'
 
 import { JOB_PROPERTY, } from '../../../reducers/JobReducer/JobItemState'
-import * as JobActions from '../../../actions/JobActions'
 import * as dialogStyle from './style'
 
 export const CONFIRM_DIALOG_MODE = {
