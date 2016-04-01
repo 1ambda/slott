@@ -2,7 +2,7 @@ import { handleActions, } from 'redux-actions'
 
 import * as JobActionTypes from '../../constants/JobActionTypes'
 import * as JobApiActionTypes from '../../constants/JobApiActionTypes'
-import * as JobSortStrategies from '../../constants/JobSortStrategies'
+import * as JobSortingStrategies from './SorterState'
 
 export const JOB_STATE = {
   STOPPED: 'STOPPED', /** readonly */
@@ -126,11 +126,11 @@ export function sortJob(state, { payload, }) {
   const jobs = state.slice() /** copy origin state */
 
   switch(payload.strategy) {
-    case JobSortStrategies.RUNNING:
+    case JobSortingStrategies.RUNNING:
       return jobs.sort(sortByRunning)
-    case JobSortStrategies.WAITING:
+    case JobSortingStrategies.WAITING:
       return jobs.sort(sortByWaiting)
-    case JobSortStrategies.STOPPED:
+    case JobSortingStrategies.STOPPED:
       return jobs.sort(sortByStopped)
   }
 

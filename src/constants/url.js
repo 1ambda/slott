@@ -71,21 +71,6 @@ export default {
   getContainerJobUrl: (containerName, id) => { /** id might be undefined */
     return _buildContainerJobUrl(CONTAINERS, containerName, id)
   },
-
-  buildJobStateUrl: (id) => {
-    return `${HOST_JOB_CONTAINER}/${URL_JOB_BASE}/${id}/${URL_JOB_PROPERTY_STATE}`
-  },
-
-  buildJobConfigUrl: (id) => {
-    return `${HOST_JOB_CONTAINER}/${URL_JOB_BASE}/${id}/${URL_JOB_PROPERTY_CONFIG}`
-  },
-
-  buildJobUrl: (id) => {
-    let postfix = ''
-    if (id !== void 0) postfix = `/${id}`
-
-    return `${HOST_JOB_CONTAINER}/${URL_JOB_BASE}${postfix}`
-  },
 }
 
 

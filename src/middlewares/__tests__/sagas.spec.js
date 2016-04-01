@@ -7,7 +7,6 @@ import * as JobApiActions from '../../actions/JobApiActions'
 import * as JobActionTypes from '../../constants/JobActionTypes'
 import * as JobApiActionTypes from '../../constants/JobApiActionTypes'
 import * as Selector from '../../reducers/JobReducer/selector'
-import * as JobSortStrategies from '../../constants/JobSortStrategies'
 
 import * as API from '../api'
 import * as Handler from '../handler'

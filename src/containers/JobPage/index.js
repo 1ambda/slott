@@ -22,10 +22,10 @@ class JobPage extends React.Component {
     jobs: PropTypes.array.isRequired,
     paginator: PropTypes.object.isRequired,
     filterKeyword: PropTypes.string.isRequired,
-    sortingStrategy: PropTypes.string.isRequired,
     editorDialog: PropTypes.object.isRequired,
     confirmDialog: PropTypes.object.isRequired,
     snackbar: PropTypes.object.isRequired,
+    sortingStrategy: PropTypes.object.isRequired,
     containerSelector: PropTypes.object.isRequired,
   }
 
@@ -89,10 +89,10 @@ function mapStateToProps(state) {
     jobs: state.job[JOB_STATE_PROPERTY.JOB_ITEMS],
     paginator: state.job[JOB_STATE_PROPERTY.PAGINATOR],
     filterKeyword: state.job[JOB_STATE_PROPERTY.FILTER],
-    sortingStrategy: state.job[JOB_STATE_PROPERTY.SORTER],
     editorDialog: state.job[JOB_STATE_PROPERTY.EDITOR_DIALOG],
     confirmDialog: state.job[JOB_STATE_PROPERTY.CONFIRM_DIALOG],
     snackbar: state.job[JOB_STATE_PROPERTY.SNACKBAR],
+    sortingStrategy: state.job[JOB_STATE_PROPERTY.SORTER],
     containerSelector: state.job[JOB_STATE_PROPERTY.CONTAINER_SELECTOR],
   }
 }

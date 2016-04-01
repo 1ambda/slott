@@ -11,6 +11,6 @@ export function getSelectedContainer(state) {
 }
 
 export function getCurrentSortStrategy(state) {
-  return state.job[JOB_STATE_PROPERTY.SORTER] /** state consists of string */
+  return state.job[JOB_STATE_PROPERTY.SORTER].selectedStrategy
 }
 

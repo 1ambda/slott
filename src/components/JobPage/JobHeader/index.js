@@ -9,7 +9,7 @@ import Filter from '../../Common/Filter'
 import Selector from '../../Common/Selector'
 import * as style from './style'
 
-import JobSortingStrategies from '../../../constants/JobSortStrategies'
+import * as JobSortingStrategies from '../../../reducers/JobReducer/SorterState'
 import { JobContainerSelectorModes, } from '../../../reducers/JobReducer/JobContainerState'
 import * as JobActions from '../../../actions/JobActions'
 import { JOB_PROPERTY, isRunning, } from '../../../reducers/JobReducer/JobItemState'
@@ -17,7 +17,7 @@ import * as URL from '../../../constants/url'
 
 export default class JobHeader extends React.Component {
   static propTypes = {
-    sortingStrategy: PropTypes.string.isRequired,
+    sortingStrategy: PropTypes.object.isRequired,
     containerSelector: PropTypes.object.isRequired,
     jobs: PropTypes.array.isRequired,
     actions: PropTypes.object.isRequired,
@@ -99,22 +99,22 @@ export default class JobHeader extends React.Component {
   }
 
   handleFilterChange(filterKeyword) {
-    const payload = { filterKeyword, }
     const { actions, } = this.props
+    const payload = { filterKeyword, }
 
     actions.filterJob(payload)
   }
 
   handleSorterChange(strategy) {
-    const payload = { strategy, }
     const { actions, } = this.props
+    const payload = { strategy, }
 
     actions.sortJob(payload)
   }
 
   handleContainerSelectorChange(container) {
-    const payload = { container, }
     const { actions, } = this.props
+    const payload = { container, }
 
      actions.changeContainer(payload)
   }
@@ -174,8 +174,8 @@ export default class JobHeader extends React.Component {
                   labelStyle={style.selectorLabel}
                   floatingLabel="Sort by"
                   floatingLabelStyle={style.selectorFloatingLabel}
-                  strategies={JobSortingStrategies}
-                  currentStrategy={sortingStrategy} />
+                  strategies={sortingStrategy.availableStrategies}
+                  currentStrategy={sortingStrategy.selectedStrategy} />
         </div>
         {summaryWithPopover}
       </div>
