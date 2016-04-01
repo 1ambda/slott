@@ -5,6 +5,7 @@ export const END_SWITCHING = 'JOB_END_SWITCHING'
 /** for sorter, containerSelector, filter, paginator */
 export const SORT = 'JOB_SORT'
 export const FILTER = 'JOB_FILTER'
+export const INITIALIZE_FILTER = 'JOB_INITIALIZE_FILTER'
 export const CHANGE_PAGE_OFFSET = 'JOB_CHANGE_PAGE_OFFSET'
 
 /** for dialogs, snackbar */

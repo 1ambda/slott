@@ -8,6 +8,7 @@ export const endSwitching = createAction(JobActionTypes.END_SWITCHING)
 /** sorter, containerSelector, filter, paginator */
 export const sortJob = createAction(JobActionTypes.SORT)
 export const filterJob = createAction(JobActionTypes.FILTER)
+export const initializeFilter = createAction(JobActionTypes.INITIALIZE_FILTER)
 export const changePageOffset = createAction(JobActionTypes.CHANGE_PAGE_OFFSET)
 
 /** for dialogs, snackbar */

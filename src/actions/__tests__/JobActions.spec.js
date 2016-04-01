@@ -16,6 +16,7 @@ describe('JobActions', () => {
     /** sorter, containerSelector, filter, paginator */
     { name: 'sortJob', type: JobActionTypes.SORT, },
     { name: 'filterJob', type: JobActionTypes.FILTER, },
+    { name: 'initializeFilter', type: JobActionTypes.INITIALIZE_FILTER, },
     { name: 'changePageOffset', type: JobActionTypes.CHANGE_PAGE_OFFSET, },
 
     /** dialog, snackbar */
