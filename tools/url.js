@@ -12,9 +12,9 @@ const FILE_PRODUCTION_SAMPLE_JS = 'production.sample.js'
 const PATH_PRODUCTION_SAMPLE_CONFIG = `./${DIR_CONFIG}/${FILE_PRODUCTION_SAMPLE_JS}`
 
 try {
-  fs.accessSync(PATH_PRODUCTION_CONFIG, fs.F_OK);
+  fs.accessSync(PATH_PRODUCTION_CONFIG, fs.F_OK)
 } catch (error) {
-  console.log(`${PATH_PRODUCTION_CONFIG} doesn't exist, copying ${FILE_PRODUCTION_SAMPLE_JS}`.green)
+  console.log(`${PATH_PRODUCTION_CONFIG} doesn't exist, copying ${FILE_PRODUCTION_SAMPLE_JS}`.green) // eslint-disable-line no-console
   fs.copySync(PATH_PRODUCTION_SAMPLE_CONFIG, PATH_PRODUCTION_CONFIG)
 }
 

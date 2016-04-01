@@ -80,7 +80,7 @@ describe('sagas', () => {
   })
 
   describe('initialize', () => {
-    it(`should callFetchContainerJobs`, () => {
+    it('should callFetchContainerJobs', () => {
       const gen = Sagas.initialize()
       expect(gen.next().value).to.deep.equal(
         call(Handler.callFetchContainerJobs)

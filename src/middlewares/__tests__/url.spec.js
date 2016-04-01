@@ -22,7 +22,7 @@ describe('middlewares/url', () => {
   describe(`${URL._buildContainerJobPropertyUrl.name}`, () => {
 
     it('should throw error given id is undefined, null, empty string', () => {
-      [undefined, null, ''].map(id => {
+      [undefined, null, '',].map(id => {
         expect(
           () => URL._buildContainerJobPropertyUrl(containers, 'container01', id, 'prop')
         ).to.throw(Error)
@@ -30,7 +30,7 @@ describe('middlewares/url', () => {
     })
 
     it('should throw error given property is undefined, null, empty string', () => {
-      [undefined, null, ''].map(property => {
+      [undefined, null, '',].map(property => {
         expect(
           () => URL._buildContainerJobPropertyUrl(containers, 'container01', 'id', property)
         ).to.throw(Error)

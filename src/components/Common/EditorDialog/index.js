@@ -82,7 +82,7 @@ export default class EditorDialog extends React.Component {
 
     if (defaultMode !== JSON_EDITOR_MODES.CODE) editor.expandAll()
 
-    this.setState({ editor, })
+    this.setState({ editor, }) // eslint-disable-line react/no-did-mount-set-state,react/no-set-state
   }
 
   /** component life-cycle */
@@ -91,7 +91,7 @@ export default class EditorDialog extends React.Component {
     const { job: nextJSON, } = nextProps
 
     /** if JSON is not changed, then disable `UPDATE` button */
-    this.setState({ isJSONChanged: isEditorJSONChanged(currentJSON, nextJSON), })
+    this.setState({ isJSONChanged: isEditorJSONChanged(currentJSON, nextJSON), }) // eslint-disable-line react/no-set-state
   }
 
   getEditorJSONValue() {
@@ -104,7 +104,7 @@ export default class EditorDialog extends React.Component {
 
     const updatedJSON = this.getEditorJSONValue()
 
-    this.setState({ isJSONChanged: isEditorJSONChanged(prevJSON, updatedJSON), })
+    this.setState({ isJSONChanged: isEditorJSONChanged(prevJSON, updatedJSON), }) // eslint-disable-line react/no-set-state
   }
 
   handleEditorError(err) {

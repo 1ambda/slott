@@ -53,7 +53,7 @@ describe('handler', () => {
       )
 
       expect(gen.next(jobs).value).to.deep.equal(
-        put(JobItemState.Action.updateAllJobs({ jobs }))
+        put(JobItemState.Action.updateAllJobs({ jobs, }))
       )
 
       expect(gen.next().value).to.deep.equal(
@@ -79,7 +79,7 @@ describe('handler', () => {
         - put fetchJobConfigSucceeded with { id, readonly, job: updatedJob }
         `, () => {
 
-        const [id, readonly,] = ['job01', false]
+        const [id, readonly,] = [ 'job01', false, ]
         const payload = { [JOB_PROPERTY.id]: id, readonly, }
         const action = { payload, }
         const updatedJob = { [JOB_PROPERTY.id]: id, }
@@ -110,7 +110,7 @@ describe('handler', () => {
           put openErrorSnackbar with { message, error, }
         `, () => {
 
-        const [id, readonly,] = ['job01', false]
+        const [id, readonly,] = [ 'job01', false, ]
         const payload = { [JOB_PROPERTY.id]: id, readonly, }
         const action = { payload, }
         const container = 'container'
@@ -149,8 +149,8 @@ describe('handler', () => {
         const job = {[JOB_PROPERTY.id]: id, [JOB_PROPERTY.tags]: [],}
         const payload = {[JOB_PROPERTY.id]: id, job,}
         const action = { payload, }
-        const updatedJob = {[JOB_PROPERTY.id]: id, [JOB_PROPERTY.tags]: ['tag01'],}
-        const container = "container01"
+        const updatedJob = {[JOB_PROPERTY.id]: id, [JOB_PROPERTY.tags]: ['tag01', ],}
+        const container = 'container01'
 
         const gen = handler(action)
 
@@ -186,7 +186,7 @@ describe('handler', () => {
         const job = { [JOB_PROPERTY.id]: id, [JOB_PROPERTY.tags]: [], }
         const payload = { [JOB_PROPERTY.id]: id, job, }
         const action = { payload, }
-        const container = "container01"
+        const container = 'container01'
 
         const gen = handler(action)
 
@@ -227,7 +227,7 @@ describe('handler', () => {
         const payload = { job, }
         const action = { payload, }
         const existingJobs = []
-        const container = "container01"
+        const container = 'container01'
 
         const gen = handler(action)
 
@@ -271,7 +271,7 @@ describe('handler', () => {
         const job = {[JOB_PROPERTY.id]: id, [JOB_PROPERTY.tags]: [],}
         const payload = { job, }
         const action = { payload, }
-        const container = "container01"
+        const container = 'container01'
 
         const gen = handler(action)
 
@@ -307,7 +307,7 @@ describe('handler', () => {
         const payload = { job, }
         const action = { payload, }
         const existingJobs = []
-        const container = "container01"
+        const container = 'container01'
 
         const gen = handler(action)
 
@@ -349,7 +349,7 @@ describe('handler', () => {
         const id = 'job01'
         const payload = { [JOB_PROPERTY.id]: id, }
         const action = { payload, }
-        const container = "container01"
+        const container = 'container01'
 
         const gen = handler(action)
 
@@ -384,7 +384,7 @@ describe('handler', () => {
         const id = 'job01'
         const payload = { [JOB_PROPERTY.id]: id, }
         const action = { payload, }
-        const container = "container01"
+        const container = 'container01'
 
         const gen = handler(action)
 
@@ -421,7 +421,7 @@ describe('handler', () => {
         const payload = { [JOB_PROPERTY.id]: id, }
         const action = { payload, }
         const updatedJob = { [JOB_PROPERTY.id]: id, [SERVER_JOB_PROPERTY.enabled]: false, }
-        const container = "container01"
+        const container = 'container01'
 
         const gen = handler(action)
 
@@ -448,7 +448,7 @@ describe('handler', () => {
         const id = 'job01'
         const payload = { [JOB_PROPERTY.id]: id, }
         const action = { payload, }
-        const container = "container01"
+        const container = 'container01'
 
         const gen = handler(action)
 
@@ -486,7 +486,7 @@ describe('handler', () => {
         const payload = { [JOB_PROPERTY.id]: id, }
         const action = { payload, }
         const updatedJob = { [JOB_PROPERTY.id]: id, [SERVER_JOB_PROPERTY.enabled]: true, }
-        const container = "container01"
+        const container = 'container01'
 
         const gen = handler(action)
 
@@ -513,7 +513,7 @@ describe('handler', () => {
         const id = 'job01'
         const payload = { [JOB_PROPERTY.id]: id, }
         const action = { payload, }
-        const container = "container01"
+        const container = 'container01'
 
         const gen = handler(action)
 
@@ -551,7 +551,7 @@ describe('handler', () => {
         const payload = { [JOB_PROPERTY.id]: id, }
         const action = { payload, }
         const updatedJob = { [JOB_PROPERTY.id]: id, [SERVER_JOB_PROPERTY.active]: true, }
-        const container = "container01"
+        const container = 'container01'
 
         const gen = handler(action)
 
@@ -592,7 +592,7 @@ describe('handler', () => {
         const id = 'job01'
         const payload = { [JOB_PROPERTY.id]: id, }
         const action = { payload, }
-        const container = "container01"
+        const container = 'container01'
 
         const gen = handler(action)
 
@@ -640,7 +640,7 @@ describe('handler', () => {
         const payload = { [JOB_PROPERTY.id]: id, }
         const action = { payload, }
         const updatedJob = { [JOB_PROPERTY.id]: id, [SERVER_JOB_PROPERTY.active]: false, }
-        const container = "container01"
+        const container = 'container01'
 
         const gen = handler(action)
 
@@ -681,7 +681,7 @@ describe('handler', () => {
         const id = 'job01'
         const payload = { [JOB_PROPERTY.id]: id, }
         const action = { payload, }
-        const container = "container01"
+        const container = 'container01'
 
         const gen = handler(action)
 
@@ -727,7 +727,7 @@ describe('handler', () => {
         `, () => {
 
         const id = 'job01'
-        const container = "container01"
+        const container = 'container01'
         const payload = { [JOB_PROPERTY.id]: id, container, }
         const action = { payload, }
         const jobs = []
@@ -764,7 +764,7 @@ describe('handler', () => {
         `, () => {
 
         const id = 'job01'
-        const container = "container01"
+        const container = 'container01'
         const payload = { [JOB_PROPERTY.id]: id, container, }
         const action = { payload, }
         const strategy = 'strategy'

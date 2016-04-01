@@ -37,7 +37,7 @@ function getJSONs(urls) {
   const promises = urls.map(url => {
     return getJSON(url)
       .catch(error => {
-        console.error(`Failed to fetch ${url}. ${error.message}`)
+        console.error(`Failed to fetch ${url}. ${error.message}`) // eslint-disable-line no-console
         return [] /** return an empty array */
       })
   })
