@@ -1,56 +1,121 @@
 {
   "jobs": [
     {
-      "id": "akka-cluster1-01",
+      "id": "akka-cluster-A-1",
       "tags": [
-        "server1"
+        "cluster"
       ],
       "active": true,
       "enabled": true,
       "kafka": {
-        "topic": "akka-1",
-        "consumer-group": "cluster-consumer-1"
+        "topic": "akka-A",
+        "consumer-group": "cluster-consumers"
       },
-      "hdfs": "/data/akka/cluster1"
-    },
-    {
-      "id": "akka-cluster1-02",
+      "hdfs": "/data/akka/cluster-A"
+    }
+  , {
+      "id": "akka-cluster-A-2",
       "tags": [
-        "server1"
+        "cluster"
       ],
       "active": true,
       "enabled": true,
       "kafka": {
-        "topic": "akka-1",
+        "topic": "akka-A",
+        "consumer-group": "cluster-consumers"
+      },
+      "hdfs": "/data/akka/cluster-A"
+    }
+  , {
+      "id": "akka-cluster-A-3",
+      "tags": [
+        "cluster"
+      ],
+      "active": true,
+      "enabled": true,
+      "kafka": {
+        "topic": "akka-A",
         "consumer-group": "cluster-consumer-1"
       },
-      "hdfs": "/data/akka/cluster1"
-    },
-    {
-      "id": "akka-cluster1-03",
+      "hdfs": "/data/akka/cluster-A"
+    }
+  , {
+      "id": "akka-cluster-B-1",
       "tags": [
-        "server1"
+        "cluster"
+      ],
+      "active": true,
+      "enabled": true,
+      "kafka": {
+        "topic": "akka-B",
+        "consumer-group": "cluster-consumers"
+      },
+      "hdfs": "/data/akka/cluster-B"
+    }
+  , {
+      "id": "akka-cluster-B-2",
+      "tags": [
+        "cluster"
+      ],
+      "active": true,
+      "enabled": true,
+      "kafka": {
+        "topic": "akka-B",
+        "consumer-group": "cluster-consumers"
+      },
+      "hdfs": "/data/akka/cluster-B"
+    }
+  , {
+      "id": "akka-application-1",
+      "tags": [
+        "application"
       ],
       "active": false,
       "enabled": true,
       "kafka": {
-        "topic": "akka-1",
-        "consumer-group": "cluster-consumer-1"
+        "topic": "akka-C",
+        "consumer-group": "application-consumers"
       },
-      "hdfs": "/data/akka/cluster1"
-    },
-    {
-      "id": "akka-cluster2-01",
+      "hdfs": "/data/akka/app-1"
+    }
+  , {
+      "id": "akka-application-2",
       "tags": [
-        "server1"
+        "application"
       ],
       "active": false,
       "enabled": false,
       "kafka": {
-        "topic": "akka-2",
-        "consumer-group": "cluster-consumer-1"
+        "topic": "akka-D",
+        "consumer-group": "application-consumers"
       },
-      "hdfs": "/data/akka/cluster2"
+      "hdfs": "/data/akka/app-2"
+    }
+  , {
+      "id": "akka-remote-A-1",
+      "tags": [
+        "remote"
+      ],
+      "active": true,
+      "enabled": true,
+      "kafka": {
+        "topic": "akka-E",
+        "consumer-group": "remote-consumers"
+      },
+      "hdfs": "/data/akka/remote-A"
+    }
+  , {
+      "id": "akka-remote-A-2",
+      "tags": [
+        "remote"
+      ],
+      "active": true,
+      "enabled": true,
+      "kafka": {
+        "topic": "akka-E",
+        "consumer-group": "remote-consumers"
+      },
+      "hdfs": "/data/akka/remote-A"
     }
   ]
 }

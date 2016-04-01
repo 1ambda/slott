@@ -1,32 +1,136 @@
 {
   "jobs": [
     {
-      "id": "storm-trident1-01",
+      "id": "spark-stream-1",
       "tags": [
-        "storm",
-        "trident"
+        "spark",
+        "micro-batch"
       ],
       "active": false,
       "enabled": true,
       "kafka": {
-        "topic": "storm-1",
-        "consumer-group": "trident-consumer-1"
+        "topic": "spark-1",
+        "consumer-group": "spark-consumers"
+      },
+      "hdfs": "/data/spark/stream-1"
+    }
+  , {
+      "id": "spark-stream-2",
+      "tags": [
+        "spark",
+        "micro-batch"
+      ],
+      "active": true,
+      "enabled": true,
+      "kafka": {
+        "topic": "spark-2",
+        "consumer-group": "spark-consumers"
+      },
+      "hdfs": "/data/spark/stream-2"
+    }
+  , {
+      "id": "storm-trident-1",
+      "tags": [
+        "trident"
+      ],
+      "active": false,
+      "enabled": false,
+      "kafka": {
+        "topic": "storm-trident-1",
+        "consumer-group": "trident-consumers"
       },
       "hdfs": "/data/storm/trident-1"
-    },
-    {
-      "id": "storm-trident1-02",
+    }
+  , {
+      "id": "storm-trident-2",
       "tags": [
-        "storm",
         "trident"
       ],
       "active": true,
       "enabled": true,
       "kafka": {
-        "topic": "storm-1",
-        "consumer-group": "trident-consumer-1"
+        "topic": "storm-trident-2",
+        "consumer-group": "trident-consumers"
       },
-      "hdfs": "/data/storm/trident-1"
+      "hdfs": "/data/storm/trident-2"
+    }
+  , {
+      "id": "storm-trident-3",
+      "tags": [
+        "trident"
+      ],
+      "active": false,
+      "enabled": true,
+      "kafka": {
+        "topic": "storm-trident-3",
+        "consumer-group": "trident-consumers"
+      },
+      "hdfs": "/data/storm/trident-3"
+    }
+  , {
+      "id": "storm-trident-4",
+      "tags": [
+        "trident"
+      ],
+      "active": false,
+      "enabled": true,
+      "kafka": {
+        "topic": "storm-trident-4",
+        "consumer-group": "trident-consumers"
+      },
+      "hdfs": "/data/storm/trident-4"
+    }
+  , {
+      "id": "storm-trident-5-a",
+      "tags": [
+        "trident-group"
+      ],
+      "active": true,
+      "enabled": true,
+      "kafka": {
+        "topic": "storm-5",
+        "consumer-group": "trident-consumers"
+      },
+      "hdfs": "/data/storm/trident-5"
+    }
+  , {
+      "id": "storm-trident-5-b",
+      "tags": [
+        "trident-group"
+      ],
+      "active": true,
+      "enabled": true,
+      "kafka": {
+        "topic": "storm-5",
+        "consumer-group": "trident-consumers"
+      },
+      "hdfs": "/data/storm/trident-5"
+    }
+  , {
+      "id": "storm-trident-5-c",
+      "tags": [
+        "trident-group"
+      ],
+      "active": true,
+      "enabled": true,
+      "kafka": {
+        "topic": "storm-5",
+        "consumer-group": "trident-consumers"
+      },
+      "hdfs": "/data/storm/trident-5"
+    }
+  , {
+      "id": "storm-trident-5-b",
+      "tags": [
+        "trident-group"
+      ],
+      "active": true,
+      "enabled": true,
+      "kafka": {
+        "topic": "storm-5",
+        "consumer-group": "trident-consumers"
+      },
+      "hdfs": "/data/storm/trident-5"
     }
   ]
 }

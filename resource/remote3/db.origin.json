@@ -10,7 +10,7 @@
       "enabled": true,
       "kafka": {
         "topic": "batch-1",
-        "consumer-group": "daily-batch-consumer-1"
+        "consumer-group": "batch-consumers"
       },
       "hdfs": "/data/batch/daily-1"
     },
@@ -24,7 +24,7 @@
       "enabled": true,
       "kafka": {
         "topic": "batch-2",
-        "consumer-group": "daily-batch-consumer-1"
+        "consumer-group": "batch-consumers"
       },
       "hdfs": "/data/batch/daily-2"
     },
@@ -38,7 +38,7 @@
       "enabled": false,
       "kafka": {
         "topic": "batch-3",
-        "consumer-group": "hourly-batch-consumer-1"
+        "consumer-group": "batch-consumers"
       },
       "hdfs": "/data/batch/hourly-1"
     },
@@ -52,7 +52,7 @@
       "enabled": true,
       "kafka": {
         "topic": "batch-4",
-        "consumer-group": "hourly-batch-consumer-1"
+        "consumer-group": "batch-consumers"
       },
       "hdfs": "/data/batch/hourly-2"
     },
@@ -66,7 +66,7 @@
       "enabled": false,
       "kafka": {
         "topic": "batch-5",
-        "consumer-group": "hourly-batch-consumer-1"
+        "consumer-group": "batch-consumers"
       },
       "hdfs": "/data/batch/hourly-3"
     }
