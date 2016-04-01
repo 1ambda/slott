@@ -124,7 +124,7 @@ export function* fetchAllContainerJobs(containerNames) {
   return flattened.map(Converter.convertServerJobToClientJob)
 }
 
-export function* fetchContainerJobs(containerName) {
+export function* fetchJobs(containerName) {
   const url = URL.getContainerJobUrl(containerName)
 
   const containerServerJobs = yield call(getJSON, url)
@@ -135,31 +135,20 @@ export function* fetchContainerJobs(containerName) {
   return containerServerJobs.map(Converter.convertServerJobToClientJob)
 }
 
-export function* fetchJobs() {
-  const url = URL.buildJobUrl()
-
-  const serverJobs = yield call(getJSON, url)
-
-  if (!Array.isArray(serverJobs))
-    throw new Error(`GET ${url} didn't return an array, got ${serverJobs}`)
-
-  return serverJobs.map(Converter.convertServerJobToClientJob)
-}
-
-export function* fetchJob(id) {
-  const url = URL.buildJobUrl(id)
+export function* fetchJob(containerName, id) {
+  const url = URL.getContainerJobUrl(containerName, id)
 
   const serverJob = yield call(getJSON, url)
   return Converter.convertServerJobToClientJob(serverJob)
 }
 
-export function* createJob(job) {
-  const url = URL.buildJobUrl()
+export function* createJob(containerName, job) {
+  const url = URL.getContainerJobUrl(containerName)
   yield call(postJSON, url, Converter.removeClientProps(job)) /** return nothing */
 }
 
-export function* removeJob(id) {
-  const url = URL.buildJobUrl(id)
+export function* removeJob(containerName, id) {
+  const url = URL.getContainerJobUrl(containerName, id)
   yield call(deleteJSON, url) /** return nothing */
 }
 
@@ -187,8 +176,8 @@ export function* removeJob(id) {
  *    }
  */
 
-export function* fetchJobConfig(id) {
-  const url = URL.buildJobConfigUrl(id)
+export function* fetchJobConfig(container, id) {
+  const url = URL.getContainerJobConfigUrl(container, id)
 
   const serverJob = yield call(getJSON, url)
 
@@ -196,41 +185,41 @@ export function* fetchJobConfig(id) {
   return Converter.removeStateProps(serverJob)
 }
 
-export function* updateJobConfig(id, property) {
-  const url = URL.buildJobConfigUrl(id)
+export function* updateJobConfig(containerName, id, property) {
+  const url = URL.getContainerJobConfigUrl(containerName, id)
 
   yield call(patchJSON, url, Converter.removeStateProps(property))
 
   /** since `patch` doesn't return job state, we need to fetch job */
-  return yield call(fetchJob, id)
+  return yield call(fetchJob, containerName, id)
 }
 
-export function* setReadonly(id) {
-  return yield call(updateJobConfig, id, Converter.createConfigToSetReadonly())
+export function* setReadonly(containerName, id) {
+  return yield call(updateJobConfig, containerName, id, Converter.createConfigToSetReadonly())
 }
 
-export function* unsetReadonly(id) {
-  return yield call(updateJobConfig, id, Converter.createConfigToUnsetReadonly())
+export function* unsetReadonly(containerName, id) {
+  return yield call(updateJobConfig, containerName, id, Converter.createConfigToUnsetReadonly())
 }
 
-export function* updateJobState(id, state) {
-  const url = URL.buildJobStateUrl(id)
+export function* updateJobState(containerName, id, state) {
+  const url = URL.getContainerJobStateUrl(containerName, id)
 
   yield call (patchJSON, url, state)
 }
 
-export function* startJob(id) {
-  yield call(updateJobState, id, Converter.createStateToStartJob()) /** return nothing */
+export function* startJob(containerName, id) {
+  yield call(updateJobState, containerName, id, Converter.createStateToStartJob())
 
   /** since `patch` METHOD doesn't return all job props (state + config), we need to fetch job */
-  return yield call(fetchJob, id)
+  return yield call(fetchJob, containerName, id)
 }
 
-export function* stopJob(id) {
-  yield call(updateJobState, id, Converter.createStateToStopJob()) /** return nothing */
+export function* stopJob(containerName, id) {
+  yield call(updateJobState, containerName, id, Converter.createStateToStopJob())
 
   /** since `patch` METHOD doesn't return all job props (state + config), we need to fetch job */
-  return yield call(fetchJob, id)
+  return yield call(fetchJob, containerName, id)
 }
 
 
