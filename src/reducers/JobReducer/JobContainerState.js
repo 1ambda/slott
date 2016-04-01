@@ -15,7 +15,7 @@ export const INITIAL_STATE = {
 }
 
 export const handler = handleActions({
-  [JobApiActionTypes.FETCH_CONTAINER_JOBS.SUCCEEDED]: (state, { payload, }) => {
+  [JobApiActionTypes.FETCH_JOBS.SUCCEEDED]: (state, { payload, }) => {
     const { container, } = payload
     return Object.assign({}, state, { selectedContainer: container, })
   },

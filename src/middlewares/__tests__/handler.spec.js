@@ -33,11 +33,11 @@ describe('handler', () => {
       const gen = Handler.callFetchContainerJobs()
 
       expect(gen.next().value).to.deep.equal(
-        select(Selector.getSelectedContainer)
+        select(Selector.selectedContainer)
       )
 
       expect(gen.next(container).value).to.deep.equal(
-        select(Selector.getCurrentSortStrategy)
+        select(Selector.currentSortStrategy)
       )
 
       expect(gen.next(sortStrategy).value).to.deep.equal(
@@ -78,7 +78,7 @@ describe('handler', () => {
         const gen = handler(action)
 
         expect(gen.next().value).to.deep.equal(
-          select(Selector.getSelectedContainer)
+          select(Selector.selectedContainer)
         )
 
         expect(gen.next(container).value).to.deep.equal(
@@ -105,7 +105,7 @@ describe('handler', () => {
         const gen = handler(action)
 
         expect(gen.next().value).to.deep.equal(
-          select(Selector.getSelectedContainer)
+          select(Selector.selectedContainer)
         )
 
         expect(gen.next(container).value).to.deep.equal(
@@ -141,7 +141,7 @@ describe('handler', () => {
         const gen = handler(action)
 
         expect(gen.next().value).to.deep.equal(
-          select(Selector.getSelectedContainer)
+          select(Selector.selectedContainer)
         )
 
         expect(gen.next(container).value).to.deep.equal(
@@ -173,7 +173,7 @@ describe('handler', () => {
         const gen = handler(action)
 
         expect(gen.next().value).to.deep.equal(
-          select(Selector.getSelectedContainer)
+          select(Selector.selectedContainer)
         )
 
         expect(gen.next(container).value).to.deep.equal(
@@ -210,11 +210,11 @@ describe('handler', () => {
         const gen = handler(action)
 
         expect(gen.next().value).to.deep.equal(
-          select(Selector.getSelectedContainer)
+          select(Selector.selectedContainer)
         )
 
         expect(gen.next(container).value).to.deep.equal(
-          select(Selector.getJobItems)
+          select(Selector.jobItems)
         )
 
         expect(gen.next(existingJobs).value).to.deep.equal(
@@ -250,11 +250,11 @@ describe('handler', () => {
         const gen = handler(action)
 
         expect(gen.next().value).to.deep.equal(
-          select(Selector.getSelectedContainer)
+          select(Selector.selectedContainer)
         )
 
         expect(gen.next(container).value).to.deep.equal(
-          select(Selector.getJobItems) /** select exisintg jobs */
+          select(Selector.jobItems) /** select exisintg jobs */
         )
 
         const error = new Error('VALIDATION FAILED')
@@ -282,11 +282,11 @@ describe('handler', () => {
         const gen = handler(action)
 
         expect(gen.next().value).to.deep.equal(
-          select(Selector.getSelectedContainer)
+          select(Selector.selectedContainer)
         )
 
         expect(gen.next(container).value).to.deep.equal(
-          select(Selector.getJobItems) /** select exisintg jobs */
+          select(Selector.jobItems) /** select exisintg jobs */
         )
 
         const error = new Error('VALIDATION FAILED')
@@ -320,7 +320,7 @@ describe('handler', () => {
         const gen = handler(action)
 
         expect(gen.next().value).to.deep.equal(
-          select(Selector.getSelectedContainer)
+          select(Selector.selectedContainer)
         )
 
         expect(gen.next(container).value).to.deep.equal(
@@ -351,7 +351,7 @@ describe('handler', () => {
         const gen = handler(action)
 
         expect(gen.next().value).to.deep.equal(
-          select(Selector.getSelectedContainer)
+          select(Selector.selectedContainer)
         )
 
         expect(gen.next(container).value).to.deep.equal(
@@ -385,7 +385,7 @@ describe('handler', () => {
         const gen = handler(action)
 
         expect(gen.next().value).to.deep.equal(
-          select(Selector.getSelectedContainer)
+          select(Selector.selectedContainer)
         )
 
         expect(gen.next(container).value).to.deep.equal(
@@ -412,7 +412,7 @@ describe('handler', () => {
         const gen = handler(action)
 
         expect(gen.next().value).to.deep.equal(
-          select(Selector.getSelectedContainer)
+          select(Selector.selectedContainer)
         )
 
         expect(gen.next(container).value).to.deep.equal(
@@ -446,7 +446,7 @@ describe('handler', () => {
         const gen = handler(action)
 
         expect(gen.next().value).to.deep.equal(
-          select(Selector.getSelectedContainer)
+          select(Selector.selectedContainer)
         )
 
         expect(gen.next(container).value).to.deep.equal(
@@ -473,7 +473,7 @@ describe('handler', () => {
         const gen = handler(action)
 
         expect(gen.next().value).to.deep.equal(
-          select(Selector.getSelectedContainer)
+          select(Selector.selectedContainer)
         )
 
         expect(gen.next(container).value).to.deep.equal(
@@ -507,7 +507,7 @@ describe('handler', () => {
         const gen = handler(action)
 
         expect(gen.next().value).to.deep.equal(
-          select(Selector.getSelectedContainer)
+          select(Selector.selectedContainer)
         )
 
         expect(gen.next(container).value).to.deep.equal(
@@ -548,7 +548,7 @@ describe('handler', () => {
         const gen = handler(action)
 
         expect(gen.next().value).to.deep.equal(
-          select(Selector.getSelectedContainer)
+          select(Selector.selectedContainer)
         )
 
         expect(gen.next(container).value).to.deep.equal(
@@ -592,7 +592,7 @@ describe('handler', () => {
         const gen = handler(action)
 
         expect(gen.next().value).to.deep.equal(
-          select(Selector.getSelectedContainer)
+          select(Selector.selectedContainer)
         )
 
         expect(gen.next(container).value).to.deep.equal(
@@ -633,7 +633,7 @@ describe('handler', () => {
         const gen = handler(action)
 
         expect(gen.next().value).to.deep.equal(
-          select(Selector.getSelectedContainer)
+          select(Selector.selectedContainer)
         )
 
         expect(gen.next(container).value).to.deep.equal(
@@ -678,7 +678,7 @@ describe('handler', () => {
         const gen = handler(action)
 
         expect(gen.next().value).to.deep.equal(
-          select(Selector.getCurrentSortStrategy)
+          select(Selector.currentSortStrategy)
         )
 
         expect(gen.next(strategy).value).to.deep.equal(
@@ -710,7 +710,7 @@ describe('handler', () => {
         const gen = handler(action)
 
         expect(gen.next().value).to.deep.equal(
-          select(Selector.getCurrentSortStrategy)
+          select(Selector.currentSortStrategy)
         )
 
         expect(gen.next(strategy).value).to.deep.equal(

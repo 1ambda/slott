@@ -1,14 +1,3 @@
-/** for job item, api related */
-export const START = 'JOB_START'
-export const STOP  = 'JOB_STOP'
-export const STOP_ALL = 'JOB_STOP_ALL'
-export const START_ALL = 'JOB_START_ALL'
-export const SET_READONLY = 'JOB_READONLY'
-export const UNSET_READONLY  = 'UNSET_READONLY'
-export const CREATE = 'JOB_CREATE'
-export const REMOVE = 'JOB_REMOVE'
-export const UPDATE = 'JOB_UPDATE'
-
 /** for job item */
 export const START_SWITCHING = 'JOB_START_SWITCHING'
 export const END_SWITCHING = 'JOB_END_SWITCHING'
@@ -17,10 +6,8 @@ export const END_SWITCHING = 'JOB_END_SWITCHING'
 export const SORT = 'JOB_SORT'
 export const FILTER = 'JOB_FILTER'
 export const CHANGE_PAGE_OFFSET = 'JOB_CHANGE_PAGE_OFFSET'
-export const CHANGE_CONTAINER = 'JOB_CHANGE_CONTAINER'
 
 /** for dialogs, snackbar */
-export const OPEN_EDITOR_DIALOG_TO_EDIT = 'JOB_OPEN_EDITOR_DIALOG_TO_EDIT'
 export const OPEN_EDITOR_DIALOG_TO_CREATE = 'JOB_OPEN_EDITOR_DIALOG_TO_CREATE'
 export const CLOSE_EDITOR_DIALOG = 'JOB_CLOSE_EDITOR_DIALOG'
 export const OPEN_CONFIRM_DIALOG_TO_REMOVE = 'JOB_OPEN_CONFIRM_DIALOG_TO_REMOVE'

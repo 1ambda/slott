@@ -4,7 +4,6 @@ import { takeEvery, } from 'redux-saga'
 
 import * as JobActions from '../../actions/JobActions'
 import * as JobApiActions from '../../actions/JobApiActions'
-import * as JobActionTypes from '../../constants/JobActionTypes'
 import * as JobApiActionTypes from '../../constants/JobApiActionTypes'
 import * as Selector from '../../reducers/JobReducer/selector'
 
@@ -16,42 +15,42 @@ describe('sagas', () => {
 
   const takeEveryWatcherProps = [
     {
-      actionType: JobActionTypes.OPEN_EDITOR_DIALOG_TO_EDIT,
+      actionType: JobApiActionTypes.OPEN_EDITOR_DIALOG_TO_EDIT.REQUESTED,
       watcher: Sagas.watchOpenEditorDialogToEdit,
       handler: Handler.handleOpenEditorDialogToEdit,
     },
     {
-      actionType: JobActionTypes.UPDATE,
+      actionType: JobApiActionTypes.UPDATE.REQUESTED,
       watcher: Sagas.watchUpdateJob,
       handler: Handler.handleUpdateJob,
     },
     {
-      actionType: JobActionTypes.CREATE,
+      actionType: JobApiActionTypes.CREATE.REQUESTED,
       watcher: Sagas.watchCreateJob,
       handler: Handler.handleCreateJob,
     },
     {
-      actionType: JobActionTypes.REMOVE,
+      actionType: JobApiActionTypes.REMOVE.REQUESTED,
       watcher: Sagas.watchRemoveJob,
       handler: Handler.handleRemoveJob,
     },
     {
-      actionType: JobActionTypes.SET_READONLY,
+      actionType: JobApiActionTypes.SET_READONLY.REQUESTED,
       watcher: Sagas.watchSetReadonly,
       handler: Handler.handleSetReadonly,
     },
     {
-      actionType: JobActionTypes.UNSET_READONLY,
+      actionType: JobApiActionTypes.UNSET_READONLY.REQUESTED,
       watcher: Sagas.watchUnsetReadonly,
       handler: Handler.handleUnsetReadonly,
     },
     {
-      actionType: JobActionTypes.START,
+      actionType: JobApiActionTypes.START.REQUESTED,
       watcher: Sagas.watchStartJob,
       handler: Handler.handleStartJob,
     },
     {
-      actionType: JobActionTypes.STOP,
+      actionType: JobApiActionTypes.STOP.REQUESTED,
       watcher: Sagas.watchStopJob,
       handler: Handler.handleStopJob,
     },

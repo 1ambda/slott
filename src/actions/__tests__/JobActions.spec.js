@@ -10,26 +10,15 @@ describe('JobActions', () => {
 
   const EXPECTED_ACTIONS = [
     /** job related */
-    { name: 'unsetReadonly', type: JobActionTypes.UNSET_READONLY, },
-    { name: 'setReadonly', type: JobActionTypes.SET_READONLY, },
-    { name: 'startJob', type: JobActionTypes.START, },
-    { name: 'stopJob', type: JobActionTypes.STOP, },
     { name: 'startSwitching', type: JobActionTypes.START_SWITCHING, },
     { name: 'endSwitching', type: JobActionTypes.END_SWITCHING, },
-    { name: 'createJob', type: JobActionTypes.CREATE, },
-    { name: 'removeJob', type: JobActionTypes.REMOVE, },
-    { name: 'updateJob', type: JobActionTypes.UPDATE, },
-    { name: 'startAllJobs', type: JobActionTypes.START_ALL, },
-    { name: 'stopAllJobs', type: JobActionTypes.STOP_ALL, },
 
     /** sorter, containerSelector, filter, paginator */
     { name: 'sortJob', type: JobActionTypes.SORT, },
     { name: 'filterJob', type: JobActionTypes.FILTER, },
     { name: 'changePageOffset', type: JobActionTypes.CHANGE_PAGE_OFFSET, },
-    { name: 'changeContainer', type: JobActionTypes.CHANGE_CONTAINER, },
 
     /** dialog, snackbar */
-    { name: 'openEditorDialogToEdit', type: JobActionTypes.OPEN_EDITOR_DIALOG_TO_EDIT, },
     { name: 'openEditorDialogToCreate', type: JobActionTypes.OPEN_EDITOR_DIALOG_TO_CREATE, },
     { name: 'closeEditorDialog', type: JobActionTypes.CLOSE_EDITOR_DIALOG, },
 

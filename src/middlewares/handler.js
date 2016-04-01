@@ -17,8 +17,8 @@ export const JOB_TRANSITION_DELAY = 1000
 /** utils */
 
 export function* callFetchContainerJobs() {
-  const container = yield select(Selector.getSelectedContainer)
-  const currentSortStrategy = yield select(Selector.getCurrentSortStrategy)
+  const container = yield select(Selector.selectedContainer)
+  const currentSortStrategy = yield select(Selector.currentSortStrategy)
 
   const jobs = yield call(API.fetchJobs, container)
   yield put(JobApiActions.fetchContainerJobsSucceeded({ container, jobs, }))
@@ -33,7 +33,7 @@ export function* callFetchContainerJobs() {
 
 export function* handleOpenEditorDialogToEdit(action) {
   const { payload, } = action
-  const container = yield select(Selector.getSelectedContainer)
+  const container = yield select(Selector.selectedContainer)
   const { id, readonly, } = payload
 
   try {
@@ -49,7 +49,7 @@ export function* handleOpenEditorDialogToEdit(action) {
 export function* handleUpdateJob(action) {
   const { payload, } = action
   const { id, job, } = payload
-  const container = yield select(Selector.getSelectedContainer)
+  const container = yield select(Selector.selectedContainer)
 
   try {
     const updatedJob = yield call(API.updateJobConfig, container, id, job)
@@ -63,12 +63,12 @@ export function* handleUpdateJob(action) {
 export function* handleCreateJob(action) {
   const { payload, } = action
   const { job, } = payload
-  const container = yield select(Selector.getSelectedContainer)
+  const container = yield select(Selector.selectedContainer)
 
   try {
     /** validate */
     const id = validateJobId(job)
-    const existingJobs = yield select(Selector.getJobItems)
+    const existingJobs = yield select(Selector.jobItems)
     checkDuplicatedJob(job, existingJobs)
 
     yield call(API.createJob, container, job) /** create job */
@@ -84,7 +84,7 @@ export function* handleCreateJob(action) {
 export function* handleRemoveJob(action) {
   const { payload, } = action
   const { id, } = payload
-  const container = yield select(Selector.getSelectedContainer)
+  const container = yield select(Selector.selectedContainer)
 
   try {
     validateId(id)
@@ -100,7 +100,7 @@ export function* handleRemoveJob(action) {
 export function* handleSetReadonly(action) {
   const { payload, } = action
   const { id, } = payload
-  const container = yield select(Selector.getSelectedContainer)
+  const container = yield select(Selector.selectedContainer)
 
   try {
     validateId(id)
@@ -115,7 +115,7 @@ export function* handleSetReadonly(action) {
 export function* handleUnsetReadonly(action) {
   const { payload, } = action
   const { id, } = payload
-  const container = yield select(Selector.getSelectedContainer)
+  const container = yield select(Selector.selectedContainer)
 
   try {
     validateId(id)
@@ -130,7 +130,7 @@ export function* handleUnsetReadonly(action) {
 export function* handleStartJob(action) {
   const { payload, } = action
   const { id, } = payload
-  const container = yield select(Selector.getSelectedContainer)
+  const container = yield select(Selector.selectedContainer)
 
   yield put(JobActions.startSwitching({ id, }))
 
@@ -150,7 +150,7 @@ export function* handleStartJob(action) {
 export function* handleStopJob(action) {
   const { payload, } = action
   const { id, } = payload
-  const container = yield select(Selector.getSelectedContainer)
+  const container = yield select(Selector.selectedContainer)
 
   yield put(JobActions.startSwitching({ id, }))
 
@@ -171,7 +171,7 @@ export function* handleChangeContainerSelector(action) {
   const { payload, } = action
   let container = null
 
-  const currentSortStrategy = yield select(Selector.getCurrentSortStrategy)
+  const currentSortStrategy = yield select(Selector.currentSortStrategy)
 
   try {
     container = payload.container /** payload might be undefined */

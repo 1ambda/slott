@@ -38,10 +38,10 @@ function getJSONs(urls) {
     return getJSON(url)
       .catch(error => {
         console.error(`Failed to fetch ${url}. ${error.message}`)
-        return [] /** returning an empty array */
+        return [] /** return an empty array */
       })
   })
-  return Promise.all(promises)
+  return Promise.all(promises) /** return nested arrays */
 }
 
 function getJSON(url) {
