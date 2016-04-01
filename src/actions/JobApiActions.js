@@ -1,5 +1,6 @@
+import { createAction, handleActions, } from 'redux-actions'
+
 import * as JobApiActionTypes from '../constants/JobApiActionTypes'
-import { createAction, } from 'redux-actions'
 
 export const fetchJobsSucceeded = createAction(JobApiActionTypes.FETCH_JOBS.SUCCEEDED)
 export const removeJobSucceeded = createAction(JobApiActionTypes.REMOVE.SUCCEEDED)

@@ -130,7 +130,7 @@ export default class EditorDialog extends React.Component {
     const { actions, } = this.props
     const job = this.getEditorJSONValue()
 
-    actions.createJob({ job, }) /** payload for JobActionTypes.UPDATE */
+    actions.createJob({ job, })
   }
 
   render() {

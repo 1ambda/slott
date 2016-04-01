@@ -1,8 +1,8 @@
-import { handleActions, } from 'redux-actions'
+import { createAction, handleActions, } from 'redux-actions'
 
-import * as JobActionTypes from '../../constants/JobActionTypes'
 import * as JobApiActionTypes from '../../constants/JobApiActionTypes'
-import * as JobSortingStrategies from './SorterState'
+import * as SorterState from './SorterState'
+import * as FilterState from './FilterState'
 
 export const JOB_STATE = {
   STOPPED: 'STOPPED', /** readonly */
@@ -126,11 +126,11 @@ export function sortJob(state, { payload, }) {
   const jobs = state.slice() /** copy origin state */
 
   switch(payload.strategy) {
-    case JobSortingStrategies.RUNNING:
+    case SorterState.RUNNING:
       return jobs.sort(sortByRunning)
-    case JobSortingStrategies.WAITING:
+    case SorterState.WAITING:
       return jobs.sort(sortByWaiting)
-    case JobSortingStrategies.STOPPED:
+    case SorterState.STOPPED:
       return jobs.sort(sortByStopped)
   }
 
@@ -171,29 +171,35 @@ export function checkDuplicatedJob(id, existingJobs) {
   }
 }
 
+export const ActionType = {
+  START_SWITCHING: 'JOB_START_SWITCHING',
+  END_SWITCHING: 'JOB_END_SWITCHING',
+}
+
+export const Action = {
+  startSwitching: createAction(ActionType.START_SWITCHING),
+  endSwitching: createAction(ActionType.END_SWITCHING),
+}
 
 const INITIAL_JOBS = []
 
 export const handler = handleActions({
   /** client only */
-  [JobActionTypes.START_SWITCHING]: startSwitching,
-  [JobActionTypes.END_SWITCHING]: endSwitching,
-  [JobActionTypes.SORT]: sortJob,
+  [ActionType.START_SWITCHING]: startSwitching,
+  [ActionType.END_SWITCHING]: endSwitching,
+  [SorterState.ActionType.SORT]: sortJob,
 
   /** api related */
   [JobApiActionTypes.FETCH_JOBS.SUCCEEDED]: updateAllJobs,
   [JobApiActionTypes.UPDATE.SUCCEEDED]: updateJob,
 
-  // TODO
-  [JobActionTypes.STOP_ALL]: (state) => {
-    console.error(`TODO ${JobActionTypes.STOP_ALL} in JobReducer`)
-    // Job.stopAllJobs,
+  [JobApiActionTypes.STOP_ALL]: (state) => { // TODO
+    console.error(`TODO ${JobApiActionTypes.STOP_ALL} in JobReducer`)
     return state
   },
 
-  [JobActionTypes.START_ALL]: (state) => {
-    console.error(`TODO ${JobActionTypes.START_ALL} in JobReducer`)
-    // Job.startAllJobs,
+  [JobApiActionTypes.START_ALL]: (state) => { // TODO
+    console.error(`TODO ${JobApiActionTypes.START_ALL} in JobReducer`)
     return state
   },
 

@@ -1,7 +1,6 @@
 import { take, put, call, select, } from 'redux-saga/effects'
 
 import * as JobActions from '../actions/JobActions'
-import * as JobActionTypes from '../constants/JobActionTypes'
 import * as JobApiActions from '../actions/JobApiActions'
 import * as JobApiActionTypes from '../constants/JobApiActionTypes'
 

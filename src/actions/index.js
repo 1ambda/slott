@@ -7,4 +7,6 @@ export const ACTION_CONTAINER = {
 }
 
 export default {
-  [ACTION_CONTAINER.job]: Object.assign({}, JobActions, JobApiActions), }
+  [ACTION_CONTAINER.job]: Object.assign({}, JobActions, JobApiActions),
+}
+

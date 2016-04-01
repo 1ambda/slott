@@ -2,7 +2,6 @@ import { fork, call, put, } from 'redux-saga/effects'
 import { takeEvery, } from 'redux-saga'
 
 import * as JobActions from '../actions/JobActions'
-import * as JobActionTypes from '../constants/JobActionTypes'
 import * as JobApiActionTypes from '../constants/JobApiActionTypes'
 import * as Handler from './handler'
 

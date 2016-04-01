@@ -1,7 +1,6 @@
 import { combineReducers, } from 'redux'
 import { handleActions, } from 'redux-actions'
 
-import * as JobActionTypes from '../../constants/JobActionTypes'
 import * as JobApiActionTypes from '../../constants/JobApiActionTypes'
 
 import * as JobItemState from './JobItemState'
