@@ -1,15 +1,12 @@
-/** injected by webpack, see also `tools/url.js` */
+import { CONTAINERS, } from '../constants/config'
+
 export const URL_JOB_BASE = 'api/jobs'
 export const URL_JOB_PROPERTY_STATE = 'state'
 export const URL_JOB_PROPERTY_CONFIG = 'config'
 
-export const CONTAINER_PROPERTY = {
-  name: 'name',
-  address: 'address',
-}
+export const CONTAINER_PROPERTY = { name: 'name', address: 'address', }
 
 /** multi container support */
-export const CONTAINERS = process.env.CONTAINERS || []
 export const CONTAINER_NAMES = CONTAINERS.map(container => container[CONTAINER_PROPERTY.name])
 export const INITIAL_CONTAINER_NAME = CONTAINER_NAMES[0]
 

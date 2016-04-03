@@ -1,14 +1,8 @@
 import { expect, } from 'chai'
 
-import * as EnvTool from '../../../tools/env'
-import * as UrlTool from '../../../tools/url'
 import * as URL from '../url'
 
 describe('middlewares/url', () => {
-  it('should tested on `TEST` env', () => {
-    expect(process.env.NODE_ENV).to.deep.equal(EnvTool.ENV_TEST)
-  })
-
   /** fixtures */
   const containers = [
     { [URL.CONTAINER_PROPERTY.name]: 'container01', [URL.CONTAINER_PROPERTY.address]: 'address01', },
@@ -64,7 +58,5 @@ describe('middlewares/url', () => {
       ).to.throw(Error)
     })
   })
-
-
 })
 

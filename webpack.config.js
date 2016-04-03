@@ -2,20 +2,13 @@ import webpack from 'webpack'
 import path from 'path'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
 
-import { CONTAINER_ADDRESS, CONTAINERS, } from './tools/url'
 import { ENV_DEV, ENV_PROD, ENV_TEST, } from './tools/env'
+import { GLOBAL_VARIABLES, } from './tools/config'
 
 const getPlugins = function (env) {
-
-  const GLOBALS = {
-    'process.env.NODE_ENV': JSON.stringify(env),
-    'process.env.CONTAINERS': JSON.stringify(CONTAINERS),
-    __DEV__: env === ENV_DEV,
-  }
-
   const plugins = [
     new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.DefinePlugin(GLOBALS),
+    new webpack.DefinePlugin(GLOBAL_VARIABLES),
   ]
 
   switch (env) {

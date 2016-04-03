@@ -1,6 +1,6 @@
 # resource, config
 db.json
-config/production.js
+config/production.config.js
 
 # Bower
 lib/bower_components/
@@ -41,3 +41,5 @@ dist
 
 # Mac files
 .DS_Store
+
+!.gitkeep

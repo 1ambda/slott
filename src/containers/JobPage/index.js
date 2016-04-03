@@ -8,7 +8,7 @@ import JobHeader from '../../components/JobPage/JobHeader'
 import Paginator from '../../components/Common/Paginator'
 import EditorDialog, { EDITOR_DIALOG_MODE, } from '../../components/Common/EditorDialog'
 import ConfirmDialog, { CONFIRM_DIALOG_MODE, } from '../../components/Common/ConfirmDialog'
-import ClosableSnackbar, { CLOSABLE_SNACKBAR_MODE, } from '../../components/Common/ClosableSnackbar'
+import Snackbar, { CLOSABLE_SNACKBAR_MODE, } from '../../components/Common/ClosableSnackbar'
 
 import { JOB_PROPERTY, } from '../../reducers/JobReducer/JobItemState'
 import { JOB_STATE_PROPERTY, } from '../../reducers/JobReducer'
@@ -60,7 +60,7 @@ class JobPage extends React.Component {
       (<ConfirmDialog {...confirmDialog} actions={actions} />) : null
 
     const snackbarDOM = (CLOSABLE_SNACKBAR_MODE.CLOSE !== snackbar.snackbarMode) ?
-      (<ClosableSnackbar {...snackbar} closeHandler={actions.closeSnackbar} />) : null
+      (<Snackbar {...snackbar} closeHandler={actions.closeSnackbar} />) : null
 
     return (
       <div>

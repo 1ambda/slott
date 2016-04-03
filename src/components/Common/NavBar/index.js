@@ -14,18 +14,16 @@ import MoreVertIcon from 'material-ui/lib/svg-icons/navigation/more-vert'
 import MenuItem from 'material-ui/lib/menus/menu-item'
 
 import * as style from './style.js'
+import * as CONFIG from '../../../constants/config'
 
 export default class NavBar extends React.Component {
 
-  static propTypes = {
-
-  }
-
   render() {
+
     return (
       <Toolbar style={style.navbar}>
         <ToolbarGroup firstChild float="left">
-          <ToolbarTitle text={<IndexLink to="/" style={style.text}>Slott</IndexLink>}
+          <ToolbarTitle text={<IndexLink to="/" style={style.text}>{CONFIG.TITLE}</IndexLink>}
                         style={style.title} />
           <FlatButton disabled label={<Link to="/job" style={style.text}>Job</Link>}
                       style={style.linkButton} />
