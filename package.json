@@ -23,7 +23,7 @@
     "build:html": "babel-node tools/buildHtml.js",
     "build:js": "cross-env NODE_ENV=production babel-node tools/build.js",
     "prebuild": "npm run clean-dist && npm run build:html",
-    "build": "npm run test && npm run build:js",
+    "build": "npm test && npm run build:js",
     "build-run": "npm run build && npm run open:prod",
     "test": "cross-env NODE_ENV=test mocha --reporter progress --compilers js:babel-core/register --recursive \"./src/**/*.spec.js\" --require ignore-styles",
     "test:watch": "npm run test -- --watch",

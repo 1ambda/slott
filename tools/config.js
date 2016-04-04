@@ -2,43 +2,20 @@ import fs from 'fs-extra'
 import colors from 'colors'
 
 import { ENV_DEV, ENV_PROD, ENV_TEST, } from './env'
-
-const DIR_CONFIG = 'config'
-const FILE_PRODUCTION_JS = 'production.config.js'
-const FILE_DEVELOPMENT_JS = 'development.config.js'
-const PATH_PRODUCTION_CONFIG = `./${DIR_CONFIG}/${FILE_PRODUCTION_JS}`
-const PATH_DEVELOPMENT_CONFIG = `./${DIR_CONFIG}/${FILE_DEVELOPMENT_JS}`
-const FILE_PRODUCTION_SAMPLE_JS = 'production.sample.js'
-const PATH_PRODUCTION_SAMPLE_CONFIG = `./${DIR_CONFIG}/${FILE_PRODUCTION_SAMPLE_JS}`
+import * as DEV_CONFIG from '../config/development.config'
+import * as PROD_CONFIG from '../config/production.config'
 
 const env = process.env.NODE_ENV
 
-try {
-  fs.accessSync(PATH_PRODUCTION_CONFIG, fs.F_OK)
-} catch (error) {
-  console.log(`${PATH_PRODUCTION_CONFIG} doesn't exist, copying ${FILE_PRODUCTION_SAMPLE_JS}`.green) // eslint-disable-line no-console
-  fs.copySync(PATH_PRODUCTION_SAMPLE_CONFIG, PATH_PRODUCTION_CONFIG)
-}
+export const CONFIG = (env === ENV_DEV) ? DEV_CONFIG : PROD_CONFIG
 
-/** require at runtime */
-export const CONFIG =   (env === ENV_DEV) ?
-  require(`../${DIR_CONFIG}/${FILE_DEVELOPMENT_JS}`) :
-  require(`../${DIR_CONFIG}/${FILE_PRODUCTION_JS}`)
-
-export const CONTAINERS = CONFIG.CONTAINERS
-export const TITLE = CONFIG.TITLE
-export const PAGINATOR_ITEM_COUNT_PER_PAGE = CONFIG.PAGINATOR_ITEM_COUNT_PER_PAGE
-
-export const GLOBAL_VARIABLES = {
+export const GLOBAL_VARIABLES = { /** used by Webpack.DefinePlugin */
   'process.env.ENV_DEV': JSON.stringify(ENV_DEV),
   'process.env.ENV_PROD': JSON.stringify(ENV_PROD),
   'process.env.NODE_ENV': JSON.stringify(env),
-  'process.env.CONTAINERS': JSON.stringify(CONTAINERS),
-  'process.env.TITLE': JSON.stringify(TITLE),
-  'process.env.PAGINATOR_ITEM_COUNT_PER_PAGE': parseInt(PAGINATOR_ITEM_COUNT_PER_PAGE),
-}
 
-/* eslint-disable no-console */
-console.log('Injecting Global Variable'.green)
-console.log(GLOBAL_VARIABLES)
-/* eslint-enable no-console */
+  /** variables defined in `CONFIG` file ares already stringified */
+  'process.env.CONTAINERS': CONFIG.CONTAINERS,
+  'process.env.TITLE': CONFIG.TITLE,
+  'process.env.PAGINATOR_ITEM_COUNT': CONFIG.PAGINATOR_ITEM_COUNT,
+}

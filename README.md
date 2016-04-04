@@ -6,6 +6,17 @@ JSON Configured Stream-like Job Controller
 
 <br/>
 
+## Deployment
+
+Use environment variables to configure constants (See [config.json](https://github.com/1ambda/slott/blob/master/src/constants/config.js))
+
+```
+SLOTT_TITLE=Controller
+SLOTT_CONTAINERS='[{"name":"test","address":"http://172.0.1.30:8080"},{"name":"live","address":"http://172.0.2.30:8080"}]'
+npm install
+npm run build
+```
+
 ## Development
 
 

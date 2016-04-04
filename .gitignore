@@ -1,6 +1,5 @@
 # resource, config
 db.json
-config/production.config.js
 
 # Bower
 lib/bower_components/

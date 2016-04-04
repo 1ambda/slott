@@ -11,6 +11,11 @@ const getPlugins = function (env) {
     new webpack.DefinePlugin(GLOBAL_VARIABLES),
   ]
 
+  /* eslint-disable no-console */
+  console.log('Injecting Global Variable'.green)
+  console.log(GLOBAL_VARIABLES)
+  /* eslint-enable no-console */
+
   switch (env) {
     case ENV_PROD:
       plugins.push(new ExtractTextPlugin('styles.css'))
