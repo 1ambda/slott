@@ -2,7 +2,7 @@ import { expect, } from 'chai'
 
 import * as SorterState from '../SorterState'
 
-describe('JobActions', () => {
+describe('SorterState', () => {
   const payload = 'payload'
   const PROP_NAME_TYPE = 'type'
   const PROP_NAME_PAYLOAD = 'payload'

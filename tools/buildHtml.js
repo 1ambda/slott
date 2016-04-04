@@ -17,7 +17,7 @@ fs.copySync(bowerDir, `dist/${bowerDirName}`)
 /** write index.html */
 const html = fs.readFileSync('src/index.html', ENCODING)
 const $ = cheerio.load(html)
-$('head').prepend('<link rel="stylesheet" href="styles.css">')
+// $('head').prepend('<link rel="stylesheet" href="styles.css">')
 
 fs.writeFileSync('dist/index.html', $.html(), ENCODING)
 

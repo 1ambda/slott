@@ -2,7 +2,7 @@ import { expect, } from 'chai'
 
 import * as EditorDialogState from '../EditorDialogState'
 
-describe('JobActions', () => {
+describe('EditorDialogState', () => {
   const payload = 'payload'
   const PROP_NAME_TYPE = 'type'
   const PROP_NAME_PAYLOAD = 'payload'

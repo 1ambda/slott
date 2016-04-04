@@ -2,7 +2,7 @@ import { expect, } from 'chai'
 
 import * as ClosableSnackbarState from '../ClosableSnackbarState'
 
-describe('JobActions', () => {
+describe('ClosableSnackbarState', () => {
   const payload = 'payload'
   const PROP_NAME_TYPE = 'type'
   const PROP_NAME_PAYLOAD = 'payload'

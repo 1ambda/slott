@@ -2,7 +2,7 @@ import { expect, } from 'chai'
 
 import * as PaginatorState from '../PaginatorState'
 
-describe('JobActions', () => {
+describe('PaginatorState', () => {
   const payload = 'payload'
   const PROP_NAME_TYPE = 'type'
   const PROP_NAME_PAYLOAD = 'payload'

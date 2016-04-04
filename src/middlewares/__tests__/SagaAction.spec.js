@@ -2,7 +2,7 @@ import { expect, } from 'chai'
 
 import * as SagaAction from '../SagaAction'
 
-describe('JobActions', () => {
+describe('SagaAction', () => {
   const payload = 'payload'
   const PROP_NAME_TYPE = 'type'
   const PROP_NAME_PAYLOAD = 'payload'

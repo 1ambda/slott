@@ -2,7 +2,7 @@ import { expect, } from 'chai'
 
 import * as FilterState from '../FilterState'
 
-describe('JobActions', () => {
+describe('FilterState', () => {
   const payload = 'payload'
   const PROP_NAME_TYPE = 'type'
   const PROP_NAME_PAYLOAD = 'payload'

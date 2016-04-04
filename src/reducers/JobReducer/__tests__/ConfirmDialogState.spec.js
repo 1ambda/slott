@@ -2,7 +2,7 @@ import { expect, } from 'chai'
 
 import * as ConfirmDialogState from '../ConfirmDialogState'
 
-describe('JobActions', () => {
+describe('ConfirmDialogState', () => {
   const payload = 'payload'
   const PROP_NAME_TYPE = 'type'
   const PROP_NAME_PAYLOAD = 'payload'
