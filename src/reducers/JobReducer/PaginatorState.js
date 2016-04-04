@@ -1,12 +1,14 @@
 import { createAction, handleActions, } from 'redux-actions'
 
+import { PAGINATOR_ITEM_COUNT_PER_PAGE, } from '../../constants/config'
+
 import * as FilterState from './FilterState'
 import * as SorterState from './SorterState'
 
 const INITIAL_PAGINATOR_STATE = {
   currentPageOffset: 0,
   currentItemOffset: 0,
-  itemCountPerPage: 8,
+  itemCountPerPage: PAGINATOR_ITEM_COUNT_PER_PAGE,
 }
 
 export const ActionType = {

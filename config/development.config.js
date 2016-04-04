@@ -5,3 +5,4 @@ export const CONTAINERS = [
 ]
 
 export const TITLE = 'Slott'
+export const PAGINATOR_ITEM_COUNT_PER_PAGE = 10

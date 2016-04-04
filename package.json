@@ -51,7 +51,6 @@
     "babel-cli": "6.5.1",
     "babel-core": "6.5.1",
     "babel-eslint": "5.0.0",
-    "babel-jest": "9.0.3",
     "babel-loader": "6.2.3",
     "babel-plugin-react-display-name": "2.0.0",
     "babel-plugin-react-transform": "2.0.0",

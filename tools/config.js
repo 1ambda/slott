@@ -27,6 +27,7 @@ export const CONFIG =   (env === ENV_DEV) ?
 
 export const CONTAINERS = CONFIG.CONTAINERS
 export const TITLE = CONFIG.TITLE
+export const PAGINATOR_ITEM_COUNT_PER_PAGE = CONFIG.PAGINATOR_ITEM_COUNT_PER_PAGE
 
 export const GLOBAL_VARIABLES = {
   'process.env.ENV_DEV': JSON.stringify(ENV_DEV),
@@ -34,4 +35,10 @@ export const GLOBAL_VARIABLES = {
   'process.env.NODE_ENV': JSON.stringify(env),
   'process.env.CONTAINERS': JSON.stringify(CONTAINERS),
   'process.env.TITLE': JSON.stringify(TITLE),
+  'process.env.PAGINATOR_ITEM_COUNT_PER_PAGE': parseInt(PAGINATOR_ITEM_COUNT_PER_PAGE),
 }
+
+/* eslint-disable no-console */
+console.log('Injecting Global Variable'.green)
+console.log(GLOBAL_VARIABLES)
+/* eslint-enable no-console */
