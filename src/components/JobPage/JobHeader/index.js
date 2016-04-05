@@ -122,9 +122,7 @@ export default class JobHeader extends React.Component {
     const { sortingStrategy, containerSelector, jobs, } = this.props
     const { open, anchorEl, } = this.state
 
-
     /** 1. create `CREATE` button */
-
     const createButton = (
       <RaisedButton labelStyle={style.buttonLabel}
                     secondary label={"CREATE"}

@@ -7,4 +7,4 @@ export const defaultContainers = [
 /** exposed variables, should be stringified if it is string */
 export const CONTAINERS = JSON.stringify(defaultContainers)
 export const TITLE = JSON.stringify('Slott')
-export const PAGINATOR_ITEM_COUNT = 10
+export const PAGINATOR_ITEM_COUNT = 5

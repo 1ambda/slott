@@ -66,14 +66,14 @@ class JobPage extends React.Component {
       <div>
         <JobHeader sortingStrategy={sortingStrategy}
                    containerSelector={containerSelector}
-                   jobs={jobs}
+                   jobs={filtered}
                    actions={actions} />
         <JobList filterKeyword={filterKeyword} jobs={sliced} actions={actions} />
         <div className="center" style={style.paginator}>
           <Paginator itemCountPerPage={itemCountPerPage}
                      currentPageOffset={currentPageOffset}
                      currentItemOffset={currentItemOffset}
-                     totalItemCount={jobs.length}
+                     totalItemCount={filtered.length}
                      handler={this.handlePageOffsetChange.bind(this)} />
         </div>
         {editorDialogDOM}
