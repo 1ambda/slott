@@ -188,7 +188,7 @@ export function* fetchJobConfig(container, id) {
 export function* updateJobConfig(containerName, id, property) {
   const url = URL.getContainerJobConfigUrl(containerName, id)
 
-  yield call(patchJSON, url, Converter.removeStateProps(property))
+  yield call(putJSON, url, Converter.removeStateProps(property))
 
   /** since `patch` doesn't return job state, we need to fetch job */
   return yield call(fetchJob, containerName, id)
