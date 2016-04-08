@@ -188,35 +188,45 @@ export function* fetchJobConfig(container, id) {
 export function* updateJobConfig(containerName, id, property) {
   const url = URL.getContainerJobConfigUrl(containerName, id)
 
+  /** replace whole job config */
   yield call(putJSON, url, Converter.removeStateProps(property))
 
   /** since `patch` doesn't return job state, we need to fetch job */
   return yield call(fetchJob, containerName, id)
 }
 
+export function* patchJobConfig(containerName, id, property) {
+  const url = URL.getContainerJobConfigUrl(containerName, id)
+
+  yield call(patchJSON, url, Converter.removeStateProps(property))
+
+  /** since `patch` doesn't return job state, we need to fetch job */
+  return yield call(fetchJob, containerName, id)
+}
+
 export function* setReadonly(containerName, id) {
-  return yield call(updateJobConfig, containerName, id, Converter.createConfigToSetReadonly())
+  return yield call(patchJobConfig, containerName, id, Converter.createConfigToSetReadonly())
 }
 
 export function* unsetReadonly(containerName, id) {
-  return yield call(updateJobConfig, containerName, id, Converter.createConfigToUnsetReadonly())
+  return yield call(patchJobConfig, containerName, id, Converter.createConfigToUnsetReadonly())
 }
 
-export function* updateJobState(containerName, id, state) {
+export function* patchJobState(containerName, id, state) {
   const url = URL.getContainerJobStateUrl(containerName, id)
 
-  yield call (patchJSON, url, state)
+  yield call(patchJSON, url, state)
 }
 
 export function* startJob(containerName, id) {
-  yield call(updateJobState, containerName, id, Converter.createStateToStartJob())
+  yield call(patchJobState, containerName, id, Converter.createStateToStartJob())
 
   /** since `patch` METHOD doesn't return all job props (state + config), we need to fetch job */
   return yield call(fetchJob, containerName, id)
 }
 
 export function* stopJob(containerName, id) {
-  yield call(updateJobState, containerName, id, Converter.createStateToStopJob())
+  yield call(patchJobState, containerName, id, Converter.createStateToStopJob())
 
   /** since `patch` METHOD doesn't return all job props (state + config), we need to fetch job */
   return yield call(fetchJob, containerName, id)
