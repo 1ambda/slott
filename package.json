@@ -1,7 +1,7 @@
 {
   "id": "slott",
   "version": "0.0.1",
-  "description": "",
+  "description": "JSON Configured Stream-like Job Controller",
   "scripts": {
     "postinstall": "bower cache clean && bower install",
     "prestart": "npm run remove-dist",
@@ -99,7 +99,7 @@
     "webpack-hot-middleware": "2.6.0",
     "yargs": "3.32.0"
   },
-  "keywords:": [],
+  "keywords:": ["slott"],
   "repository": {
     "type": "git",
     "url": "https://github.com/1ambda/slott"
