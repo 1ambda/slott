@@ -1,8 +1,8 @@
 import { expect, } from 'chai'
 
-import * as URL from '../url'
+import * as URL from '../Url'
 
-describe('middlewares/url', () => {
+describe('Url', () => {
   /** fixtures */
   const containers = [
     { [URL.CONTAINER_PROPERTY.name]: 'container01', [URL.CONTAINER_PROPERTY.address]: 'address01', },

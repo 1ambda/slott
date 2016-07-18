@@ -1,15 +1,12 @@
 import React, { PropTypes, } from 'react'
 
-import ListItem from 'material-ui/lib/lists/list-item'
-import Divider from 'material-ui/lib/divider'
-import Checkbox from 'material-ui/lib/checkbox'
-import Toggle from 'material-ui/lib/toggle'
-import FontIcon from 'material-ui/lib/font-icon'
-import Delete from 'material-ui/lib/svg-icons/action/delete'
+import { List, ListItem, } from 'material-ui/List'
+import Toggle from 'material-ui/Toggle'
+import FontIcon from 'material-ui/FontIcon'
+import Delete from 'material-ui/svg-icons/action/delete'
 
 import * as style from './style'
-import { JobItemColors, } from '../../../constants/theme'
-import * as JobActions from '../../../actions/JobActions'
+import { JobItemColors, } from '../../../constants/Theme'
 
 import {
   JOB_PROPERTY, isRunning, isStopped, isWaiting, isSwitching,
@@ -85,7 +82,6 @@ export default class JobItem extends React.Component {
   }
 
   static createRunningToggle(index, inactive, toggled, handler) {
-
     const runningToggle = (<Toggle onToggle={handler}
                                    disabled={inactive}
                                    defaultToggled={toggled} />)
@@ -101,11 +97,18 @@ export default class JobItem extends React.Component {
   }
 
   static createSpinIcon(job) {
-
-
     return (isRunning(job)) ? (<FontIcon style={{color: JobItemColors.runningSpin,}} className="fa fa-circle-o-notch fa-spin" />) :
       (isWaiting(job))  ? (<FontIcon style={{color: JobItemColors.waitingSpin,}} className="fa fa-circle-o-notch" />) :
         (<FontIcon className="fa fa-circle-o-notch" />)
+  }
+
+  constructor(props) {
+    super(props)
+
+    this.handleReadonlyToggleChange = this.handleReadonlyToggleChange.bind(this)
+    this.handleRunningToggleChange = this.handleRunningToggleChange.bind(this)
+    this.handleRemoveButtonClick = this.handleRemoveButtonClick.bind(this)
+    this.handleItemClick = this.handleItemClick.bind(this)
   }
 
   handleReadonlyToggleChange() {
@@ -163,7 +166,7 @@ export default class JobItem extends React.Component {
     /** 1. Remove Button */
     const readonly = isReadonly(job)
     const removeButton = JobItem.createRemoveButton(
-      0, readonly, this.handleRemoveButtonClick.bind(this))
+      0, readonly, this.handleRemoveButtonClick)
 
     /** 2. Disable Toggle */
     const readonlyToggleInactive = isReadonlyToggleDisabled(job)
@@ -171,7 +174,7 @@ export default class JobItem extends React.Component {
 
     const readonlyToggle = JobItem.createReadonlyToggle(
       1, readonlyToggleInactive, readonlyToggleDefaultToggled,
-      this.handleReadonlyToggleChange.bind(this))
+      this.handleReadonlyToggleChange)
 
     /** 3. Running Toggle */
     const runningToggleInactive = isRunningToggleDisabled(job)
@@ -179,7 +182,7 @@ export default class JobItem extends React.Component {
 
     const runningToggle = JobItem.createRunningToggle(
       2, runningToggleInactive, runningToggleDefaultToggled,
-      this.handleRunningToggleChange.bind(this))
+      this.handleRunningToggleChange)
 
     /** 4. spin */
     const spinIcon = JobItem.createSpinIcon(job)
@@ -188,7 +191,7 @@ export default class JobItem extends React.Component {
     const tagString = (tags) ? tags.join(', ') : null
 
     return (
-      <ListItem onClick={this.handleItemClick.bind(this)}
+      <ListItem onClick={this.handleItemClick}
                 primaryText={id}
                 secondaryText={tagString}
                 leftIcon={spinIcon}

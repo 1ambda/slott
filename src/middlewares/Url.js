@@ -1,4 +1,4 @@
-import { CONTAINERS, } from '../constants/config'
+import { CONTAINERS, } from '../constants/Config'
 
 export const URL_JOB_BASE = 'api/jobs'
 export const URL_JOB_PROPERTY_STATE = 'state'

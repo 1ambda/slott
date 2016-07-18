@@ -1,7 +1,7 @@
 import React, { PropTypes, } from 'react'
 
-import FlatButton from 'material-ui/lib/flat-button'
-import Dialog from 'material-ui/lib/dialog'
+import FlatButton from 'material-ui/FlatButton'
+import Dialog from 'material-ui/Dialog'
 
 import { JOB_PROPERTY, } from '../../../reducers/JobReducer/JobItemState'
 import * as dialogStyle from './style'

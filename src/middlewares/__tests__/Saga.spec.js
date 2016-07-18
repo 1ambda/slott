@@ -5,54 +5,61 @@ import { takeEvery, } from 'redux-saga'
 import * as ClosableSnackBarState from '../../reducers/JobReducer/ClosableSnackbarState'
 import * as SagaAction from '../SagaAction'
 
-import * as Selector from '../../reducers/JobReducer/selector'
+import * as Handler from '../Handler'
+import rootSaga, * as Saga from '../Saga'
 
-import * as API from '../api'
-import * as Handler from '../handler'
-import rootSaga, * as Sagas from '../sagas'
-
-describe('sagas', () => {
+describe('Saga', () => {
 
   const takeEveryWatcherProps = [
     {
       actionType: SagaAction.ActionType.OPEN_EDITOR_DIALOG_TO_EDIT,
-      watcher: Sagas.watchOpenEditorDialogToEdit,
+      watcher: Saga.watchOpenEditorDialogToEdit,
       handler: Handler.handleOpenEditorDialogToEdit,
     },
     {
       actionType: SagaAction.ActionType.UPDATE,
-      watcher: Sagas.watchUpdateJob,
+      watcher: Saga.watchUpdateJob,
       handler: Handler.handleUpdateJob,
     },
     {
       actionType: SagaAction.ActionType.CREATE,
-      watcher: Sagas.watchCreateJob,
+      watcher: Saga.watchCreateJob,
       handler: Handler.handleCreateJob,
     },
     {
       actionType: SagaAction.ActionType.REMOVE,
-      watcher: Sagas.watchRemoveJob,
+      watcher: Saga.watchRemoveJob,
       handler: Handler.handleRemoveJob,
     },
     {
       actionType: SagaAction.ActionType.SET_READONLY,
-      watcher: Sagas.watchSetReadonly,
+      watcher: Saga.watchSetReadonly,
       handler: Handler.handleSetReadonly,
     },
     {
       actionType: SagaAction.ActionType.UNSET_READONLY,
-      watcher: Sagas.watchUnsetReadonly,
+      watcher: Saga.watchUnsetReadonly,
       handler: Handler.handleUnsetReadonly,
     },
     {
       actionType: SagaAction.ActionType.START,
-      watcher: Sagas.watchStartJob,
+      watcher: Saga.watchStartJob,
       handler: Handler.handleStartJob,
     },
     {
       actionType: SagaAction.ActionType.STOP,
-      watcher: Sagas.watchStopJob,
+      watcher: Saga.watchStopJob,
       handler: Handler.handleStopJob,
+    },
+    {
+      actionType: SagaAction.ActionType.START_ALL,
+      watcher: Saga.watchStartAllJobs,
+      handler: Handler.handleStartAllJobs,
+    },
+    {
+      actionType: SagaAction.ActionType.STOP_ALL,
+      watcher: Saga.watchStopAllJobs,
+      handler: Handler.handleStopAllJobs,
     },
   ]
 
@@ -81,7 +88,7 @@ describe('sagas', () => {
 
   describe('initialize', () => {
     it('should callFetchContainerJobs', () => {
-      const gen = Sagas.initialize()
+      const gen = Saga.initialize()
       expect(gen.next().value).to.deep.equal(
         call(Handler.callFetchContainerJobs)
       )
@@ -92,7 +99,7 @@ describe('sagas', () => {
     it(`should callFetchJobs
         - if exception is occurred,
           put(openErrorSnackbar with { message, error }`, () => {
-      const gen = Sagas.initialize()
+      const gen = Saga.initialize()
 
       expect(gen.next().value).to.deep.equal(
         call(Handler.callFetchContainerJobs)
@@ -114,17 +121,19 @@ describe('sagas', () => {
       const gen = rootSaga()
 
       /** initialize */
-      expect(gen.next().value).to.deep.equal( [
-          fork(Sagas.initialize),
-          fork(Sagas.watchOpenEditorDialogToEdit),
-          fork(Sagas.watchUpdateJob),
-          fork(Sagas.watchRemoveJob),
-          fork(Sagas.watchCreateJob),
-          fork(Sagas.watchSetReadonly),
-          fork(Sagas.watchUnsetReadonly),
-          fork(Sagas.watchStartJob),
-          fork(Sagas.watchStopJob),
-          fork(Sagas.watchChangeContainer),
+      expect(gen.next().value).to.deep.equal([
+          fork(Saga.initialize),
+          fork(Saga.watchOpenEditorDialogToEdit),
+          fork(Saga.watchUpdateJob),
+          fork(Saga.watchRemoveJob),
+          fork(Saga.watchCreateJob),
+          fork(Saga.watchSetReadonly),
+          fork(Saga.watchUnsetReadonly),
+          fork(Saga.watchStartJob),
+          fork(Saga.watchStopJob),
+          fork(Saga.watchChangeContainer),
+          fork(Saga.watchStartAllJobs),
+          fork(Saga.watchStopAllJobs),
         ]
       )
     })

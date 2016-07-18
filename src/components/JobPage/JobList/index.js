@@ -1,7 +1,7 @@
 import React, { PropTypes, } from 'react'
 
-import List from 'material-ui/lib/lists/list'
-import Divider from 'material-ui/lib/divider'
+import { List, ListItem, } from 'material-ui/List'
+import Divider from 'material-ui/Divider'
 
 import * as style from './style'
 import JobItem from '../JobItem'
@@ -18,7 +18,7 @@ export default class JobList extends React.Component {
   }
 
   render() {
-    const { jobs, filterKeyword, actions, } = this.props
+    const { jobs, actions, } = this.props
 
     const jobItems = jobs
       .reduce((acc, job) => {

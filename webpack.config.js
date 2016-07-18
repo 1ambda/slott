@@ -2,8 +2,8 @@ import webpack from 'webpack'
 import path from 'path'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
 
-import { ENV_DEV, ENV_PROD, ENV_TEST, } from './tools/env'
-import { GLOBAL_VARIABLES, } from './tools/config'
+import { ENV_DEV, ENV_PROD, ENV_TEST, } from './tools/Env'
+import { GLOBAL_VARIABLES, } from './tools/Config'
 
 const getPlugins = function (env) {
   const plugins = [

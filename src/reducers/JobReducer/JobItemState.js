@@ -175,8 +175,6 @@ export const ActionType = {
   END_SWITCHING: 'JOB_END_SWITCHING',
   UPDATE_ALL_JOBS: 'JOB_UPDATE_ALL_JOBS',
   UPDATE_JOB: 'JOB_UPDATE_JOB',
-  START_ALL: 'JOB_START_ALL',
-  STOP_ALL: 'JOB_STOP_ALL',
 }
 
 export const Action = {
@@ -184,8 +182,6 @@ export const Action = {
   endSwitching: createAction(ActionType.END_SWITCHING),
   updateAllJobs: createAction(ActionType.UPDATE_ALL_JOBS),
   updateJob: createAction(ActionType.UPDATE_JOB),
-  startAllJobs: createAction(ActionType.START_ALL),
-  stopAllJobs: createAction(ActionType.STOP_ALL),
 }
 
 const INITIAL_JOBS = []
@@ -200,15 +196,5 @@ export const handler = handleActions({
   /** api related */
   [ActionType.UPDATE_ALL_JOBS]: updateAllJobs,
   [ActionType.UPDATE_JOB]: updateJob,
-
-  [ActionType.STOP_ALL]: (state) => { // TODO
-    console.error(`TODO ${ActionType.STOP_ALL} in JobReducer`)
-    return state
-  },
-
-  [ActionType.START_ALL]: (state) => { // TODO
-    console.error(`TODO ${ActionType.START_ALL} in JobReducer`)
-    return state
-  },
 
 }, INITIAL_JOBS)

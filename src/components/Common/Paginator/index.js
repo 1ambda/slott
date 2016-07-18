@@ -4,13 +4,15 @@ import ReactPaginate from 'react-paginate'
 /** since react-paginate support css style only, we need a stylesheet */
 import * as paginatorStyle from './style.css'
 
-const styles = {
-  container: {
-
-  },
-}
+const styles = { container: {}, }
 
 export default class Paginator extends React.Component {
+
+  constructor(props) {
+    super(props)
+
+    this.handlePageChange = this.handlePageChange.bind(this)
+  }
 
   handlePageChange(data) {
     const { handler, } = this.props
@@ -21,10 +23,7 @@ export default class Paginator extends React.Component {
   }
 
   render() {
-
-    const { style, handler, totalItemCount, currentPageOffset, itemCountPerPage, } = this.props
-    const mergedStyle = Object.assign({}, styles.container, style)
-
+    const { totalItemCount, currentPageOffset, itemCountPerPage, } = this.props
     const totalPageCount = Math.ceil(totalItemCount / itemCountPerPage)
 
     return(
@@ -35,7 +34,7 @@ export default class Paginator extends React.Component {
                      pageNum={totalPageCount}
                      marginPagesDisplayed={1}
                      pageRangeDisplayed={3}
-                     clickCallback={this.handlePageChange.bind(this)}
+                     clickCallback={this.handlePageChange}
                      containerClassName={"pagination"}
                      subContainerClassName={"pages pagination"}
                      activeClassName={paginatorStyle.activeLabel} />

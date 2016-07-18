@@ -1,23 +1,17 @@
 import { expect, } from 'chai'
 import { take, put, call, fork, select, } from 'redux-saga/effects'
 
-import * as FilterState from '../../reducers/JobReducer/FilterState'
 import * as SorterState from '../../reducers/JobReducer/SorterState'
-import * as PaginatorState from '../../reducers/JobReducer/PaginatorState'
 import * as JobItemState from '../../reducers/JobReducer/JobItemState'
 import * as ContainerSelectorState from '../../reducers/JobReducer/ContainerSelectorState'
 import * as EditorDialogState from '../../reducers/JobReducer/EditorDialogState'
-import * as ConfirmDialogState from '../../reducers/JobReducer/ConfirmDialogState'
 import * as ClosableSnackBarState from '../../reducers/JobReducer/ClosableSnackbarState'
 
-import * as SagaAction from '../SagaAction'
-
 import { JOB_PROPERTY, } from '../../reducers/JobReducer/JobItemState'
-import { SERVER_JOB_PROPERTY, } from '../../middlewares/converter'
-import * as Selector from '../../reducers/JobReducer/selector'
-
-import * as API from '../api'
-import * as Handler from '../handler'
+import { SERVER_JOB_PROPERTY, } from '../../middlewares/Converter'
+import * as Selector from '../../reducers/JobReducer/Selector'
+import * as API from '../Api'
+import * as Handler from '../Handler'
 
 describe('handler', () => {
 

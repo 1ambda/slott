@@ -1,6 +1,6 @@
 import { createAction, handleActions, } from 'redux-actions'
 
-import { PAGINATOR_ITEM_COUNT_PER_PAGE, } from '../../constants/config'
+import { PAGINATOR_ITEM_COUNT_PER_PAGE, } from '../../constants/Config'
 
 import * as FilterState from './FilterState'
 import * as SorterState from './SorterState'

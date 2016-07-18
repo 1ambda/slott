@@ -1,8 +1,6 @@
 import { createAction, handleActions, } from 'redux-actions'
 
-import * as SagaAction from '../../middlewares/SagaAction'
-import * as JobItemState from '../../reducers/JobReducer/JobItemState'
-import * as URL from '../../middlewares/url'
+import * as URL from '../../middlewares/Url'
 
 export const ActionType = {
   SELECT_CONTAINER: 'JOB_SELECT_CONTAINER',

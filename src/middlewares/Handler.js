@@ -1,22 +1,18 @@
 import { take, put, call, select, } from 'redux-saga/effects'
 
-import * as FilterState from '../reducers/JobReducer/FilterState'
 import * as SorterState from '../reducers/JobReducer/SorterState'
-import * as PaginatorState from '../reducers/JobReducer/PaginatorState'
 import * as JobItemState from '../reducers/JobReducer/JobItemState'
 import * as ContainerSelectorState from '../reducers/JobReducer/ContainerSelectorState'
 import * as EditorDialogState from '../reducers/JobReducer/EditorDialogState'
-import * as ConfirmDialogState from '../reducers/JobReducer/ConfirmDialogState'
 import * as SnackBarState from '../reducers/JobReducer/ClosableSnackbarState'
 
-import * as SagaAction from '../middlewares/SagaAction'
 
 import {
-  sortJob, JOB_PROPERTY, validateId, validateJobId, checkDuplicatedJob,
+  validateId, validateJobId, checkDuplicatedJob,
+  isWaiting, isRunning,
 } from '../reducers/JobReducer/JobItemState'
-import * as JobSortingStrategies from '../reducers/JobReducer/SorterState'
-import * as API from './api'
-import * as Selector from '../reducers/JobReducer/selector'
+import * as API from './Api'
+import * as Selector from '../reducers/JobReducer/Selector'
 
 export const JOB_TRANSITION_DELAY = 1000
 
@@ -231,3 +227,90 @@ export function* handleChangeContainerSelector(action) {
 }
 
 
+export function* handleStartAllJobs(action) {
+  const { payload, } = action
+  const { filteredJobs, } = payload
+  const waitingJobs = filteredJobs.filter(job => isWaiting(job))
+  const container = yield select(Selector.selectedContainer)
+  const failedJobIds = []
+
+  for(let i = 0; i < waitingJobs.length; i++) {
+    const job = waitingJobs[i]
+    const id = job[JobItemState.JOB_PROPERTY.id]
+
+    yield put(JobItemState.Action.startSwitching({ id, }))
+
+    try {
+      validateId(id)
+      const updatedJob = yield call(API.startJob, container, id)
+      yield call(API.delay, JOB_TRANSITION_DELAY)
+      yield put(JobItemState.Action.updateJob({ id, job: updatedJob, }))
+    } catch (error) {
+      failedJobIds.push(id)
+    }
+
+    yield put(JobItemState.Action.endSwitching({ id, }))
+  }
+
+  if (failedJobIds.length > 0) {
+    const failedJobIdsString = failedJobIds.join(',')
+    const error = new Error(`${container}/${failedJobIdsString}`)
+    yield put(SnackBarState.Action.openErrorSnackbar(
+        { message: `Failed to start ${failedJobIds.length} job `, error, } )
+    )
+  } else if (waitingJobs.length > 0 && failedJobIds.length === 0) {
+    yield put(SnackBarState.Action.openInfoSnackbar(
+        { message: `Successfully started ${waitingJobs.length} jobs`, }
+      )
+    )
+  } else {
+    yield put(SnackBarState.Action.openInfoSnackbar(
+        { message: 'All waiting jobs were already started', }
+      )
+    )
+  }
+}
+
+export function* handleStopAllJobs(action) {
+  const { payload, } = action
+  const { filteredJobs, } = payload
+  const runningJobs = filteredJobs.filter(job => isRunning(job))
+  const container = yield select(Selector.selectedContainer)
+  const failedJobIds = []
+
+  for(let i = 0; i < runningJobs.length; i++) {
+    const job = runningJobs[i]
+    const id = job[JobItemState.JOB_PROPERTY.id]
+
+    yield put(JobItemState.Action.startSwitching({ id, }))
+
+    try {
+      validateId(id)
+      const updatedJob = yield call(API.stopJob, container, id)
+      yield call(API.delay, JOB_TRANSITION_DELAY)
+      yield put(JobItemState.Action.updateJob({ id, job: updatedJob, }))
+    } catch (error) {
+      failedJobIds.push(id)
+    }
+
+    yield put(JobItemState.Action.endSwitching({ id, }))
+  }
+
+  if (failedJobIds.length > 0) {
+    const failedJobIdsString = failedJobIds.join(',')
+    const error = new Error(`${container}/${failedJobIdsString}`)
+    yield put(SnackBarState.Action.openErrorSnackbar(
+      { message: `Failed to stop ${failedJobIds.length} job `, error, } )
+    )
+  } else if (runningJobs.length > 0 && failedJobIds.length === 0) {
+    yield put(SnackBarState.Action.openInfoSnackbar(
+        { message: `Successfully stopped ${runningJobs.length} jobs`, }
+      )
+    )
+  } else {
+    yield put(SnackBarState.Action.openInfoSnackbar(
+        { message: 'All running jobs were already stopped', }
+      )
+    )
+  }
+}

@@ -3,7 +3,7 @@ import { takeEvery, } from 'redux-saga'
 
 import * as SnackbarState from '../reducers/JobReducer/ClosableSnackbarState'
 import * as SagaAction from './SagaAction'
-import * as Handler from './handler'
+import * as Handler from './Handler'
 
 /**
  * watcher functions
@@ -60,6 +60,14 @@ export function* watchChangeContainer() {
   yield* takeEvery(SagaAction.ActionType.CHANGE_CONTAINER, Handler.handleChangeContainerSelector)
 }
 
+export function* watchStartAllJobs() {
+  yield* takeEvery(SagaAction.ActionType.START_ALL , Handler.handleStartAllJobs)
+}
+
+export function* watchStopAllJobs() {
+  yield* takeEvery(SagaAction.ActionType.STOP_ALL, Handler.handleStopAllJobs)
+}
+
 
 export default function* root() {
   yield [
@@ -73,5 +81,7 @@ export default function* root() {
     fork(watchStartJob),
     fork(watchStopJob),
     fork(watchChangeContainer),
+    fork(watchStartAllJobs),
+    fork(watchStopAllJobs),
   ]
 }

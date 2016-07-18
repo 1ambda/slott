@@ -1,4 +1,4 @@
-/** injected by webpack, see also `tools/config.js` */
+/** injected by webpack, see also `tools/Config.js` */
 
 export const ENV_DEV = process.env.ENV_DEV || ''
 export const ENV_PROD = process.env.ENV_PROD || ''

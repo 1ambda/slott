@@ -10,7 +10,6 @@ import EditorDialog, { EDITOR_DIALOG_MODE, } from '../../components/Common/Edito
 import ConfirmDialog, { CONFIRM_DIALOG_MODE, } from '../../components/Common/ConfirmDialog'
 import Snackbar, { CLOSABLE_SNACKBAR_MODE, } from '../../components/Common/ClosableSnackbar'
 
-import { JOB_PROPERTY, } from '../../reducers/JobReducer/JobItemState'
 import { JOB_STATE_PROPERTY, } from '../../reducers/JobReducer'
 
 import Actions, { ACTION_SELECTOR, } from '../../actions'
@@ -29,6 +28,12 @@ class JobPage extends React.Component {
     containerSelector: PropTypes.object.isRequired,
   }
 
+  constructor(props) {
+    super(props)
+
+    this.handlePageOffsetChange = this.handlePageOffsetChange.bind(this)
+  }
+
   handlePageOffsetChange(newPageOffset) {
     const { actions, } = this.props
     const payload = { newPageOffset, }
@@ -39,20 +44,24 @@ class JobPage extends React.Component {
     const {
       actions, jobs, paginator, filterKeyword,
       sortingStrategy, containerSelector,
-      editorDialog, confirmDialog, snackbar, } = this.props
+      editorDialog, confirmDialog, snackbar,
+    } = this.props
 
-    const { itemCountPerPage, currentPageOffset, currentItemOffset, } = paginator
+    const {
+      itemCountPerPage, currentPageOffset, currentItemOffset,
+    } = paginator
 
-    /** 1. filter jobs */
+    const regex = new RegExp(filterKeyword)
+
+    /** 1. filter, slice jobs */
     const filtered = jobs.filter(job => {
       const searchArea = JSON.stringify(job)
-      return (searchArea.includes(filterKeyword))
+      return regex.test(searchArea)
     })
 
-    /** 2. select jobs to be curated */
     const sliced = filtered.slice(currentItemOffset, currentItemOffset + itemCountPerPage)
 
-    /** 3. draw dialogs, snackbar */
+    /** 2. draw dialogs, snackbar */
     const editorDialogDOM = (EDITOR_DIALOG_MODE.CLOSE !== editorDialog.dialogMode) ?
       (<EditorDialog {...editorDialog} actions={actions} />) : null
 
@@ -66,15 +75,22 @@ class JobPage extends React.Component {
       <div>
         <JobHeader sortingStrategy={sortingStrategy}
                    containerSelector={containerSelector}
-                   jobs={filtered}
-                   actions={actions} />
+                   filteredJobs={filtered}
+                   filterKeyword={filterKeyword}
+                   startAllJobs={actions.startAllJobs}
+                   stopAllJobs={actions.stopAllJobs}
+                   filterJob={actions.filterJob}
+                   sortJob={actions.sortJob}
+                   changeContainer={actions.changeContainer}
+                   openEditorDialogToCreate={actions.openEditorDialogToCreate} />
+
         <JobList filterKeyword={filterKeyword} jobs={sliced} actions={actions} />
         <div className="center" style={style.paginator}>
           <Paginator itemCountPerPage={itemCountPerPage}
                      currentPageOffset={currentPageOffset}
                      currentItemOffset={currentItemOffset}
                      totalItemCount={filtered.length}
-                     handler={this.handlePageOffsetChange.bind(this)} />
+                     handler={this.handlePageOffsetChange} />
         </div>
         {editorDialogDOM}
         {confirmDialogDOM}

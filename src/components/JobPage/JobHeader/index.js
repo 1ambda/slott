@@ -1,154 +1,174 @@
 import React, { PropTypes, } from 'react'
-import RaisedButton from 'material-ui/lib/raised-button'
-import Popover from 'material-ui/lib/popover/popover'
-import PopoverAnimationFromTop from 'material-ui/lib/popover/popover-animation-from-top'
-import DropDownMenu from 'material-ui/lib/DropDownMenu'
-import MenuItem from 'material-ui/lib/menus/menu-item'
+import RaisedButton from 'material-ui/RaisedButton'
+import { Popover, PopoverAnimationVertical, } from 'material-ui/Popover'
 
 import Filter from '../../Common/Filter'
 import Selector from '../../Common/Selector'
 import * as style from './style'
 
-import * as JobSortingStrategies from '../../../reducers/JobReducer/SorterState'
-import * as JobActions from '../../../actions/JobActions'
-import { JOB_PROPERTY, isRunning, } from '../../../reducers/JobReducer/JobItemState'
-import * as URL from '../../../middlewares/url'
+import { isRunning, } from '../../../reducers/JobReducer/JobItemState'
 
 export default class JobHeader extends React.Component {
   static propTypes = {
     sortingStrategy: PropTypes.object.isRequired,
     containerSelector: PropTypes.object.isRequired,
-    jobs: PropTypes.array.isRequired,
-    actions: PropTypes.object.isRequired,
-  }
-
-  static createSummaryDOM(jobs, createButton, actionAllButton) {
-    const totalJobCount = jobs.length
-    const runningJobCount = jobs.filter(job => isRunning(job)).length
-
-    return (
-      <div style={style.summaryContainer}>
-        <span>Running</span>
-        <span style={style.summaryRunningJob}> {runningJobCount}</span>
-        <span> of {totalJobCount} Jobs</span>
-        <span style={style.buttonContainer}> {createButton} </span>
-        <span style={style.buttonContainer}> {actionAllButton} </span>
-      </div>
-    )
-  }
-
-  /** create stop/start all button */
-  static createActionAllButton(openButtonLabel,
-                               open, anchorEl,
-                               openHandler, closeHandler,
-                               popoverButtonHandler) {
-
-    return (
-      <RaisedButton labelStyle={style.buttonLabel}
-                    primary
-                    onTouchTap={openHandler} label={openButtonLabel}>
-        <Popover
-          open={open}
-          anchorEl={anchorEl}
-          onRequestClose={closeHandler}
-          animation={PopoverAnimationFromTop} >
-          <div style={style.popover}>
-            <RaisedButton labelStyle={style.buttonLabel}
-                          onClick={popoverButtonHandler}
-                          secondary label="ARE YOU SURE ?"/>
-          </div>
-        </Popover>
-      </RaisedButton>
-    )
+    filteredJobs: PropTypes.array.isRequired,
+    filterKeyword: PropTypes.string.isRequired,
+    startAllJobs: PropTypes.func.isRequired,
+    stopAllJobs: PropTypes.func.isRequired,
+    filterJob: PropTypes.func.isRequired,
+    sortJob: PropTypes.func.isRequired,
+    changeContainer: PropTypes.func.isRequired,
+    openEditorDialogToCreate: PropTypes.func.isRequired,
   }
 
   constructor(props) {
     super(props)
 
     /** manage popover state itself */
-    this.state = { open: false, }
+    this.state = { popoverOpened: false, }
+
+    this.handleStartPopoverOpen = this.handleStartPopoverOpen.bind(this)
+    this.handleStopPopoverOpen = this.handleStopPopoverOpen.bind(this)
+    this.handlePopoverClose = this.handlePopoverClose.bind(this)
+
+    this.handleCreateJob = this.handleCreateJob.bind(this)
+    this.handleStartAllJobs = this.handleStartAllJobs.bind(this)
+    this.handleStopAllJobs = this.handleStopAllJobs.bind(this)
+    this.handleFilterChange = this.handleFilterChange.bind(this)
+    this.handleSorterChange = this.handleSorterChange.bind(this)
+    this.handleContainerSelectorChange = this.handleContainerSelectorChange.bind(this)
   }
 
-  handlePopoverOpen(event) {
-    this.setState({ open: true, anchorEl: event.currentTarget, })
+  handleStartPopoverOpen(event) {
+    this.setState({
+      popoverOpened: true,
+      popoverAnchorElem: event.currentTarget,
+      popoverHandler: this.handleStartAllJobs,
+    })
+  }
+
+  handleStopPopoverOpen(event) {
+    this.setState({
+      popoverOpened: true,
+      popoverAnchorElem: event.currentTarget,
+      popoverHandler: this.handleStopAllJobs,
+    })
   }
 
   handlePopoverClose() {
-    this.setState({ open: false, })
+    this.setState({ popoverOpened: false, })
   }
 
   handleStartAllJobs() {
-    const { actions, } = this.props
-    this.setState({ open: false, })
+    const { filteredJobs, startAllJobs, } = this.props
+    this.setState({ popoverOpened: false, })
+    const payload = { filteredJobs, }
 
-    actions.startAllJobs() // TODO
+    startAllJobs(payload)
   }
 
   handleStopAllJobs() {
-    const { actions, } = this.props
-    this.setState({ open: false, })
+    const { filteredJobs, stopAllJobs, } = this.props
+    this.setState({ popoverOpened: false, })
+    const payload = { filteredJobs, }
 
-    actions.stopAllJobs() // TODO
+    stopAllJobs(payload)
   }
 
   handleCreateJob() {
-    const { actions, } = this.props
+    const { openEditorDialogToCreate, } = this.props
 
-    actions.openEditorDialogToCreate()
+    openEditorDialogToCreate()
   }
 
   handleFilterChange(filterKeyword) {
-    const { actions, } = this.props
+    const { filterJob, } = this.props
     const payload = { filterKeyword, }
 
-    actions.filterJob(payload)
+    filterJob(payload)
   }
 
   handleSorterChange(strategy) {
-    const { actions, } = this.props
+    const { sortJob, } = this.props
     const payload = { strategy, }
 
-    actions.sortJob(payload)
+    sortJob(payload)
   }
 
   handleContainerSelectorChange(container) {
-    const { actions, } = this.props
+    const { changeContainer, } = this.props
     const payload = { container, }
 
-     actions.changeContainer(payload)
+    changeContainer(payload)
+  }
+
+  createCommandButtons() {
+    return (
+      <div style={style.commandButtonsContainer}>
+        <RaisedButton labelStyle={style.commandButtonLabel}
+                      label={"START ALL"}
+                      style={style.commandButtonLeft}
+                      backgroundColor={style.startAllButton.backgroundColor}
+                      onTouchTap={this.handleStartPopoverOpen} />
+        <RaisedButton labelStyle={style.commandButtonLabel}
+                      primary label={"STOP ALL"}
+                      style={style.commandButtonLeft}
+                      onTouchTap={this.handleStopPopoverOpen} />
+        <RaisedButton labelStyle={style.commandButtonLabel}
+                      secondary label={"CREATE"}
+                      style={style.commandRightButton}
+                      onTouchTap={this.handleCreateJob} />
+        <div style={{clear: 'both',}}></div>
+      </div>
+    )
+  }
+
+  createSummary() {
+    const { filteredJobs, } = this.props
+
+    const totalJobCount = filteredJobs.length
+    const runningJobCount = filteredJobs.filter(job => isRunning(job)).length
+
+    return (
+      <div style={style.summaryContainer}>
+        <span>Running</span>
+        <span style={style.summaryRunningJob}> {runningJobCount}</span>
+        <span> of {totalJobCount} Jobs</span>
+      </div>
+    )
+  }
+
+  createPopover() {
+    const {
+      popoverOpened, popoverAnchorElem, popoverHandler,
+    } = this.state
+
+    return (
+        <Popover
+          open={popoverOpened}
+          anchorEl={popoverAnchorElem}
+          anchorOrigin={{horizontal: 'left', vertical: 'bottom', }}
+          targetOrigin={{horizontal: 'left', vertical: 'top', }}
+          onRequestClose={this.handlePopoverClose} >
+          <div style={style.popoverContainer}>
+            <RaisedButton backgroundColor={style.popoverButton.color}
+                          labelStyle={style.popoverButton.labelStyle}
+                          label="EXECUTE"
+                          onTouchTap={popoverHandler} />
+          </div>
+        </Popover>
+    )
   }
 
   render() {
-    const { sortingStrategy, containerSelector, jobs, } = this.props
-    const { open, anchorEl, } = this.state
+    const { sortingStrategy, containerSelector, filterKeyword, } = this.props
+    const summary = this.createSummary()
+    const commandButtons = this.createCommandButtons()
+    const popover = this.createPopover()
 
-    /** 1. create `CREATE` button */
-    const createButton = (
-      <RaisedButton labelStyle={style.buttonLabel}
-                    secondary label={"CREATE"}
-                    onTouchTap={this.handleCreateJob.bind(this)} />)
-
-    /** 2. create popover */
-    const isAtLeastOneJobIsRunning= jobs.reduce((acc, job) => {
-      return acc || isRunning(job)
-    }, false)
-
-    const actionAllButtonLabel = (isAtLeastOneJobIsRunning) ?
-      'STOP  ALL JOBS' : 'START ALL JOBS'
-    const popoverHandler = (isAtLeastOneJobIsRunning) ?
-      this.handleStopAllJobs.bind(this) : this.handleStartAllJobs.bind(this)
-
-    const actionAllButton = JobHeader.createActionAllButton(
-      actionAllButtonLabel,
-      open,
-      anchorEl,
-      this.handlePopoverOpen.bind(this),
-      this.handlePopoverClose.bind(this),
-      popoverHandler
-    )
-
-    /** 3. draw summary with popover */
-    const summaryWithPopover = JobHeader.createSummaryDOM(jobs, createButton, actionAllButton)
+    const flotingLabel = (filterKeyword.trim() === '') ?
+      'Insert Filter' : `Filtered by '${filterKeyword}'`
 
     return (
       <div>
@@ -156,17 +176,17 @@ export default class JobHeader extends React.Component {
           Job
         </div>
         <div>
-          <Filter handler={this.handleFilterChange.bind(this)}
-                  floatingLabel="Insert Filter"
+          <Filter handler={this.handleFilterChange}
+                  floatingLabel={flotingLabel}
                   style={style.filterInput} />
-          <Selector handler={this.handleContainerSelectorChange.bind(this)}
+          <Selector handler={this.handleContainerSelectorChange}
                     style={style.containerSelector}
                     labelStyle={style.containerSelectorLabel}
                     floatingLabel="Container"
                     floatingLabelStyle={style.selectorFloatingLabel}
                     strategies={containerSelector.availableContainers}
                     currentStrategy={containerSelector.selectedContainer} />
-          <Selector handler={this.handleSorterChange.bind(this)}
+          <Selector handler={this.handleSorterChange}
                   style={style.selector}
                   labelStyle={style.selectorLabel}
                   floatingLabel="Sort by"
@@ -174,7 +194,9 @@ export default class JobHeader extends React.Component {
                   strategies={sortingStrategy.availableStrategies}
                   currentStrategy={sortingStrategy.selectedStrategy} />
         </div>
-        {summaryWithPopover}
+        {summary}
+        {commandButtons}
+        {popover}
       </div>
     )
   }

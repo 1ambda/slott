@@ -1,6 +1,5 @@
 import React, { PropTypes, } from 'react'
-import Snackbar from 'material-ui/lib/snackbar'
-import RaisedButton from 'material-ui/lib/raised-button'
+import Snackbar from 'material-ui/Snackbar'
 
 import * as style from './style'
 

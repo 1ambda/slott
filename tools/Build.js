@@ -3,7 +3,7 @@ import webpackConfigBuilder from '../webpack.config'
 import colors from 'colors'
 import { argv as args, } from 'yargs'
 
-import { ENV_PROD, } from './env'
+import { ENV_PROD, } from './Env'
 
 const webpackConfig = webpackConfigBuilder(ENV_PROD)
 

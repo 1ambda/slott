@@ -1,8 +1,8 @@
 import { expect, } from 'chai'
 import { fork, take, call, put, select, } from 'redux-saga/effects'
 
-import * as API from '../api'
-import * as Converter from '../converter'
+import * as API from '../Api'
+import * as Converter from '../Converter'
 
 describe('api', () => {
   // TODO, how to test `getContainerJobConfigUrl`?

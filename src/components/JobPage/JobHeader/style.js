@@ -1,4 +1,4 @@
-import { JobPageColors, } from '../../../constants/theme'
+import { JobPageColors, } from '../../../constants/Theme'
 
 export const title = {
   fontSize: 30,
@@ -9,26 +9,48 @@ export const title = {
 export const summaryContainer = {
   fontSize: 15,
   fontWeight: 300,
-  marginTop: 20,
-  marginBottom: 25,
+  marginTop: 10,
+}
+
+export const commandButtonsContainer = {
+  marginTop: 30,
+  marginBottom: 10,
 }
 
 export const summaryRunningJob = {
   fontWeight: 500,
 }
 
-export const buttonContainer = {
+export const commandRightButton = {
   float: 'right',
   marginLeft: 10,
 }
 
-export const buttonLabel = {
-  fontWeight: 300,
+export const commandButtonLeft = {
+  float: 'left',
+  marginLeft: 10,
 }
 
-export const popover = {
+export const commandButtonLabel = {
+  fontWeight: 100,
+  color: JobPageColors.commandButtonLabel,
+}
+
+export const startAllButton =  {
+  backgroundColor: JobPageColors.startButton,
+}
+
+export const popoverContainer = {
   padding: 20,
   backgroundColor: JobPageColors.popoverBackground,
+}
+
+export const popoverButton = {
+  color: JobPageColors.popoverButton,
+  labelStyle: {
+    fontWeight: 100,
+    color: JobPageColors.commandButtonLabel,
+  },
 }
 
 export const selector = {
@@ -49,13 +71,6 @@ export const containerSelector = Object.assign({}, selector, {
 export const containerSelectorLabel = Object.assign({}, selectorLabel, {
   fontSize: 14,
 })
-
-export const dropdown = {
-  float: 'right',
-  marginTop: 20,
-  paddingTop: 30,
-  width: 130,
-}
 
 export const filterInput= {
   fontWeight: 300,
