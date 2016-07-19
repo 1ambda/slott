@@ -148,14 +148,7 @@ export default class JobItem extends React.Component {
     const readonly = isReadonly(job)
     const payload = { id: job[JOB_PROPERTY.id], readonly, }
 
-    /**
-     * preventDefault hack
-     *
-     * since we can't control nestedListToggle event in current material-ui version (0.14.4)
-     * we have to avoid opening dialog when nestedListToggle is clicked
-     */
-    if (event.dispatchMarker.includes('Text'))
-      actions.openEditorDialogToEdit(payload)
+    actions.openEditorDialogToEdit(payload)
   }
 
   render() {
